@@ -77,4 +77,52 @@ public class UserTest {
         UserCreationException exception = assertThrows(UserCreationException.class, () -> new User(name, email, password));
         assertEquals("User name should have at least three characters", exception.getMessage());
     }
+
+    @Test
+    public void shouldBeAbleToUpdateUserName() {
+        Long id = 1L;
+        String name = "New User";
+        String email = "new.user@budget.com";
+        String password = "P@inK1ller";
+        User user = new User(id, name, email, password);
+
+        user.setName("Updated User");
+
+        assertEquals("Updated User", user.getName());
+    }
+
+    @Test
+    public void shouldValidateNameBeforeUpdateIt() {
+        String name = "New User";
+        String email = "new.user@budget.com";
+        String password = "P@inK1ller";
+        User user = new User(name, email, password);
+
+        UserCreationException exception = assertThrows(UserCreationException.class, () -> user.setName("Me"));
+        assertEquals("User name should have at least three characters", exception.getMessage());
+    }
+
+    @Test
+    public void shouldBeAbleToUpdateUserPassword() {
+        Long id = 1L;
+        String name = "New User";
+        String email = "new.user@budget.com";
+        String password = "P@inK1ller";
+        User user = new User(id, name, email, password);
+
+        user.setPassword("Upd@t&d1");
+
+        assertEquals("Upd@t&d1", user.getPassword());
+    }
+
+    @Test
+    public void shouldValidatePasswordBeforeUpdateIt() {
+        String name = "New User";
+        String email = "new.user@budget.com";
+        String password = "P@inK1ller";
+        User user = new User(name, email, password);
+
+        UserCreationException exception = assertThrows(UserCreationException.class, () -> user.setPassword("ThePassword"));
+        assertEquals("Inform a valid password", exception.getMessage());
+    }
 }

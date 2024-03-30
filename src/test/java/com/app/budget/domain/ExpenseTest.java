@@ -135,7 +135,7 @@ public class ExpenseTest {
 
         Expense expense = new Expense(id, categories, title, value, dueDate, null);
 
-        assertTrue(expense.getStatus() == ExpenseStatus.PENDING);
+        assertEquals(expense.getStatus(), ExpenseStatus.PENDING);
     }
 
     @Test

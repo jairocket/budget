@@ -35,6 +35,7 @@ public class User {
     }
 
     public void setName(String name) {
+        validateName(name);
         this.name = name;
     }
 
@@ -43,6 +44,10 @@ public class User {
     }
 
     public void setPassword(String password) {
+        if (!passwordIsValid(password)) {
+            throw new UserCreationException("Inform a valid password");
+        }
+
         this.password = password;
     }
 
@@ -91,6 +96,5 @@ public class User {
         }
 
     }
-
 
 }
