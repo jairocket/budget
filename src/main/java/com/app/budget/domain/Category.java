@@ -17,7 +17,6 @@ public class Category {
 
     public Category(String name) {
         validateName(name);
-
         this.name = name;
     }
 
@@ -30,6 +29,7 @@ public class Category {
     }
 
     public void setName(String name) {
+        validateName(name);
         this.name = name;
     }
 
