@@ -18,6 +18,7 @@ abstract class FinancialOccurrence {
         validateCategories(categories);
         validateTitle(title);
         validateValue(value);
+        validateDueDate(dueDate);
 
         this.id = id;
         this.categories = categories;
@@ -30,6 +31,7 @@ abstract class FinancialOccurrence {
         validateCategories(categories);
         validateTitle(title);
         validateValue(value);
+        validateDueDate(dueDate);
 
         this.categories = categories;
         this.title = title;
@@ -42,6 +44,7 @@ abstract class FinancialOccurrence {
     }
 
     public void setTitle(String title) {
+        validateTitle(title);
         this.title = title;
     }
 
@@ -50,6 +53,7 @@ abstract class FinancialOccurrence {
     }
 
     public void setValue(Double value) {
+        validateValue(value);
         this.value = value;
     }
 
@@ -58,6 +62,7 @@ abstract class FinancialOccurrence {
     }
 
     public void setDueDate(LocalDate dueDate) {
+        validateDueDate(dueDate);
         this.dueDate = dueDate;
     }
 
@@ -70,6 +75,7 @@ abstract class FinancialOccurrence {
     }
 
     public void setCategories(Set<Category> categories) {
+        validateCategories(categories);
         this.categories = categories;
     }
 
