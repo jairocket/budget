@@ -16,9 +16,8 @@ public class User {
     private UserRole role;
 
     public User(String name, String email, String password, UserRole role) {
-        validateUserConstructor(name, email, password);
+        validateUserConstructor(name, email, password, role);
         String hashedPassword = hash(password);
-        role = Optional.ofNullable(role).orElseThrow(() -> new UserCreationException("Role should be informed."));
 
         this.name = name;
         this.email = email;
@@ -27,9 +26,8 @@ public class User {
     }
 
     public User(Long id, String name, String email, String password, UserRole role) {
-        validateUserConstructor(name, email, password);
+        validateUserConstructor(name, email, password, role);
         String hashedPassword = hash(password);
-        role = Optional.ofNullable(role).orElseThrow(() -> new UserCreationException("Role should be informed."));
 
         this.id = id;
         this.name = name;
@@ -71,6 +69,7 @@ public class User {
     }
 
     public void setRole(UserRole role) {
+        validateRole(role);
         this.role = role;
     }
 
@@ -103,8 +102,9 @@ public class User {
                 .matches();
     }
 
-    private void validateUserConstructor(String name, String email, String password) {
+    private void validateUserConstructor(String name, String email, String password, UserRole role) {
         validateName(name);
+        validateRole(role);
 
         if (!emailIsValid(email)) {
             throw new UserCreationException("Inform a valid email");
@@ -115,5 +115,10 @@ public class User {
         }
     }
 
+    private void validateRole(UserRole role) {
+        if (role == null) {
+            throw new UserCreationException("Role should be informed.");
+        }
+    }
 
 }
