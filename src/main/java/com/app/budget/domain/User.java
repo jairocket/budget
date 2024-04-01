@@ -1,5 +1,6 @@
 package com.app.budget.domain;
 
+import com.app.budget.enums.UserRole;
 import com.app.budget.exceptions.UserCreationException;
 
 import java.util.Optional;
@@ -12,24 +13,29 @@ public class User {
     private Long id;
     private String name;
     private String password;
+    private UserRole role;
 
-    public User(String name, String email, String password) {
+    public User(String name, String email, String password, UserRole role) {
         validateUserConstructor(name, email, password);
         String hashedPassword = hash(password);
+        role = Optional.ofNullable(role).orElseThrow(() -> new UserCreationException("Role should be informed."));
 
         this.name = name;
         this.email = email;
         this.password = hashedPassword;
+        this.role = role;
     }
 
-    public User(Long id, String name, String email, String password) {
+    public User(Long id, String name, String email, String password, UserRole role) {
         validateUserConstructor(name, email, password);
         String hashedPassword = hash(password);
+        role = Optional.ofNullable(role).orElseThrow(() -> new UserCreationException("Role should be informed."));
 
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = hashedPassword;
+        this.role = role;
     }
 
     public Long getId() {
@@ -58,6 +64,14 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
     }
 
     private boolean emailIsValid(String email) {
