@@ -3,6 +3,7 @@ package com.app.budget.domain;
 import com.app.budget.exceptions.UserCreationException;
 import org.junit.Test;
 
+import static com.app.budget.domain.Authentication.passwordMatches;
 import static org.junit.Assert.*;
 
 public class UserTest {
@@ -18,6 +19,8 @@ public class UserTest {
         assertEquals("New User", user.getName());
         assertEquals("new.user@budget.com", user.getEmail());
         assertTrue(1 == user.getId());
+        assertNotEquals(password, user.getPassword());
+        assertTrue(passwordMatches(password, user.getPassword()));
     }
 
     @Test

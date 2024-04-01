@@ -15,6 +15,8 @@
     <description>personal budget api</description>
     <properties>
         <java.version>17</java.version>
+        <spring.version>6.1.5</spring.version>
+        <spring-security.version>6.2.3</spring-security.version>
     </properties>
     <dependencies>
         <dependency>
@@ -29,7 +31,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
