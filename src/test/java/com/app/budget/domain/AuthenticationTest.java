@@ -14,7 +14,6 @@ public class AuthenticationTest {
         var hashedPassword = hash(rawPassword);
 
         assertFalse(rawPassword.equals(hashedPassword));
-
         assertTrue(passwordMatches(rawPassword, hashedPassword));
     }
 

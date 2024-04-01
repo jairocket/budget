@@ -12,6 +12,5 @@ public class BudgetApplication {
 
 }
 
-//todo - Crypt password
 //todo - login
 //todo - logout
