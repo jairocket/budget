@@ -18,6 +18,7 @@ public class UserTest {
         assertEquals("New User", user.getName());
         assertEquals("new.user@budget.com", user.getEmail());
         assertTrue(1 == user.getId());
+        assertNotEquals(password, user.getPassword());
     }
 
     @Test
