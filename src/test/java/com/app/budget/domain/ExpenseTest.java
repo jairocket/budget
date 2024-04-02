@@ -19,7 +19,7 @@ public class ExpenseTest {
         String title = "Uber";
         Double value = 35.90;
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
-        ExpenseStatus status = ExpenseStatus.PENDING;
+        ExpenseStatus status = ExpenseStatus.LATE;
 
         Expense expense = new Expense(id, categories, title, value, dueDate, status);
 
@@ -29,7 +29,7 @@ public class ExpenseTest {
         assertEquals("Uber", expense.getTitle());
         assertTrue(expense.getValue() == 35.90);
         assertEquals("2024-02-01", expense.getDueDate().toString());
-        assertEquals(ExpenseStatus.PENDING, expense.getStatus());
+        assertEquals(ExpenseStatus.LATE, expense.getStatus());
     }
 
     @Test
