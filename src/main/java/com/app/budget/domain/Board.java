@@ -52,4 +52,16 @@ public class Board {
     public User getUser() {
         return user;
     }
+
+    public Double getTotalIncomes() {
+        return incomes.stream().reduce(0.00, (subtotal, element) -> subtotal + element.getValue(), Double::sum);
+    }
+
+    public Double getTotalExpenses() {
+        return expenses.stream().reduce(0.00, (subtotal, element) -> subtotal + element.getValue(), Double::sum);
+    }
+
+    public Double getBalance() {
+        return getTotalIncomes() - getTotalExpenses();
+    }
 }
