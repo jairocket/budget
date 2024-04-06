@@ -1,6 +1,7 @@
 package com.app.budget.domain;
 
 import com.app.budget.enums.ExpenseStatus;
+import com.app.budget.enums.IncomeStatus;
 import com.app.budget.enums.UserRole;
 import com.app.budget.exceptions.BoardException;
 import org.junit.Test;
@@ -53,9 +54,9 @@ public class BoardTest {
         Category category_1 = new Category("Transṕortation");
 
         Set<Category> categories = Set.of(category_1);
-        Income income_1 = new Income(categories, "Uber", 30.00, LocalDate.of(2024, 3, 1));
-        Income income_2 = new Income(categories, "Uber", 25.00, LocalDate.of(2024, 3, 2));
-        Income income_3 = new Income(categories, "Uber", 45.00, LocalDate.of(2024, 3, 3));
+        Income income_1 = new Income(categories, "Uber", 30.00, LocalDate.of(2024, 3, 1), IncomeStatus.RECEIVED);
+        Income income_2 = new Income(categories, "Uber", 25.00, LocalDate.of(2024, 3, 2), IncomeStatus.LATE);
+        Income income_3 = new Income(categories, "Uber", 45.00, LocalDate.of(2024, 3, 3), IncomeStatus.PENDING);
 
         Board board = new Board(user);
         board.setIncomes(List.of(income_1, income_2, income_3));
@@ -85,7 +86,7 @@ public class BoardTest {
         Set<Category> categories = Set.of(category_1);
         Expense expense_1 = new Expense(categories, "Uber", 10.00, LocalDate.of(2024, 3, 1), ExpenseStatus.PENDING);
         Expense expense_2 = new Expense(categories, "Uber", 25.00, LocalDate.of(2024, 3, 2), ExpenseStatus.PENDING);
-        Income income_1 = new Income(categories, "Uber", 45.00, LocalDate.of(2024, 3, 3));
+        Income income_1 = new Income(categories, "Uber", 45.00, LocalDate.of(2024, 3, 3), IncomeStatus.PENDING);
 
         Board board = new Board(user);
         board.setIncomes(List.of(income_1));
