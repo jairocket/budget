@@ -3,6 +3,7 @@ package com.app.budget.domain;
 import com.app.budget.enums.ExpenseStatus;
 import com.app.budget.exceptions.FinancialOccurrenceException;
 import org.junit.Test;
+import org.testcontainers.shaded.org.apache.commons.lang3.RandomStringUtils;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -76,6 +77,33 @@ public class FinancialOccurrenceTest {
 
         FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> new Expense(categories, title, null, value, null, dueDate, status));
         assertEquals("Title should have at least three characters", exception.getMessage());
+    }
+
+    @Test
+    public void shouldThrowExceptionIfTitleHasMoreThanFortyFiveCharacters() {
+        String longTitle = "qwertyuiopasdfghjklzxcvbnmmnbvcxzlkjhgfdsapoiuytrewq";
+        Double value = 35.90;
+        LocalDate dueDate = LocalDate.of(2024, 2, 1);
+        ExpenseStatus status = ExpenseStatus.PENDING;
+        Category category = new Category("Clothing");
+        Set<Category> categories = Set.of(category);
+
+        FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> new Expense(categories, longTitle, null, value, null, dueDate, status));
+        assertEquals("Title should have less than forty-five characters", exception.getMessage());
+    }
+
+    @Test
+    public void shouldThrowExceptionIfDescriptionLengthIsBiggerThan256() {
+        Long id = 1L;
+        Double value = 35.90;
+        String title = "Uber";
+        String longDescription = RandomStringUtils.random(257);
+        LocalDate dueDate = LocalDate.of(2024, 2, 1);
+        Category category = new Category("Clothing");
+        Set<Category> categories = Set.of(category);
+
+        FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> new FinancialOccurrenceTestHelper(id, categories, title, longDescription, value, null, dueDate));
+        assertEquals("Description should have less than 256 characters", exception.getMessage());
     }
 
     @Test

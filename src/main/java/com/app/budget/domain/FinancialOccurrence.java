@@ -23,6 +23,7 @@ abstract class FinancialOccurrence {
         validateValue(actualValue);
         validateDueDate(dueDate);
         description = parsedDescription(description);
+        validateDescription(description);
         predictedValue = Optional.ofNullable(predictedValue).orElse(0.00);
         actualValue = Optional.ofNullable(actualValue).orElse(0.00);
 
@@ -43,6 +44,7 @@ abstract class FinancialOccurrence {
         validateValue(actualValue);
         validateDueDate(dueDate);
         description = parsedDescription(description);
+        validateDescription(description);
         predictedValue = Optional.ofNullable(predictedValue).orElse(0.00);
         actualValue = Optional.ofNullable(actualValue).orElse(0.00);
 
@@ -128,6 +130,10 @@ abstract class FinancialOccurrence {
         if (title.length() < 3) {
             throw new FinancialOccurrenceException("Title should have at least three characters");
         }
+
+        if (title.length() > 45) {
+            throw new FinancialOccurrenceException("Title should have less than forty-five characters");
+        }
     }
 
     private void validateValue(Double value) {
@@ -151,4 +157,9 @@ abstract class FinancialOccurrence {
         return Optional.ofNullable(description).orElse("");
     }
 
+    private void validateDescription(String description) {
+        if (description.length() > 256) {
+            throw new FinancialOccurrenceException("Description should have less than 256 characters");
+        }
+    }
 }
