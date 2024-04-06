@@ -14,19 +14,21 @@ public class ExpenseTest {
     @Test
     public void shouldBeAbleToCreateExpense() {
         Long id = 1L;
-        Set<Category> categories = new HashSet<>();
-        categories.add(new Category("Transportation"));
+        Set<Category> categories = Set.of(new Category("Transportation"), new Category("Health"));
         String title = "Uber";
         Double value = 35.90;
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
         ExpenseStatus status = ExpenseStatus.LATE;
+        String description = "Going to the doctor";
 
-        Expense expense = new Expense(id, categories, title, value, dueDate, status);
+        Expense expense = new Expense(id, categories, title, description, value, dueDate, status);
 
         assertTrue(expense.getId() == 1);
-        assertEquals(1, expense.getCategories().size());
+        assertEquals(2, expense.getCategories().size());
         assertEquals("Transportation", expense.getCategories().stream().toList().get(0).getName());
+        assertEquals("Health", expense.getCategories().stream().toList().get(1).getName());
         assertEquals("Uber", expense.getTitle());
+        assertEquals("Going to the doctor", expense.getDescription());
         assertTrue(expense.getValue() == 35.90);
         assertEquals("2024-02-01", expense.getDueDate().toString());
         assertEquals(ExpenseStatus.LATE, expense.getStatus());
@@ -41,7 +43,7 @@ public class ExpenseTest {
         Double value = 35.9563;
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
 
-        Expense expense = new Expense(id, categories, title, value, dueDate, null);
+        Expense expense = new Expense(id, categories, title, null, value, dueDate, null);
 
         assertEquals(expense.getStatus(), ExpenseStatus.PENDING);
     }
@@ -55,7 +57,7 @@ public class ExpenseTest {
         Double value = 35.9563;
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
 
-        Expense expense = new Expense(id, categories, title, value, dueDate, null);
+        Expense expense = new Expense(id, categories, title, null, value, dueDate, null);
 
         FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> expense.setStatus(null));
         assertEquals("Status cannot be null", exception.getMessage());

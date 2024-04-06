@@ -20,7 +20,7 @@ public class IncomeTest {
         Double value = 35.90;
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
 
-        Income income = new Income(id, categories, title, value, dueDate, null);
+        Income income = new Income(id, categories, title, null, value, dueDate, null);
 
         assertTrue(income.getId() == 1);
         assertEquals(1, income.getCategories().size());
@@ -28,6 +28,7 @@ public class IncomeTest {
         assertEquals("Uber", income.getTitle());
         assertTrue(income.getValue() == 35.90);
         assertEquals("2024-02-01", income.getDueDate().toString());
+        assertEquals("", income.getDescription());
         assertEquals(IncomeStatus.PENDING, income.getStatus());
     }
 
@@ -40,7 +41,7 @@ public class IncomeTest {
         Double value = 35.9563;
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
 
-        Income income = new Income(id, categories, title, value, dueDate, null);
+        Income income = new Income(id, categories, title, null, value, dueDate, null);
 
         FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> income.setStatus(null));
         assertEquals("Status cannot be null", exception.getMessage());
@@ -54,7 +55,7 @@ public class IncomeTest {
         String title = "Uber";
         Double value = 35.9563;
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
-        Income income = new Income(id, categories, title, value, dueDate, null);
+        Income income = new Income(id, categories, title, null, value, dueDate, null);
 
         income.setStatus(IncomeStatus.RECEIVED);
 
