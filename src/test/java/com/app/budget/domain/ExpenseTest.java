@@ -1,14 +1,14 @@
 package com.app.budget.domain;
 
 import com.app.budget.enums.ExpenseStatus;
+import com.app.budget.exceptions.FinancialOccurrenceException;
 import org.junit.Test;
 
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ExpenseTest {
     @Test
@@ -44,6 +44,21 @@ public class ExpenseTest {
         Expense expense = new Expense(id, categories, title, value, dueDate, null);
 
         assertEquals(expense.getStatus(), ExpenseStatus.PENDING);
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenTryToUpdateStatusToNull() {
+        Long id = 1L;
+        Set<Category> categories = new HashSet<>();
+        categories.add(new Category("Transportation"));
+        String title = "Uber";
+        Double value = 35.9563;
+        LocalDate dueDate = LocalDate.of(2024, 2, 1);
+
+        Expense expense = new Expense(id, categories, title, value, dueDate, null);
+
+        FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> expense.setStatus(null));
+        assertEquals("Status cannot be null", exception.getMessage());
     }
 
 
