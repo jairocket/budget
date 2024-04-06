@@ -11,7 +11,3 @@ public class BudgetApplication {
     }
 
 }
-
-//todo - login
-//todo - logout
-//todo - add optional description at financial occurrence
