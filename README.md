@@ -2,7 +2,9 @@ Budget is an API for expenses control
 
 ## Business Rules
 
-### User
+### Domain
+
+#### User
 
 - Should have a `name` with at least three characters;
 - Should have a valid `email`;
@@ -18,14 +20,14 @@ Budget is an API for expenses control
     - Admin users should be able to manage all api resources.
 - Can have one or more `Boards`
 
-### Board
+#### Board
 
 - Each `Board` should be related to one `User`;
 - Can have zero or lots of `Expenses`
 - Can have zero or lots of `Incomes`
 - Should be able to calculate the balance between `Expenses` and `Incomes`;
 
-### Financial Occurrence
+#### Financial Occurrence
 
 - Refer to anything that can have an impact on your personal finances;
 - Should have a `title` with at least three characters;
@@ -35,7 +37,7 @@ Budget is an API for expenses control
 - Should have a `dueDate`
 - Should have one or more `Categories`
 
-### Expense
+#### Expense
 
 - `Expenses` are a type of `FinancialOccurences`
 - Should have a `status`:
@@ -43,7 +45,7 @@ Budget is an API for expenses control
     - PAID, if it is... paid;
     - LATE, if it is not paid, but due date has expired.
 
-### Income
+#### Income
 
 - `Incomes` are a type of `FinancialOccurences`
 - Should have a `status`:
