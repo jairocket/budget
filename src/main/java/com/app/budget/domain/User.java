@@ -89,6 +89,10 @@ public class User {
         if (name.length() < 3) {
             throw new UserCreationException("User name should have at least three characters");
         }
+
+        if (name.length() > 60) {
+            throw new UserCreationException("User name should have less than sixty characters");
+        }
     }
 
     private boolean passwordIsValid(String password) {
