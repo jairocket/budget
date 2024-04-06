@@ -15,7 +15,8 @@ public class FinancialOccurrenceTest {
     @Test
     public void shouldValidateCategories() {
         Long id = 1L;
-        Set<Category> categories = new HashSet<>();
+        Category category = new Category("Clothing");
+        Set<Category> categories = Set.of(category);
         String title = "Uber";
         Double value = 35.90;
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
@@ -23,7 +24,7 @@ public class FinancialOccurrenceTest {
         FinancialOccurrenceTestHelper expense = new FinancialOccurrenceTestHelper(id, categories, title, value, dueDate);
 
         assertTrue(expense.getId() == 1);
-        assertEquals("Others", expense.getCategories().stream().toList().get(0).getName());
+        assertEquals("Clothing", expense.getCategories().stream().toList().get(0).getName());
         assertEquals("Uber", expense.getTitle());
         assertTrue(expense.getValue() == 35.90);
         assertEquals("2024-02-01", expense.getDueDate().toString());
@@ -41,11 +42,24 @@ public class FinancialOccurrenceTest {
     }
 
     @Test
+    public void shouldThrowExceptionIfCategoriesIsEmpty() {
+        Long id = 1L;
+        Double value = 35.90;
+        String title = "Uber";
+        LocalDate dueDate = LocalDate.of(2024, 2, 1);
+        Set<Category> categories = new HashSet<>();
+
+        FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> new FinancialOccurrenceTestHelper(id, categories, title, value, dueDate));
+        assertEquals("Should inform at least one category", exception.getMessage());
+    }
+
+    @Test
     public void shouldThrowExceptionIfTitleIsNull() {
         Long id = 1L;
         Double value = 35.90;
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
-        Set<Category> categories = new HashSet<>();
+        Category category = new Category("Clothing");
+        Set<Category> categories = Set.of(category);
 
         FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> new FinancialOccurrenceTestHelper(id, categories, null, value, dueDate));
         assertEquals("Title cannot be null", exception.getMessage());
@@ -57,7 +71,8 @@ public class FinancialOccurrenceTest {
         Double value = 35.90;
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
         ExpenseStatus status = ExpenseStatus.PENDING;
-        Set<Category> categories = new HashSet<>();
+        Category category = new Category("Clothing");
+        Set<Category> categories = Set.of(category);
 
         FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> new Expense(categories, title, value, dueDate, status));
         assertEquals("Title should have at least three characters", exception.getMessage());
@@ -68,7 +83,8 @@ public class FinancialOccurrenceTest {
         Long id = 1L;
         String title = "Uber";
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
-        Set<Category> categories = new HashSet<>();
+        Category category = new Category("Clothing");
+        Set<Category> categories = Set.of(category);
 
         FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> new FinancialOccurrenceTestHelper(id, categories, title, null, dueDate));
         assertEquals("Value cannot be null", exception.getMessage());
@@ -79,7 +95,8 @@ public class FinancialOccurrenceTest {
         Long id = 1L;
         String title = "Uber";
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
-        Set<Category> categories = new HashSet<>();
+        Category category = new Category("Clothing");
+        Set<Category> categories = Set.of(category);
         Double value = -40.99;
 
         FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> new FinancialOccurrenceTestHelper(id, categories, title, value, dueDate));
@@ -107,7 +124,8 @@ public class FinancialOccurrenceTest {
     public void shouldThrowExceptionIfDueDateIsNull() {
         Long id = 1L;
         String title = "Uber";
-        Set<Category> categories = new HashSet<>();
+        Category category = new Category("Clothing");
+        Set<Category> categories = Set.of(category);
         Double value = -40.99;
 
         FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> new FinancialOccurrenceTestHelper(id, categories, title, value, null));

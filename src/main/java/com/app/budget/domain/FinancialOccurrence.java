@@ -83,8 +83,7 @@ abstract class FinancialOccurrence {
         categories = Optional.ofNullable(categories).orElseThrow(() -> new FinancialOccurrenceException("Categories cannot be null"));
 
         if (categories.isEmpty()) {
-            Category others = new Category("Others");
-            categories.add(others);
+            throw new FinancialOccurrenceException("Should inform at least one category");
         }
     }
 
