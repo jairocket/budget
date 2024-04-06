@@ -10,15 +10,15 @@ import java.util.Set;
 public class Expense extends FinancialOccurrence {
     private ExpenseStatus status;
 
-    public Expense(Long id, Set<Category> categories, String title, String description, Double value, LocalDate dueDate, ExpenseStatus status) {
-        super(id, categories, title, description, value, dueDate);
+    public Expense(Long id, Set<Category> categories, String title, String description, Double predictedValue, Double actualValue, LocalDate dueDate, ExpenseStatus status) {
+        super(id, categories, title, description, predictedValue, actualValue, dueDate);
         if (status == null) status = ExpenseStatus.PENDING;
 
         this.status = status;
     }
 
-    public Expense(Set<Category> categories, String title, String description, Double value, LocalDate dueDate, ExpenseStatus status) {
-        super(categories, title, description, value, dueDate);
+    public Expense(Set<Category> categories, String title, String description, Double predictedValue, Double actualValue, LocalDate dueDate, ExpenseStatus status) {
+        super(categories, title, description, predictedValue, actualValue, dueDate);
         if (status == null) status = ExpenseStatus.PENDING;
 
         this.status = status;

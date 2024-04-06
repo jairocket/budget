@@ -16,12 +16,13 @@ public class ExpenseTest {
         Long id = 1L;
         Set<Category> categories = Set.of(new Category("Transportation"), new Category("Health"));
         String title = "Uber";
-        Double value = 35.90;
+        Double predictedValue = 35.90;
+        Double actualValue = 35.90;
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
         ExpenseStatus status = ExpenseStatus.LATE;
         String description = "Going to the doctor";
 
-        Expense expense = new Expense(id, categories, title, description, value, dueDate, status);
+        Expense expense = new Expense(id, categories, title, description, predictedValue, actualValue, dueDate, status);
 
         assertTrue(expense.getId() == 1);
         assertEquals(2, expense.getCategories().size());
@@ -39,10 +40,10 @@ public class ExpenseTest {
         Set<Category> categories = new HashSet<>();
         categories.add(new Category("Transportation"));
         String title = "Uber";
-        Double value = 35.9563;
+        Double predictedValue = 35.9563;
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
 
-        Expense expense = new Expense(id, categories, title, null, value, dueDate, null);
+        Expense expense = new Expense(id, categories, title, null, predictedValue, null, dueDate, null);
 
         assertEquals(expense.getStatus(), ExpenseStatus.PENDING);
     }
@@ -53,10 +54,10 @@ public class ExpenseTest {
         Set<Category> categories = new HashSet<>();
         categories.add(new Category("Transportation"));
         String title = "Uber";
-        Double value = 35.9563;
+        Double predictedValue = 35.9563;
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
 
-        Expense expense = new Expense(id, categories, title, null, value, dueDate, null);
+        Expense expense = new Expense(id, categories, title, null, predictedValue, null, dueDate, null);
 
         FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> expense.setStatus(null));
         assertEquals("Status cannot be null", exception.getMessage());

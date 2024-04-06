@@ -54,9 +54,9 @@ public class BoardTest {
         Category category_1 = new Category("Transṕortation");
 
         Set<Category> categories = Set.of(category_1);
-        Income income_1 = new Income(categories, "Uber", null, 30.00, LocalDate.of(2024, 3, 1), IncomeStatus.RECEIVED);
-        Income income_2 = new Income(categories, "Uber", null, 25.00, LocalDate.of(2024, 3, 2), IncomeStatus.LATE);
-        Income income_3 = new Income(categories, "Uber", null, 45.00, LocalDate.of(2024, 3, 3), IncomeStatus.PENDING);
+        Income income_1 = new Income(categories, "Uber", null, 30.00, 30.00, LocalDate.of(2024, 3, 1), IncomeStatus.RECEIVED);
+        Income income_2 = new Income(categories, "Uber", null, 25.00, 25.00, LocalDate.of(2024, 3, 2), IncomeStatus.LATE);
+        Income income_3 = new Income(categories, "Uber", null, 45.00, 45.00, LocalDate.of(2024, 3, 3), IncomeStatus.PENDING);
 
         Board board = new Board(user);
         board.setIncomes(List.of(income_1, income_2, income_3));
@@ -69,9 +69,9 @@ public class BoardTest {
         Category category_1 = new Category("Transṕortation");
 
         Set<Category> categories = Set.of(category_1);
-        Expense expense_1 = new Expense(categories, "Uber", null, 30.00, LocalDate.of(2024, 3, 1), ExpenseStatus.PENDING);
-        Expense expense_2 = new Expense(categories, "Uber", null, 25.00, LocalDate.of(2024, 3, 2), ExpenseStatus.PENDING);
-        Expense expense_3 = new Expense(categories, "Uber", null, 45.00, LocalDate.of(2024, 3, 3), ExpenseStatus.PENDING);
+        Expense expense_1 = new Expense(categories, "Uber", null, 30.00, 30.00, LocalDate.of(2024, 3, 1), ExpenseStatus.PENDING);
+        Expense expense_2 = new Expense(categories, "Uber", null, 25.00, 25.00, LocalDate.of(2024, 3, 2), ExpenseStatus.PENDING);
+        Expense expense_3 = new Expense(categories, "Uber", null, 45.00, 45.00, LocalDate.of(2024, 3, 3), ExpenseStatus.PENDING);
 
         Board board = new Board(user);
         board.setExpenses(List.of(expense_1, expense_2, expense_3));
@@ -84,9 +84,9 @@ public class BoardTest {
         Category category_1 = new Category("Transṕortation");
 
         Set<Category> categories = Set.of(category_1);
-        Expense expense_1 = new Expense(categories, "Uber", null, 10.00, LocalDate.of(2024, 3, 1), ExpenseStatus.PENDING);
-        Expense expense_2 = new Expense(categories, "Uber", null, 25.00, LocalDate.of(2024, 3, 2), ExpenseStatus.PENDING);
-        Income income_1 = new Income(categories, "Uber", null, 45.00, LocalDate.of(2024, 3, 3), IncomeStatus.PENDING);
+        Expense expense_1 = new Expense(categories, "Uber", null, 10.00, 10.00, LocalDate.of(2024, 3, 1), ExpenseStatus.PENDING);
+        Expense expense_2 = new Expense(categories, "Uber", null, 25.00, 25.00, LocalDate.of(2024, 3, 2), ExpenseStatus.PENDING);
+        Income income_1 = new Income(categories, "Uber", null, 45.00, 45.00, LocalDate.of(2024, 3, 3), IncomeStatus.PENDING);
 
         Board board = new Board(user);
         board.setIncomes(List.of(income_1));

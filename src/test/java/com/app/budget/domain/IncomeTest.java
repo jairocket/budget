@@ -17,10 +17,11 @@ public class IncomeTest {
         Set<Category> categories = new HashSet<>();
         categories.add(new Category("Transportation"));
         String title = "Uber";
-        Double value = 35.90;
+        Double predictedValue = 35.90;
+        Double actualValue = 39.99;
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
 
-        Income income = new Income(id, categories, title, null, value, dueDate, null);
+        Income income = new Income(id, categories, title, null, predictedValue, actualValue, dueDate, null);
 
         assertTrue(income.getId() == 1);
         assertEquals(1, income.getCategories().size());
@@ -38,10 +39,10 @@ public class IncomeTest {
         Set<Category> categories = new HashSet<>();
         categories.add(new Category("Transportation"));
         String title = "Uber";
-        Double value = 35.9563;
+        Double predictedValue = 35.9563;
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
 
-        Income income = new Income(id, categories, title, null, value, dueDate, null);
+        Income income = new Income(id, categories, title, null, predictedValue, null, dueDate, null);
 
         FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> income.setStatus(null));
         assertEquals("Status cannot be null", exception.getMessage());
@@ -55,7 +56,7 @@ public class IncomeTest {
         String title = "Uber";
         Double value = 35.9563;
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
-        Income income = new Income(id, categories, title, null, value, dueDate, null);
+        Income income = new Income(id, categories, title, null, value, null, dueDate, null);
 
         income.setStatus(IncomeStatus.RECEIVED);
 
