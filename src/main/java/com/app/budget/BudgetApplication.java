@@ -11,6 +11,3 @@ public class BudgetApplication {
     }
 
 }
-
-//todo - login
-//todo - logout

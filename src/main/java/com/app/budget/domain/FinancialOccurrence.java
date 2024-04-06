@@ -11,31 +11,36 @@ abstract class FinancialOccurrence {
     private Long id;
     private Set<Category> categories;
     private String title;
+    private String description;
     private Double value;
     private LocalDate dueDate;
 
-    public FinancialOccurrence(Long id, Set<Category> categories, String title, Double value, LocalDate dueDate) {
+    public FinancialOccurrence(Long id, Set<Category> categories, String title, String description, Double value, LocalDate dueDate) {
         validateCategories(categories);
         validateTitle(title);
         validateValue(value);
         validateDueDate(dueDate);
+        description = parsedDescription(description);
 
         this.id = id;
         this.categories = categories;
         this.title = title;
+        this.description = description;
         this.value = round(value);
         this.dueDate = dueDate;
     }
 
-    public FinancialOccurrence(Set<Category> categories, String title, Double value, LocalDate dueDate) {
+    public FinancialOccurrence(Set<Category> categories, String title, String description, Double value, LocalDate dueDate) {
         validateCategories(categories);
         validateTitle(title);
         validateValue(value);
         validateDueDate(dueDate);
+        description = parsedDescription(description);
 
         this.categories = categories;
         this.title = title;
         this.value = round(value);
+        this.description = description;
         this.dueDate = dueDate;
     }
 
@@ -79,6 +84,14 @@ abstract class FinancialOccurrence {
         this.categories = categories;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     private void validateCategories(Set<Category> categories) {
         categories = Optional.ofNullable(categories).orElseThrow(() -> new FinancialOccurrenceException("Categories cannot be null"));
 
@@ -113,6 +126,10 @@ abstract class FinancialOccurrence {
         if (dueDate == null) {
             throw new FinancialOccurrenceException("Due date should not be lower than zero");
         }
+    }
+
+    private String parsedDescription(String description) {
+        return Optional.ofNullable(description).orElse("");
     }
 
 }
