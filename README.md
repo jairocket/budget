@@ -25,7 +25,6 @@ Budget is an API for expenses control
 - Each `Board` should be related to one `User`;
 - Can have zero or lots of `Expenses`
 - Can have zero or lots of `Incomes`
-- Should be able to calculate the balance between `Expenses` and `Incomes`;
 
 #### Financial Occurrence
 

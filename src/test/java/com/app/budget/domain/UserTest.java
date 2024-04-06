@@ -14,7 +14,7 @@ public class UserTest {
         String email = "new.user@budget.com";
         String password = "P@inK1ller";
         String role = "USER";
-        
+
         User user = new User(id, name, email, password, UserRole.valueOf(role));
 
         assertEquals("New User", user.getName());
@@ -90,6 +90,16 @@ public class UserTest {
 
         UserCreationException exception = assertThrows(UserCreationException.class, () -> new User(name, email, password, UserRole.USER));
         assertEquals("User name should have at least three characters", exception.getMessage());
+    }
+
+    @Test
+    public void shouldThrowExceptionIfNameHasMoreThanSixtyCharacters() {
+        String longName = "qwertyuiopasdfghjklzxcvbnmmnbvcxzlkjhgfdsapoiuytrewqqwertyuiop";
+        String email = "new.user@budget.com";
+        String password = "ThePassWord";
+
+        UserCreationException exception = assertThrows(UserCreationException.class, () -> new User(longName, email, password, UserRole.USER));
+        assertEquals("User name should have less than sixty characters", exception.getMessage());
     }
 
     @Test
