@@ -12,13 +12,13 @@ abstract class FinancialOccurrence {
     private Set<Category> categories;
     private String title;
     private String description;
-    private Double value;
+    private Double predictedValue;
     private LocalDate dueDate;
 
-    public FinancialOccurrence(Long id, Set<Category> categories, String title, String description, Double value, LocalDate dueDate) {
+    public FinancialOccurrence(Long id, Set<Category> categories, String title, String description, Double predictedValue, LocalDate dueDate) {
         validateCategories(categories);
         validateTitle(title);
-        validateValue(value);
+        validateValue(predictedValue);
         validateDueDate(dueDate);
         description = parsedDescription(description);
 
@@ -26,20 +26,20 @@ abstract class FinancialOccurrence {
         this.categories = categories;
         this.title = title;
         this.description = description;
-        this.value = round(value);
+        this.predictedValue = round(predictedValue);
         this.dueDate = dueDate;
     }
 
-    public FinancialOccurrence(Set<Category> categories, String title, String description, Double value, LocalDate dueDate) {
+    public FinancialOccurrence(Set<Category> categories, String title, String description, Double predictedValue, LocalDate dueDate) {
         validateCategories(categories);
         validateTitle(title);
-        validateValue(value);
+        validateValue(predictedValue);
         validateDueDate(dueDate);
         description = parsedDescription(description);
 
         this.categories = categories;
         this.title = title;
-        this.value = round(value);
+        this.predictedValue = round(predictedValue);
         this.description = description;
         this.dueDate = dueDate;
     }
@@ -53,13 +53,13 @@ abstract class FinancialOccurrence {
         this.title = title;
     }
 
-    public Double getValue() {
-        return value;
+    public Double getPredictedValue() {
+        return predictedValue;
     }
 
-    public void setValue(Double value) {
-        validateValue(value);
-        this.value = value;
+    public void setPredictedValue(Double predictedValue) {
+        validateValue(predictedValue);
+        this.predictedValue = predictedValue;
     }
 
     public LocalDate getDueDate() {

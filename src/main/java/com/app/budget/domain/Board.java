@@ -54,11 +54,11 @@ public class Board {
     }
 
     public Double getTotalIncomes() {
-        return incomes.stream().reduce(0.00, (subtotal, element) -> subtotal + element.getValue(), Double::sum);
+        return incomes.stream().reduce(0.00, (subtotal, element) -> subtotal + element.getPredictedValue(), Double::sum);
     }
 
     public Double getTotalExpenses() {
-        return expenses.stream().reduce(0.00, (subtotal, element) -> subtotal + element.getValue(), Double::sum);
+        return expenses.stream().reduce(0.00, (subtotal, element) -> subtotal + element.getPredictedValue(), Double::sum);
     }
 
     public Double getBalance() {

@@ -25,13 +25,12 @@ public class ExpenseTest {
 
         assertTrue(expense.getId() == 1);
         assertEquals(2, expense.getCategories().size());
-        assertEquals("Transportation", expense.getCategories().stream().toList().get(0).getName());
-        assertEquals("Health", expense.getCategories().stream().toList().get(1).getName());
         assertEquals("Uber", expense.getTitle());
         assertEquals("Going to the doctor", expense.getDescription());
-        assertTrue(expense.getValue() == 35.90);
+        assertTrue(expense.getPredictedValue() == 35.90);
         assertEquals("2024-02-01", expense.getDueDate().toString());
         assertEquals(ExpenseStatus.LATE, expense.getStatus());
+        assertArrayEquals(categories.toArray(), expense.getCategories().toArray());
     }
 
     @Test

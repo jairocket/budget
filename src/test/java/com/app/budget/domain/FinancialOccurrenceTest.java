@@ -26,7 +26,7 @@ public class FinancialOccurrenceTest {
         assertTrue(expense.getId() == 1);
         assertEquals("Clothing", expense.getCategories().stream().toList().get(0).getName());
         assertEquals("Uber", expense.getTitle());
-        assertTrue(expense.getValue() == 35.90);
+        assertTrue(expense.getPredictedValue() == 35.90);
         assertEquals("2024-02-01", expense.getDueDate().toString());
     }
 
@@ -115,7 +115,7 @@ public class FinancialOccurrenceTest {
 
         Expense expense = new Expense(id, categories, title, null, value, dueDate, status);
 
-        assertTrue(expense.getValue() == 35.96);
+        assertTrue(expense.getPredictedValue() == 35.96);
 
     }
 
