@@ -12,34 +12,44 @@ abstract class FinancialOccurrence {
     private Set<Category> categories;
     private String title;
     private String description;
-    private Double value;
+    private Double predictedValue;
+    private Double actualValue;
     private LocalDate dueDate;
 
-    public FinancialOccurrence(Long id, Set<Category> categories, String title, String description, Double value, LocalDate dueDate) {
+    public FinancialOccurrence(Long id, Set<Category> categories, String title, String description, Double predictedValue, Double actualValue, LocalDate dueDate) {
         validateCategories(categories);
         validateTitle(title);
-        validateValue(value);
+        validateValue(predictedValue);
+        validateValue(actualValue);
         validateDueDate(dueDate);
         description = parsedDescription(description);
+        predictedValue = Optional.ofNullable(predictedValue).orElse(0.00);
+        actualValue = Optional.ofNullable(actualValue).orElse(0.00);
+
 
         this.id = id;
         this.categories = categories;
         this.title = title;
         this.description = description;
-        this.value = round(value);
+        this.predictedValue = round(predictedValue);
+        this.actualValue = round(actualValue);
         this.dueDate = dueDate;
     }
 
-    public FinancialOccurrence(Set<Category> categories, String title, String description, Double value, LocalDate dueDate) {
+    public FinancialOccurrence(Set<Category> categories, String title, String description, Double predictedValue, Double actualValue, LocalDate dueDate) {
         validateCategories(categories);
         validateTitle(title);
-        validateValue(value);
+        validateValue(predictedValue);
+        validateValue(actualValue);
         validateDueDate(dueDate);
         description = parsedDescription(description);
+        predictedValue = Optional.ofNullable(predictedValue).orElse(0.00);
+        actualValue = Optional.ofNullable(actualValue).orElse(0.00);
 
         this.categories = categories;
         this.title = title;
-        this.value = round(value);
+        this.predictedValue = round(predictedValue);
+        this.actualValue = round(actualValue);
         this.description = description;
         this.dueDate = dueDate;
     }
@@ -53,13 +63,13 @@ abstract class FinancialOccurrence {
         this.title = title;
     }
 
-    public Double getValue() {
-        return value;
+    public Double getPredictedValue() {
+        return predictedValue;
     }
 
-    public void setValue(Double value) {
-        validateValue(value);
-        this.value = value;
+    public void setPredictedValue(Double predictedValue) {
+        validateValue(predictedValue);
+        this.predictedValue = predictedValue;
     }
 
     public LocalDate getDueDate() {
@@ -92,6 +102,16 @@ abstract class FinancialOccurrence {
         this.description = description;
     }
 
+    public Double getActualValue() {
+        if (actualValue == null) return null;
+        return actualValue;
+    }
+
+    public void setActualValue(Double actualValue) {
+        validateValue(actualValue);
+        this.actualValue = actualValue;
+    }
+
     private void validateCategories(Set<Category> categories) {
         categories = Optional.ofNullable(categories).orElseThrow(() -> new FinancialOccurrenceException("Categories cannot be null"));
 
@@ -111,8 +131,7 @@ abstract class FinancialOccurrence {
     }
 
     private void validateValue(Double value) {
-        value = Optional.ofNullable(value).orElseThrow(() -> new FinancialOccurrenceException("Value cannot be null"));
-
+        value = Optional.ofNullable(value).orElse(0.00);
         if (value < 0.00) {
             throw new FinancialOccurrenceException("Value should not be lower than zero");
         }
@@ -124,7 +143,7 @@ abstract class FinancialOccurrence {
 
     private void validateDueDate(LocalDate dueDate) {
         if (dueDate == null) {
-            throw new FinancialOccurrenceException("Due date should not be lower than zero");
+            throw new FinancialOccurrenceException("Due date should not be null");
         }
     }
 

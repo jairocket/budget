@@ -53,15 +53,19 @@ public class Board {
         return user;
     }
 
-    public Double getTotalIncomes() {
-        return incomes.stream().reduce(0.00, (subtotal, element) -> subtotal + element.getValue(), Double::sum);
+    public Double getTotalPredictedIncomes() {
+        return incomes.stream().reduce(0.00, (subtotal, element) -> subtotal + element.getPredictedValue(), Double::sum);
     }
 
-    public Double getTotalExpenses() {
-        return expenses.stream().reduce(0.00, (subtotal, element) -> subtotal + element.getValue(), Double::sum);
+    public Double getTotalPredictedExpenses() {
+        return expenses.stream().reduce(0.00, (subtotal, element) -> subtotal + element.getPredictedValue(), Double::sum);
     }
 
-    public Double getBalance() {
-        return getTotalIncomes() - getTotalExpenses();
+    public Double getTotalActualIncomes() {
+        return incomes.stream().reduce(0.00, (subtotal, element) -> subtotal + element.getActualValue(), Double::sum);
+    }
+
+    public Double getTotalActualExpenses() {
+        return expenses.stream().reduce(0.00, (subtotal, element) -> subtotal + element.getActualValue(), Double::sum);
     }
 }
