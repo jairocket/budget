@@ -6,7 +6,7 @@ Budget is an API for expenses control
 
 #### User
 
-- Should have a `name` with at least three characters;
+- Should have a `name` with min of three and max of 60 characters;
 - Should have a valid `email`;
 - Should have a strong `password` with;
     - At least one special character;
@@ -30,7 +30,7 @@ Budget is an API for expenses control
 #### Financial Occurrence
 
 - Refer to anything that can have an impact on your personal finances;
-- Should have a `title` with at least three characters;
+- Should have a `title` with min of 3 and max of 45 characters;
 - Can have a short `description` with maximum of 256 characters;
     - If `description` is not informed, it should be stored as an empty string;
 - Should have a `value`;
