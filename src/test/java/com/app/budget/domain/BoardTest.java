@@ -61,7 +61,7 @@ public class BoardTest {
         Board board = new Board(user);
         board.setIncomes(List.of(income_1, income_2, income_3));
 
-        assertTrue(board.getTotalPredictedIncomes() == 100.00);
+        assertEquals(100.00, board.getTotalPredictedIncomes(), 0.00);
     }
 
     @Test
@@ -76,7 +76,7 @@ public class BoardTest {
         Board board = new Board(user);
         board.setExpenses(List.of(expense_1, expense_2, expense_3));
 
-        assertTrue(board.getTotalPredictedExpenses() == 100.00);
+        assertEquals(100.00, board.getTotalPredictedExpenses(), 0.00);
     }
 
     @Test
@@ -91,7 +91,7 @@ public class BoardTest {
         Board board = new Board(user);
         board.setIncomes(List.of(income_1, income_2, income_3));
 
-        assertTrue(board.getTotalActualIncomes() == 100.00);
+        assertEquals(100.00, board.getTotalActualIncomes(), 0.00);
     }
 
     @Test
@@ -106,6 +106,6 @@ public class BoardTest {
         Board board = new Board(user);
         board.setExpenses(List.of(expense_1, expense_2, expense_3));
 
-        assertTrue(board.getTotalActualExpenses() == 100.00);
+        assertEquals(100.00, board.getTotalActualExpenses(), 0.00);
     }
 }

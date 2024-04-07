@@ -27,7 +27,7 @@ public class FinancialOccurrenceTest {
         assertTrue(expense.getId() == 1);
         assertEquals("Clothing", expense.getCategories().stream().toList().get(0).getName());
         assertEquals("Uber", expense.getTitle());
-        assertTrue(expense.getPredictedValue() == 35.90);
+        assertEquals(35.90, expense.getPredictedValue(), 0.0);
         assertEquals("2024-02-01", expense.getDueDate().toString());
     }
 
@@ -147,7 +147,7 @@ public class FinancialOccurrenceTest {
 
         Expense expense = new Expense(id, categories, title, null, predictedValue, actualValue, dueDate, status);
 
-        assertTrue(expense.getActualValue() == 35.96);
+        assertEquals(35.96, expense.getActualValue(), 0.00);
 
     }
 
@@ -163,7 +163,7 @@ public class FinancialOccurrenceTest {
 
         Expense expense = new Expense(id, categories, title, null, value, null, dueDate, status);
 
-        assertTrue(expense.getPredictedValue() == 35.96);
+        assertEquals(35.96, expense.getPredictedValue(), 0.00);
 
     }
 
@@ -191,5 +191,125 @@ public class FinancialOccurrenceTest {
         FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> new FinancialOccurrenceTestHelper(id, categories, title, null, value, null, null));
         assertEquals("Due date should not be null", exception.getMessage());
     }
+
+    @Test
+    public void shouldBeAbleToUpdateProperties() {
+        Long id = 1L;
+        Category category = new Category("Clothing");
+        Set<Category> categories = new HashSet<>(Set.of(category));
+        String title = "Uber";
+        Double predictedValue = 35.90;
+        LocalDate dueDate = LocalDate.of(2024, 2, 1);
+
+        FinancialOccurrenceTestHelper expense = new FinancialOccurrenceTestHelper(id, categories, title, null, predictedValue, null, dueDate);
+        categories.add(new Category("Transportation"));
+
+        expense.setTitle("Taxi");
+        expense.setCategories(categories);
+        expense.setPredictedValue(38.99);
+        expense.setActualValue(41.50);
+        expense.setDescription("Going to buy clothing");
+        expense.setDueDate(LocalDate.of(2024, 2, 5));
+
+        assertEquals(2, expense.getCategories().size());
+        assertEquals("Taxi", expense.getTitle());
+        assertEquals("Going to buy clothing", expense.getDescription());
+        assertEquals(38.99, expense.getPredictedValue(), 0.00);
+        assertEquals(41.50, expense.getActualValue(), 0.00);
+        assertEquals("2024-02-05", expense.getDueDate().toString());
+        assertArrayEquals(categories.toArray(), expense.getCategories().toArray());
+    }
+
+    @Test
+    public void shouldThrowExceptionIfUpdateDueDateToNull() {
+        Long id = 1L;
+        Category category = new Category("Clothing");
+        Set<Category> categories = new HashSet<>(Set.of(category));
+        String title = "Uber";
+        Double predictedValue = 35.90;
+        LocalDate dueDate = LocalDate.of(2024, 2, 1);
+
+        FinancialOccurrenceTestHelper expense = new FinancialOccurrenceTestHelper(id, categories, title, null, predictedValue, null, dueDate);
+
+        FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> expense.setDueDate(null));
+        assertEquals("Due date should not be null", exception.getMessage());
+    }
+
+    @Test
+    public void shouldThrowExceptionIfUpdateTitleToNull() {
+        Long id = 1L;
+        Category category = new Category("Clothing");
+        Set<Category> categories = new HashSet<>(Set.of(category));
+        String title = "Uber";
+        Double predictedValue = 35.90;
+        LocalDate dueDate = LocalDate.of(2024, 2, 1);
+
+        FinancialOccurrenceTestHelper expense = new FinancialOccurrenceTestHelper(id, categories, title, null, predictedValue, null, dueDate);
+
+        FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> expense.setTitle(null));
+        assertEquals("Title cannot be null", exception.getMessage());
+    }
+
+    @Test
+    public void shouldThrowExceptionIfUpdateDescriptionToMoreThan256Characters() {
+        Long id = 1L;
+        Category category = new Category("Clothing");
+        Set<Category> categories = new HashSet<>(Set.of(category));
+        String title = "Uber";
+        Double predictedValue = 35.90;
+        LocalDate dueDate = LocalDate.of(2024, 2, 1);
+        String longDescription = RandomStringUtils.randomAlphabetic(257);
+
+        FinancialOccurrenceTestHelper expense = new FinancialOccurrenceTestHelper(id, categories, title, null, predictedValue, null, dueDate);
+
+        FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> expense.setDescription(longDescription));
+        assertEquals("Description should have less than 256 characters", exception.getMessage());
+    }
+
+    @Test
+    public void shouldThrowExceptionIfUpdatePredictedValueToLowerThanZero() {
+        Long id = 1L;
+        Category category = new Category("Clothing");
+        Set<Category> categories = new HashSet<>(Set.of(category));
+        String title = "Uber";
+        Double predictedValue = 35.90;
+        LocalDate dueDate = LocalDate.of(2024, 2, 1);
+
+        FinancialOccurrenceTestHelper expense = new FinancialOccurrenceTestHelper(id, categories, title, null, predictedValue, null, dueDate);
+
+        FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> expense.setPredictedValue(-100.99));
+        assertEquals("Value should not be lower than zero", exception.getMessage());
+    }
+
+    @Test
+    public void shouldThrowExceptionIfUpdateActualValueToLowerThanZero() {
+        Long id = 1L;
+        Category category = new Category("Clothing");
+        Set<Category> categories = new HashSet<>(Set.of(category));
+        String title = "Uber";
+        Double predictedValue = 35.90;
+        LocalDate dueDate = LocalDate.of(2024, 2, 1);
+
+        FinancialOccurrenceTestHelper expense = new FinancialOccurrenceTestHelper(id, categories, title, null, predictedValue, null, dueDate);
+
+        FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> expense.setActualValue(-100.99));
+        assertEquals("Value should not be lower than zero", exception.getMessage());
+    }
+
+    @Test
+    public void shouldThrowExceptionIfUpdateCategoriesToNull() {
+        Long id = 1L;
+        Category category = new Category("Clothing");
+        Set<Category> categories = new HashSet<>(Set.of(category));
+        String title = "Uber";
+        Double predictedValue = 35.90;
+        LocalDate dueDate = LocalDate.of(2024, 2, 1);
+
+        FinancialOccurrenceTestHelper expense = new FinancialOccurrenceTestHelper(id, categories, title, null, predictedValue, null, dueDate);
+
+        FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> expense.setCategories(null));
+        assertEquals("Categories cannot be null", exception.getMessage());
+    }
+
 }
 

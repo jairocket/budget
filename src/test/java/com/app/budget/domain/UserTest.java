@@ -103,7 +103,7 @@ public class UserTest {
     }
 
     @Test
-    public void shouldBeAbleToUpdateUserName() {
+    public void shouldBeAbleToUpdateUserNameAndRole() {
         Long id = 1L;
         String name = "New User";
         String email = "new.user@budget.com";
@@ -111,8 +111,10 @@ public class UserTest {
         User user = new User(id, name, email, password, UserRole.ADMIN);
 
         user.setName("Updated User");
+        user.setRole(UserRole.USER);
 
         assertEquals("Updated User", user.getName());
+        assertEquals(UserRole.USER, user.getRole());
     }
 
     @Test
@@ -124,6 +126,17 @@ public class UserTest {
 
         UserCreationException exception = assertThrows(UserCreationException.class, () -> user.setName("Me"));
         assertEquals("User name should have at least three characters", exception.getMessage());
+    }
+
+    @Test
+    public void shouldValidateRoleBeforeUpdateIt() {
+        String name = "New User";
+        String email = "new.user@budget.com";
+        String password = "P@inK1ller";
+        User user = new User(name, email, password, UserRole.USER);
+
+        UserCreationException exception = assertThrows(UserCreationException.class, () -> user.setRole(null));
+        assertEquals("Role should be informed.", exception.getMessage());
     }
 
     @Test

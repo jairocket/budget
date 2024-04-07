@@ -27,7 +27,7 @@ public class IncomeTest {
         assertEquals(1, income.getCategories().size());
         assertEquals("Transportation", income.getCategories().stream().toList().get(0).getName());
         assertEquals("Uber", income.getTitle());
-        assertTrue(income.getPredictedValue() == 35.90);
+        assertEquals(35.90, income.getPredictedValue(), 0.00);
         assertEquals("2024-02-01", income.getDueDate().toString());
         assertEquals("", income.getDescription());
         assertEquals(IncomeStatus.PENDING, income.getStatus());

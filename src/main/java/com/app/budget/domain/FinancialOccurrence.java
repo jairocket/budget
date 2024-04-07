@@ -101,6 +101,7 @@ abstract class FinancialOccurrence {
     }
 
     public void setDescription(String description) {
+        validateDescription(description);
         this.description = description;
     }
 
