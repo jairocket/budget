@@ -39,5 +39,9 @@ public class Category {
         if (name.length() < 3) {
             throw new CategoryException("User category should have at least three characters");
         }
+
+        if (name.length() > 45) {
+            throw new CategoryException("User category should have less than forty-five characters");
+        }
     }
 }

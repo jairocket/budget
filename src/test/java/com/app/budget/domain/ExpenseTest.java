@@ -28,7 +28,7 @@ public class ExpenseTest {
         assertEquals(2, expense.getCategories().size());
         assertEquals("Uber", expense.getTitle());
         assertEquals("Going to the doctor", expense.getDescription());
-        assertTrue(expense.getPredictedValue() == 35.90);
+        assertEquals(35.90, expense.getPredictedValue(), 0.00);
         assertEquals("2024-02-01", expense.getDueDate().toString());
         assertEquals(ExpenseStatus.LATE, expense.getStatus());
         assertArrayEquals(categories.toArray(), expense.getCategories().toArray());
@@ -46,6 +46,22 @@ public class ExpenseTest {
         Expense expense = new Expense(id, categories, title, null, predictedValue, null, dueDate, null);
 
         assertEquals(expense.getStatus(), ExpenseStatus.PENDING);
+    }
+
+    @Test
+    public void shouldBeAbleToUpdateStatus() {
+        Long id = 1L;
+        Set<Category> categories = new HashSet<>();
+        categories.add(new Category("Transportation"));
+        String title = "Uber";
+        Double predictedValue = 35.9563;
+        LocalDate dueDate = LocalDate.of(2024, 2, 1);
+        Expense expense = new Expense(id, categories, title, null, predictedValue, null, dueDate, null);
+
+        expense.setStatus(ExpenseStatus.PAID);
+
+        assertEquals(expense.getStatus(), ExpenseStatus.PAID);
+
     }
 
     @Test
