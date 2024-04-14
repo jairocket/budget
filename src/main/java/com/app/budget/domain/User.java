@@ -6,8 +6,6 @@ import com.app.budget.exceptions.UserCreationException;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-import static com.app.budget.domain.Authentication.hash;
-
 public class User {
     private final String email;
     private Long id;
@@ -17,22 +15,20 @@ public class User {
 
     public User(String name, String email, String password, UserRole role) {
         validateUserConstructor(name, email, password, role);
-        String hashedPassword = hash(password);
 
         this.name = name;
         this.email = email;
-        this.password = hashedPassword;
+        this.password = password;
         this.role = role;
     }
 
     public User(Long id, String name, String email, String password, UserRole role) {
         validateUserConstructor(name, email, password, role);
-        String hashedPassword = hash(password);
 
         this.id = id;
         this.name = name;
         this.email = email;
-        this.password = hashedPassword;
+        this.password = password;
         this.role = role;
     }
 
