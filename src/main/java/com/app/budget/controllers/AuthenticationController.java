@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +28,9 @@ public class AuthenticationController {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody AuthenticationDTO authenticationDTO) {
         var userNamePassword = new UsernamePasswordAuthenticationToken(authenticationDTO.email(), authenticationDTO.password());
@@ -43,7 +46,7 @@ public class AuthenticationController {
             return ResponseEntity.badRequest().build();
         }
 
-        String encryptedPassword = new BCryptPasswordEncoder().encode(userRegisterDTO.password());
+        String encryptedPassword = passwordEncoder.encode(userRegisterDTO.password());
         UserEntity entity = new UserEntity(userRegisterDTO.name(), userRegisterDTO.email(), encryptedPassword, userRegisterDTO.role());
 
         this.userRepository.save(entity);
