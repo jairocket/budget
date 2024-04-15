@@ -22,7 +22,7 @@ public class SecurityConfiguration {
 
     @Autowired
     SecurityFilter securityFilter;
-    
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -49,6 +49,6 @@ public class SecurityConfiguration {
         Integer HASH_STRENGTH = 16;
         SecureRandom random = new SecureRandom();
 
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(HASH_STRENGTH, random);
     }
 }
