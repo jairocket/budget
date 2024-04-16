@@ -27,6 +27,14 @@ public class UserEntity implements UserDetails {
         this.role = role;
     }
 
+    public UserEntity(Long id, String name, String email, String password, UserRole role) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+
     public UserEntity() {
     }
 
