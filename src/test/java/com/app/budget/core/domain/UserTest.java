@@ -1,7 +1,7 @@
 package com.app.budget.core.domain;
 
 import com.app.budget.core.enums.UserRole;
-import com.app.budget.core.exceptions.UserCreationException;
+import com.app.budget.core.exceptions.UserException;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -25,12 +25,11 @@ public class UserTest {
 
     @Test
     public void shouldThrowExceptionIfPassWordIsInvalid() {
-        Long id = 1L;
         String name = "New User";
         String email = "new.user@budget.com";
         String password = "ThePassWord";
 
-        UserCreationException exception = assertThrows(UserCreationException.class, () -> new User(id, name, email, password, UserRole.USER));
+        UserException exception = assertThrows(UserException.class, () -> new User(name, email, password, UserRole.USER));
         assertEquals("Inform a valid password", exception.getMessage());
     }
 
@@ -39,7 +38,7 @@ public class UserTest {
         String email = "new.user@budget.com";
         String password = "ThePassWord";
 
-        UserCreationException exception = assertThrows(UserCreationException.class, () -> new User(null, email, password, UserRole.ADMIN));
+        UserException exception = assertThrows(UserException.class, () -> new User(null, email, password, UserRole.ADMIN));
         assertEquals("User name cannot be null", exception.getMessage());
     }
 
@@ -49,7 +48,7 @@ public class UserTest {
         String email = "new.user@budget.com";
         String password = "P@inK1ller";
 
-        UserCreationException exception = assertThrows(UserCreationException.class, () -> new User(name, email, password, null));
+        UserException exception = assertThrows(UserException.class, () -> new User(name, email, password, null));
         assertEquals("Role should be informed.", exception.getMessage());
     }
 
@@ -58,7 +57,7 @@ public class UserTest {
         String name = "New User";
         String password = "ThePassWord";
 
-        UserCreationException exception = assertThrows(UserCreationException.class, () -> new User(name, null, password, UserRole.USER));
+        UserException exception = assertThrows(UserException.class, () -> new User(name, null, password, UserRole.USER));
         assertEquals("User email cannot be null", exception.getMessage());
     }
 
@@ -68,7 +67,7 @@ public class UserTest {
         String email = "new.user#budget.com";
         String password = "ThePassWord";
 
-        UserCreationException exception = assertThrows(UserCreationException.class, () -> new User(name, email, password, UserRole.USER));
+        UserException exception = assertThrows(UserException.class, () -> new User(name, email, password, UserRole.USER));
         assertEquals("Inform a valid email", exception.getMessage());
     }
 
@@ -77,7 +76,7 @@ public class UserTest {
         String name = "New User";
         String email = "new.user@budget.com";
 
-        UserCreationException exception = assertThrows(UserCreationException.class, () -> new User(name, email, null, UserRole.ADMIN));
+        UserException exception = assertThrows(UserException.class, () -> new User(name, email, null, UserRole.ADMIN));
         assertEquals("User password cannot be null", exception.getMessage());
     }
 
@@ -87,7 +86,7 @@ public class UserTest {
         String email = "new.user@budget.com";
         String password = "ThePassWord";
 
-        UserCreationException exception = assertThrows(UserCreationException.class, () -> new User(name, email, password, UserRole.USER));
+        UserException exception = assertThrows(UserException.class, () -> new User(name, email, password, UserRole.USER));
         assertEquals("User name should have at least three characters", exception.getMessage());
     }
 
@@ -97,7 +96,7 @@ public class UserTest {
         String email = "new.user@budget.com";
         String password = "ThePassWord";
 
-        UserCreationException exception = assertThrows(UserCreationException.class, () -> new User(longName, email, password, UserRole.USER));
+        UserException exception = assertThrows(UserException.class, () -> new User(longName, email, password, UserRole.USER));
         assertEquals("User name should have less than sixty characters", exception.getMessage());
     }
 
@@ -123,7 +122,7 @@ public class UserTest {
         String password = "P@inK1ller";
         User user = new User(name, email, password, UserRole.USER);
 
-        UserCreationException exception = assertThrows(UserCreationException.class, () -> user.setName("Me"));
+        UserException exception = assertThrows(UserException.class, () -> user.setName("Me"));
         assertEquals("User name should have at least three characters", exception.getMessage());
     }
 
@@ -134,7 +133,7 @@ public class UserTest {
         String password = "P@inK1ller";
         User user = new User(name, email, password, UserRole.USER);
 
-        UserCreationException exception = assertThrows(UserCreationException.class, () -> user.setRole(null));
+        UserException exception = assertThrows(UserException.class, () -> user.setRole(null));
         assertEquals("Role should be informed.", exception.getMessage());
     }
 
@@ -158,7 +157,7 @@ public class UserTest {
         String password = "P@inK1ller";
         User user = new User(name, email, password, UserRole.USER);
 
-        UserCreationException exception = assertThrows(UserCreationException.class, () -> user.setPassword("ThePassword"));
+        UserException exception = assertThrows(UserException.class, () -> user.setPassword("ThePassword"));
         assertEquals("Inform a valid password", exception.getMessage());
     }
 }
