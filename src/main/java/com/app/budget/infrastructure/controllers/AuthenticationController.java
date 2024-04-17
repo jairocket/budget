@@ -1,20 +1,26 @@
 package com.app.budget.infrastructure.controllers;
 
+import com.app.budget.core.domain.User;
 import com.app.budget.core.services.TokenService;
+import com.app.budget.core.services.UserService;
 import com.app.budget.infrastructure.controllers.dto.AuthenticationDTO;
 import com.app.budget.infrastructure.controllers.dto.LoginResponseDTO;
 import com.app.budget.infrastructure.controllers.dto.UserRegisterDTO;
+import com.app.budget.infrastructure.controllers.dto.UserRegisterResponseDTO;
+import com.app.budget.infrastructure.gateways.UserDTOMapper;
 import com.app.budget.infrastructure.persistence.entities.UserEntity;
 import com.app.budget.infrastructure.persistence.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/auth")
@@ -29,7 +35,10 @@ public class AuthenticationController {
     private TokenService tokenService;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private UserService userService;
+
+    @Autowired
+    private UserDTOMapper userDTOMapper;
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody AuthenticationDTO authenticationDTO) {
@@ -41,16 +50,12 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody UserRegisterDTO userRegisterDTO) {
-        if (this.userRepository.findByEmail(userRegisterDTO.email()) != null) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<UserRegisterResponseDTO> register(@RequestBody UserRegisterDTO userRegisterDTO) {
+        User user = userDTOMapper.toDomain(userRegisterDTO);
+        User newUser = userService.register(user);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(newUser.getId()).toUri();
+        UserRegisterResponseDTO userRegisterResponseDTO = userDTOMapper.toResponse(newUser);
 
-        String encryptedPassword = passwordEncoder.encode(userRegisterDTO.password());
-        UserEntity entity = new UserEntity(userRegisterDTO.name(), userRegisterDTO.email(), encryptedPassword, userRegisterDTO.role());
-
-        this.userRepository.save(entity);
-
-        return ResponseEntity.ok().build();
+        return ResponseEntity.created(uri).body(userRegisterResponseDTO);
     }
 }
