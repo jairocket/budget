@@ -14,3 +14,5 @@ api:
   security:
     token:
       secret: ${JWT_SECRET:my-secret-key}
+jwt:
+  cookie-expiration: 10800
