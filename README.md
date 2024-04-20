@@ -8,6 +8,7 @@ Budget is an API for expenses control
 
 - Should have a `name` with min of three and max of 60 characters;
 - Should have a valid `email`;
+- Should have a unique `email`;
 - Should have a strong `password` with;
     - At least one special character;
     - At least one digit;
