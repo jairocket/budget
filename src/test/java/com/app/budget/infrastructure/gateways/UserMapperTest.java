@@ -13,7 +13,7 @@ public class UserMapperTest {
     @Test
     public void shouldBeAbleToConvertInEntity() {
         User userDomain = new User(1L, "Pedro", "pedro@email.com", "P1poc@85", UserRole.USER);
-        UserEntity entity = mapper.toEntity(userDomain);
+        UserEntity entity = mapper.toEntity(userDomain.getId(), userDomain.getName(), userDomain.getEmail(), userDomain.getPassword(), userDomain.getRole());
 
         assertEquals(1, entity.getId().longValue());
         assertEquals("Pedro", entity.getName());
