@@ -10,11 +10,6 @@ import java.util.Optional;
 @Component
 public class UserMapper {
 
-    public UserEntity toEntity(User domain) {
-        Long id = Optional.ofNullable(domain.getId()).orElse(null);
-        return new UserEntity(id, domain.getName(), domain.getEmail(), domain.getPassword(), domain.getRole());
-    }
-
     public UserEntity toEntity(Long id, String name, String email, String password, UserRole role) {
         id = Optional.ofNullable(id).orElse(null);
         return new UserEntity(id, name, email, password, role);
