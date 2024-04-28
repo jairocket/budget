@@ -28,7 +28,7 @@ public class AuthenticationControllerTest extends AbstractIntegrationTest {
     void shouldBeAbleToLogin() {
         UserEntity entity = new UserEntity("Michael Jordan", "mj@nba.com", "Pipoc@85", UserRole.USER);
 
-        UserRegisterDTO registerDTO = new UserRegisterDTO(entity.getName(), entity.getEmail(), entity.getPassword(), entity.getRole());
+        UserRegisterDTO registerDTO = new UserRegisterDTO(entity.getName(), entity.getEmail(), entity.getPassword());
 
         given()
                 .contentType(ContentType.JSON)

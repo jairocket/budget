@@ -1,6 +1,7 @@
 package com.app.budget.infrastructure.controllers;
 
 import com.app.budget.core.domain.User;
+import com.app.budget.core.enums.UserRole;
 import com.app.budget.core.services.UserService;
 import com.app.budget.infrastructure.controllers.dto.UserRegisterDTO;
 import com.app.budget.infrastructure.controllers.dto.UserRegisterResponseDTO;
@@ -26,7 +27,8 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<UserRegisterResponseDTO> register(@RequestBody UserRegisterDTO userRegisterDTO) {
-        User user = userDTOMapper.toDomain(userRegisterDTO);
+        UserRole role = UserRole.USER;
+        User user = userDTOMapper.toDomain(userRegisterDTO, role);
         User newUser = userService.register(user);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(newUser.getId()).toUri();
         UserRegisterResponseDTO userRegisterResponseDTO = userDTOMapper.toResponse(newUser);

@@ -1,6 +1,5 @@
 package com.app.budget.infrastructure.controllers;
 
-import com.app.budget.core.enums.UserRole;
 import com.app.budget.infrastructure.AbstractIntegrationTest;
 import com.app.budget.infrastructure.controllers.dto.UserRegisterDTO;
 import com.app.budget.infrastructure.persistence.repositories.UserRepository;
@@ -27,9 +26,8 @@ public class UserControllerTest extends AbstractIntegrationTest {
         String name = "Michael Jordan";
         String email = "mj@nba.com";
         String password = "Pipoc@85";
-        UserRole role = UserRole.USER;
 
-        UserRegisterDTO registerDTO = new UserRegisterDTO(name, email, password, role);
+        UserRegisterDTO registerDTO = new UserRegisterDTO(name, email, password);
 
         given()
                 .contentType(ContentType.JSON)
@@ -49,9 +47,8 @@ public class UserControllerTest extends AbstractIntegrationTest {
         String name = "Michael Jordan";
         String email = "mj@nba.com";
         String password = "Pipoc@85";
-        UserRole role = UserRole.USER;
 
-        UserRegisterDTO registerDTO = new UserRegisterDTO(name, email, password, role);
+        UserRegisterDTO registerDTO = new UserRegisterDTO(name, email, password);
 
         given()
                 .contentType(ContentType.JSON)
