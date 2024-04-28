@@ -1,14 +1,8 @@
 package com.app.budget.infrastructure.controllers;
 
-import com.app.budget.core.domain.User;
 import com.app.budget.core.services.TokenService;
-import com.app.budget.core.services.UserService;
 import com.app.budget.infrastructure.controllers.dto.AuthenticationDTO;
-import com.app.budget.infrastructure.controllers.dto.UserRegisterDTO;
-import com.app.budget.infrastructure.controllers.dto.UserRegisterResponseDTO;
-import com.app.budget.infrastructure.gateways.UserDTOMapper;
 import com.app.budget.infrastructure.persistence.entities.UserEntity;
-import com.app.budget.infrastructure.persistence.repositories.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,9 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.net.URI;
 
 @RestController
 @RequestMapping("/auth")
@@ -33,13 +24,7 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private TokenService tokenService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private UserDTOMapper userDTOMapper;
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody AuthenticationDTO authenticationDTO, HttpServletResponse response) {
@@ -57,15 +42,5 @@ public class AuthenticationController {
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
         return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/register")
-    public ResponseEntity<UserRegisterResponseDTO> register(@RequestBody UserRegisterDTO userRegisterDTO) {
-        User user = userDTOMapper.toDomain(userRegisterDTO);
-        User newUser = userService.register(user);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(newUser.getId()).toUri();
-        UserRegisterResponseDTO userRegisterResponseDTO = userDTOMapper.toResponse(newUser);
-
-        return ResponseEntity.created(uri).body(userRegisterResponseDTO);
     }
 }
