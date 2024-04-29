@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
     @Autowired
@@ -29,6 +31,11 @@ public class UserService {
 
         UserEntity newEntity = this.userRepository.save(entity);
         return userMapper.toDomain(newEntity);
+    }
+
+    public List<User> findAll() {
+        List<UserEntity> userEntities = this.userRepository.findAll();
+        return userEntities.stream().map(userMapper::toDomain).toList();
     }
 
 
