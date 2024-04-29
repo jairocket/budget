@@ -18,8 +18,9 @@ Budget is an API for expenses control
     - Should be hashed before stored;
 - Should have a `role`;
     - Regular users should be able to manage their own boards;
-    - Admin users should be able to manage all api resources.
+    - Admin users should be able to manage all api resources;
 - Can have one or more `Boards`
+- Should be authenticated and should have role ADMIN to create new ADMIN user.
 
 #### Board
 

@@ -35,4 +35,15 @@ public class UserController {
 
         return ResponseEntity.created(uri).body(userRegisterResponseDTO);
     }
+
+    @PostMapping("/register/admin")
+    public ResponseEntity<UserRegisterResponseDTO> registerAdmin(@RequestBody UserRegisterDTO userRegisterDTO) {
+        UserRole role = UserRole.ADMIN;
+        User user = userDTOMapper.toDomain(userRegisterDTO, role);
+        User newUser = userService.register(user);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(newUser.getId()).toUri();
+        UserRegisterResponseDTO userRegisterResponseDTO = userDTOMapper.toResponse(newUser);
+
+        return ResponseEntity.created(uri).body(userRegisterResponseDTO);
+    }
 }
