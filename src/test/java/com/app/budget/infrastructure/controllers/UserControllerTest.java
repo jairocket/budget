@@ -56,7 +56,7 @@ public class UserControllerTest extends AbstractIntegrationTest {
     @Test
     void shouldBeAbleToRegisterAdminUser() {
         var adminUser = new User("Marcelinho", "marcelinho@br.com", "Pipoc@85", UserRole.ADMIN);
-        var adminUserEntity = userMapper.toEntity(adminUser.getId(), adminUser.getName(), adminUser.getPassword(), adminUser.getPassword(), adminUser.getRole());
+        var adminUserEntity = userMapper.toEntity(adminUser.getId(), adminUser.getName(), adminUser.getEmail(), adminUser.getPassword(), adminUser.getRole());
         var adminToken = tokenService.generateToken(adminUserEntity);
         repository.save(adminUserEntity);
 
@@ -85,7 +85,7 @@ public class UserControllerTest extends AbstractIntegrationTest {
         String email = "os@nba.com";
         String password = "Pipoc@85";
         var adminUser = new User(name, email, password, UserRole.ADMIN);
-        var adminUserEntity = userMapper.toEntity(adminUser.getId(), adminUser.getName(), adminUser.getPassword(), adminUser.getPassword(), adminUser.getRole());
+        var adminUserEntity = userMapper.toEntity(adminUser.getId(), adminUser.getName(), adminUser.getEmail(), adminUser.getPassword(), adminUser.getRole());
         repository.save(adminUserEntity);
 
         UserRegisterDTO registerDTO = new UserRegisterDTO(adminUserEntity.getName(), adminUserEntity.getEmail(), adminUser.getPassword());
@@ -120,7 +120,7 @@ public class UserControllerTest extends AbstractIntegrationTest {
     @Test
     void shouldNotBeAbleToRegisterNewAdminUserIfDoesNotHaveRoleAdmin() {
         var regularUser = new User("Marcelinho", "marcelinho@br.com", "Pipoc@85", UserRole.USER);
-        var regularUserEntity = userMapper.toEntity(regularUser.getId(), regularUser.getName(), regularUser.getPassword(), regularUser.getPassword(), regularUser.getRole());
+        var regularUserEntity = userMapper.toEntity(regularUser.getId(), regularUser.getName(), regularUser.getEmail(), regularUser.getPassword(), regularUser.getRole());
         var regularUserToken = tokenService.generateToken(regularUserEntity);
         repository.save(regularUserEntity);
 
@@ -141,10 +141,10 @@ public class UserControllerTest extends AbstractIntegrationTest {
 
     @Test
     void shouldBeAbleToFindAllUsers() {
-        var adminUser = new User(null, "Oscar Schmidt", "oscar2@nba.com", "Pipoc@85", UserRole.ADMIN);
+        var adminUser = new User("Oscar Schmidt", "oscar2@nba.com", "Pipoc@85", UserRole.ADMIN);
         var adminUserEntity = userMapper.toEntity(adminUser.getId(), adminUser.getName(), adminUser.getEmail(), adminUser.getPassword(), adminUser.getRole());
         var adminToken = tokenService.generateToken(adminUserEntity);
-        var regularUser = new User(null, "Marcelinho", "marcelinho@br.com", "Pipoc@85", UserRole.USER);
+        var regularUser = new User("Marcelinho", "marcelinho@br.com", "Pipoc@85", UserRole.USER);
         var regularUserEntity = userMapper.toEntity(regularUser.getId(), regularUser.getName(), regularUser.getEmail(), regularUser.getPassword(), regularUser.getRole());
         repository.saveAll(List.of(regularUserEntity, adminUserEntity));
 
@@ -162,9 +162,9 @@ public class UserControllerTest extends AbstractIntegrationTest {
 
     @Test
     void shouldNotBeAbleToFindAllUsersIfDoesNotHaveAdminRole() {
-        var adminUser = new User(null, "Oscar Schmidt", "oscar2@nba.com", "Pipoc@85", UserRole.ADMIN);
+        var adminUser = new User("Oscar Schmidt", "oscar2@nba.com", "Pipoc@85", UserRole.ADMIN);
         var adminUserEntity = userMapper.toEntity(adminUser.getId(), adminUser.getName(), adminUser.getEmail(), adminUser.getPassword(), adminUser.getRole());
-        var regularUser = new User(null, "Marcelinho", "marcelinho@br.com", "Pipoc@85", UserRole.USER);
+        var regularUser = new User("Marcelinho", "marcelinho@br.com", "Pipoc@85", UserRole.USER);
         var regularUserEntity = userMapper.toEntity(regularUser.getId(), regularUser.getName(), regularUser.getEmail(), regularUser.getPassword(), regularUser.getRole());
         var regularToken = tokenService.generateToken(regularUserEntity);
 
