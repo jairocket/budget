@@ -55,4 +55,35 @@ public class AuthenticationControllerTest extends AbstractIntegrationTest {
                 .cookie("token", notNullValue());
 
     }
+
+    @Test
+    void shouldNotBeAbleToLoginWithWrongPassword() {
+        UserEntity entity = new UserEntity("Michael Jordan", "mj@nba.com", "Pipoc@85", UserRole.USER);
+
+        UserRegisterDTO registerDTO = new UserRegisterDTO(entity.getName(), entity.getEmail(), entity.getPassword());
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(registerDTO)
+                .when()
+                .post("users/register")
+                .then()
+                .statusCode(201)
+                .body("id", notNullValue())
+                .body("name", is("Michael Jordan"))
+                .body("email", is("mj@nba.com"))
+                .body("role", is("USER"));
+
+
+        AuthenticationDTO authenticationDTO = new AuthenticationDTO(entity.getEmail(), "wrongPassword");
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(authenticationDTO)
+                .when()
+                .post("/auth/login")
+                .then()
+                .statusCode(403);
+
+    }
 }
