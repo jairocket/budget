@@ -3,6 +3,7 @@ package com.app.budget.infrastructure.controllers;
 import com.app.budget.core.domain.User;
 import com.app.budget.core.enums.UserRole;
 import com.app.budget.core.services.UserService;
+import com.app.budget.infrastructure.controllers.dto.UpdatePasswordDTO;
 import com.app.budget.infrastructure.controllers.dto.UserRegisterDTO;
 import com.app.budget.infrastructure.controllers.dto.UserRegisterResponseDTO;
 import com.app.budget.infrastructure.gateways.UserDTOMapper;
@@ -49,5 +50,11 @@ public class UserController {
     public ResponseEntity<List<UserRegisterResponseDTO>> findAll() {
         List<User> users = userService.findAll();
         return ResponseEntity.ok().body(users.stream().map(userDTOMapper::toResponse).toList());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserRegisterResponseDTO> updatePassword(@PathVariable Long id, @RequestBody UpdatePasswordDTO updatePasswordDTO) {
+        userService.updatePassword(id, updatePasswordDTO.password());
+        return ResponseEntity.ok().build();
     }
 }

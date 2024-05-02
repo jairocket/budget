@@ -4,6 +4,7 @@ import com.app.budget.core.domain.User;
 import com.app.budget.core.enums.UserRole;
 import com.app.budget.core.services.TokenService;
 import com.app.budget.infrastructure.AbstractIntegrationTest;
+import com.app.budget.infrastructure.controllers.dto.UpdatePasswordDTO;
 import com.app.budget.infrastructure.controllers.dto.UserRegisterDTO;
 import com.app.budget.infrastructure.gateways.UserMapper;
 import com.app.budget.infrastructure.persistence.repositories.UserRepository;
@@ -177,5 +178,24 @@ public class UserControllerTest extends AbstractIntegrationTest {
                 .get("/users")
                 .then()
                 .statusCode(403);
+    }
+
+    @Test
+    void shouldBeAbleToUpdatePassword() {
+        var regularUser = new User("Marcelinho", "marcelinho@br.com", "Pipoc@85", UserRole.USER);
+        var regularUserEntity = userMapper.toEntity(regularUser.getId(), regularUser.getName(), regularUser.getEmail(), regularUser.getPassword(), regularUser.getRole());
+        var regularToken = tokenService.generateToken(regularUserEntity);
+
+        var savedUser = repository.save(regularUserEntity);
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + regularToken)
+                .body(new UpdatePasswordDTO("Pipoc@86"))
+                .when()
+                .put("/users/" + savedUser.getId())
+                .then()
+                .statusCode(200);
+
     }
 }
