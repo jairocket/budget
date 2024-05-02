@@ -38,5 +38,20 @@ public class UserService {
         return userEntities.stream().map(userMapper::toDomain).toList();
     }
 
+    public User updatePassword(Long id, String password) {
+        UserEntity entity = this.userRepository.findById(id).orElseThrow(() -> new UserException("Could not update user because it was not found."));
+
+        User user = userMapper.toDomain(entity);
+        user.setPassword(password);
+
+        String encryptedPassword = passwordEncoder.encode(user.getPassword());
+        UserEntity updatedEntity = userMapper.toEntity(user.getId(), user.getName(), user.getEmail(), encryptedPassword, user.getRole());
+
+        User updatedUser = userMapper.toDomain(userRepository.save(updatedEntity));
+
+        return updatedUser;
+
+
+    }
 
 }
