@@ -4,6 +4,7 @@ import com.app.budget.core.domain.User;
 import com.app.budget.core.enums.UserRole;
 import com.app.budget.core.services.UserService;
 import com.app.budget.infrastructure.controllers.dto.UpdatePasswordDTO;
+import com.app.budget.infrastructure.controllers.dto.UpdateRoleDTO;
 import com.app.budget.infrastructure.controllers.dto.UserRegisterDTO;
 import com.app.budget.infrastructure.controllers.dto.UserRegisterResponseDTO;
 import com.app.budget.infrastructure.gateways.UserDTOMapper;
@@ -54,9 +55,23 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<UserRegisterResponseDTO> updatePassword(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody UpdatePasswordDTO updatePasswordDTO) {
+    public ResponseEntity<UserRegisterResponseDTO> updatePassword(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestBody UpdatePasswordDTO updatePasswordDTO
+    ) {
 
         userService.updatePassword(token, updatePasswordDTO.password());
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserRegisterResponseDTO> updateRole(
+            @PathVariable Long id,
+            @RequestBody UpdateRoleDTO updateRoleDTO
+    ) {
+        User user = userService.updateRole(id, updateRoleDTO.role());
+        UserRegisterResponseDTO userRegisterResponseDTO = userDTOMapper.toResponse(user);
+
+        return ResponseEntity.ok().body(userRegisterResponseDTO);
     }
 }
