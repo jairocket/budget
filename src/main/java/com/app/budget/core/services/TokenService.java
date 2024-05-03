@@ -44,6 +44,10 @@ public class TokenService {
         }
     }
 
+    public String extractEmailFromToken(String token) {
+        return JWT.decode(token).getSubject();
+    }
+
     private Instant generateExpirationDate() {
         return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
     }

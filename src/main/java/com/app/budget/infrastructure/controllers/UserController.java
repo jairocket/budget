@@ -8,6 +8,7 @@ import com.app.budget.infrastructure.controllers.dto.UserRegisterDTO;
 import com.app.budget.infrastructure.controllers.dto.UserRegisterResponseDTO;
 import com.app.budget.infrastructure.gateways.UserDTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -52,9 +53,10 @@ public class UserController {
         return ResponseEntity.ok().body(users.stream().map(userDTOMapper::toResponse).toList());
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UserRegisterResponseDTO> updatePassword(@PathVariable Long id, @RequestBody UpdatePasswordDTO updatePasswordDTO) {
-        userService.updatePassword(id, updatePasswordDTO.password());
+    @PutMapping
+    public ResponseEntity<UserRegisterResponseDTO> updatePassword(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody UpdatePasswordDTO updatePasswordDTO) {
+
+        userService.updatePassword(token, updatePasswordDTO.password());
         return ResponseEntity.ok().build();
     }
 }

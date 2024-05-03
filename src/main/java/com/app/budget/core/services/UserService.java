@@ -20,6 +20,9 @@ public class UserService {
     private UserMapper userMapper;
 
     @Autowired
+    private TokenService tokenService;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     public User register(User user) {
@@ -38,8 +41,13 @@ public class UserService {
         return userEntities.stream().map(userMapper::toDomain).toList();
     }
 
-    public User updatePassword(Long id, String password) {
-        UserEntity entity = this.userRepository.findById(id).orElseThrow(() -> new UserException("Could not update user because it was not found."));
+    public User updatePassword(String token, String password) {
+        String jwt = token.replace("Bearer ", "");
+        String email = tokenService.extractEmailFromToken(jwt);
+
+        UserEntity entity = (UserEntity) this.userRepository.findByEmail(email);
+
+        //user details to domain
 
         User user = userMapper.toDomain(entity);
         user.setPassword(password);
