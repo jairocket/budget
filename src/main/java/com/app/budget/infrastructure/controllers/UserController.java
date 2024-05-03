@@ -3,10 +3,7 @@ package com.app.budget.infrastructure.controllers;
 import com.app.budget.core.domain.User;
 import com.app.budget.core.enums.UserRole;
 import com.app.budget.core.services.UserService;
-import com.app.budget.infrastructure.controllers.dto.UpdatePasswordDTO;
-import com.app.budget.infrastructure.controllers.dto.UpdateRoleDTO;
-import com.app.budget.infrastructure.controllers.dto.UserRegisterDTO;
-import com.app.budget.infrastructure.controllers.dto.UserRegisterResponseDTO;
+import com.app.budget.infrastructure.controllers.dto.*;
 import com.app.budget.infrastructure.gateways.UserDTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -64,7 +61,19 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/name")
+    public ResponseEntity<UserRegisterResponseDTO> updateName(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestBody UpdateNameDTO updateNameDTO
+    ) {
+
+        User user = userService.updateName(token, updateNameDTO.name());
+        UserRegisterResponseDTO userRegisterResponseDTO = userDTOMapper.toResponse(user);
+
+        return ResponseEntity.ok().body(userRegisterResponseDTO);
+    }
+
+    @PutMapping("/role/{id}")
     public ResponseEntity<UserRegisterResponseDTO> updateRole(
             @PathVariable Long id,
             @RequestBody UpdateRoleDTO updateRoleDTO

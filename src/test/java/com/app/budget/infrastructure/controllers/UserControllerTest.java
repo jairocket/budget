@@ -4,6 +4,7 @@ import com.app.budget.core.domain.User;
 import com.app.budget.core.enums.UserRole;
 import com.app.budget.core.services.TokenService;
 import com.app.budget.infrastructure.AbstractIntegrationTest;
+import com.app.budget.infrastructure.controllers.dto.UpdateNameDTO;
 import com.app.budget.infrastructure.controllers.dto.UpdatePasswordDTO;
 import com.app.budget.infrastructure.controllers.dto.UpdateRoleDTO;
 import com.app.budget.infrastructure.controllers.dto.UserRegisterDTO;
@@ -30,7 +31,7 @@ public class UserControllerTest extends AbstractIntegrationTest {
     private UserMapper userMapper;
 
     @BeforeEach
-    void setUpUsers() {
+    void clearRepository() {
         repository.deleteAll();
     }
 
@@ -216,7 +217,7 @@ public class UserControllerTest extends AbstractIntegrationTest {
                 .header("Authorization", "Bearer " + regularToken)
                 .body(new UpdateRoleDTO("ADMIN"))
                 .when()
-                .put("/users" + savedRegularUser.getId())
+                .put("/users/role/" + savedRegularUser.getId())
                 .then()
                 .statusCode(403);
     }
@@ -236,11 +237,31 @@ public class UserControllerTest extends AbstractIntegrationTest {
                 .header("Authorization", "Bearer " + adminToken)
                 .body(new UpdateRoleDTO("ADMIN"))
                 .when()
-                .put("/users/" + savedRegularUser.getId())
+                .put("/users/role/" + savedRegularUser.getId())
                 .then()
                 .statusCode(200)
                 .body("name", is("Marcelinho"))
                 .body("role", is("ADMIN"));
+    }
+
+    @Test
+    void shouldBeAbleToUpdateUserName() {
+        var regularUser = new User("Marcelinho", "marcelinho@br.com", "Pipoc@85", UserRole.USER);
+        var regularUserEntity = userMapper.toEntity(regularUser.getId(), regularUser.getName(), regularUser.getEmail(), regularUser.getPassword(), regularUser.getRole());
+        var regularToken = tokenService.generateToken(regularUserEntity);
+
+        repository.save(regularUserEntity);
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + regularToken)
+                .body(new UpdateNameDTO("Lucas"))
+                .when()
+                .put("/users/name")
+                .then()
+                .statusCode(200)
+                .body("name", is("Lucas"));
+
     }
 
 
