@@ -1,6 +1,7 @@
 package com.app.budget.core.services;
 
 import com.app.budget.core.domain.User;
+import com.app.budget.core.enums.UserRole;
 import com.app.budget.core.exceptions.UserException;
 import com.app.budget.infrastructure.gateways.UserMapper;
 import com.app.budget.infrastructure.persistence.entities.UserEntity;
@@ -47,8 +48,6 @@ public class UserService {
 
         UserEntity entity = (UserEntity) this.userRepository.findByEmail(email);
 
-        //user details to domain
-
         User user = userMapper.toDomain(entity);
         user.setPassword(password);
 
@@ -58,8 +57,18 @@ public class UserService {
         User updatedUser = userMapper.toDomain(userRepository.save(updatedEntity));
 
         return updatedUser;
+    }
 
+    public User updateRole(Long id, String role) {
+        UserEntity entity = this.userRepository
+                .findById(id)
+                .orElseThrow(() -> new UserException("Could not update user role. User not found"));
 
+        User user = this.userMapper.toDomain(entity);
+        user.setRole(UserRole.valueOf(role));
+        UserEntity updatedUserEntity = userMapper.toEntity(user.getId(), user.getName(), user.getEmail(), user.getPassword(), user.getRole());
+
+        return userMapper.toDomain(userRepository.save(updatedUserEntity));
     }
 
 }

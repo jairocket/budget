@@ -5,6 +5,7 @@ import com.app.budget.core.enums.UserRole;
 import com.app.budget.core.services.TokenService;
 import com.app.budget.infrastructure.AbstractIntegrationTest;
 import com.app.budget.infrastructure.controllers.dto.UpdatePasswordDTO;
+import com.app.budget.infrastructure.controllers.dto.UpdateRoleDTO;
 import com.app.budget.infrastructure.controllers.dto.UserRegisterDTO;
 import com.app.budget.infrastructure.gateways.UserMapper;
 import com.app.budget.infrastructure.persistence.repositories.UserRepository;
@@ -186,16 +187,61 @@ public class UserControllerTest extends AbstractIntegrationTest {
         var regularUserEntity = userMapper.toEntity(regularUser.getId(), regularUser.getName(), regularUser.getEmail(), regularUser.getPassword(), regularUser.getRole());
         var regularToken = tokenService.generateToken(regularUserEntity);
 
-        var savedUser = repository.save(regularUserEntity);
+        repository.save(regularUserEntity);
 
         given()
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + regularToken)
                 .body(new UpdatePasswordDTO("Pipoc@86"))
                 .when()
-                .put("/users/" + savedUser.getId())
+                .put("/users")
                 .then()
                 .statusCode(200);
 
     }
+
+    @Test
+    void shouldNotBeAbleToUpdateUserRoleIfDoesNotHaveAdminRole() {
+        var adminUser = new User("Oscar Schmidt", "oscar2@nba.com", "Pipoc@85", UserRole.ADMIN);
+        var adminUserEntity = userMapper.toEntity(adminUser.getId(), adminUser.getName(), adminUser.getEmail(), adminUser.getPassword(), adminUser.getRole());
+        var regularUser = new User("Marcelinho", "marcelinho@br.com", "Pipoc@85", UserRole.USER);
+        var regularUserEntity = userMapper.toEntity(regularUser.getId(), regularUser.getName(), regularUser.getEmail(), regularUser.getPassword(), regularUser.getRole());
+        var regularToken = tokenService.generateToken(regularUserEntity);
+
+        repository.save(adminUserEntity);
+        var savedRegularUser = repository.save(regularUserEntity);
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + regularToken)
+                .body(new UpdateRoleDTO("ADMIN"))
+                .when()
+                .put("/users" + savedRegularUser.getId())
+                .then()
+                .statusCode(403);
+    }
+
+    @Test
+    void shouldBeAbleToToUpdateUserRoleIfHasAdminRole() {
+        var adminUser = new User("Oscar Schmidt", "oscar2@nba.com", "Pipoc@85", UserRole.ADMIN);
+        var adminUserEntity = userMapper.toEntity(adminUser.getId(), adminUser.getName(), adminUser.getEmail(), adminUser.getPassword(), adminUser.getRole());
+        var adminToken = tokenService.generateToken(adminUserEntity);
+        var regularUser = new User("Marcelinho", "marcelinho@br.com", "Pipoc@85", UserRole.USER);
+        var regularUserEntity = userMapper.toEntity(regularUser.getId(), regularUser.getName(), regularUser.getEmail(), regularUser.getPassword(), regularUser.getRole());
+        repository.save(adminUserEntity);
+        var savedRegularUser = repository.save(regularUserEntity);
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + adminToken)
+                .body(new UpdateRoleDTO("ADMIN"))
+                .when()
+                .put("/users/" + savedRegularUser.getId())
+                .then()
+                .statusCode(200)
+                .body("name", is("Marcelinho"))
+                .body("role", is("ADMIN"));
+    }
+
+
 }
