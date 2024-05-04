@@ -59,6 +59,22 @@ public class UserService {
         return updatedUser;
     }
 
+    public User updateName(String token, String name) {
+        String jwt = token.replace("Bearer ", "");
+        String email = tokenService.extractEmailFromToken(jwt);
+
+        UserEntity entity = (UserEntity) this.userRepository.findByEmail(email);
+
+        User user = userMapper.toDomain(entity);
+        user.setName(name);
+
+        UserEntity updatedEntity = userMapper.toEntity(user.getId(), user.getName(), user.getEmail(), user.getPassword(), user.getRole());
+
+        User updatedUser = userMapper.toDomain(userRepository.save(updatedEntity));
+
+        return updatedUser;
+    }
+
     public User updateRole(Long id, String role) {
         UserEntity entity = this.userRepository
                 .findById(id)
