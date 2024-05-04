@@ -28,7 +28,7 @@ Budget is an API for expenses control
 - Can have zero or lots of `Expenses`
 - Can have zero or lots of `Incomes`
 
-#### Financial Occurrence
+#### Events
 
 - Refer to anything that can have an impact on your personal finances;
 - Should have a `title` with min of 3 and max of 45 characters;
@@ -41,7 +41,7 @@ Budget is an API for expenses control
 
 #### Expense
 
-- `Expenses` are a type of `FinancialOccurences`
+- `Expenses` are a type of `Event`
 - Should have a `status`:
     - PENDING, if it is not paid, but you still have time to do it;
     - PAID, if it is... paid;
@@ -49,7 +49,7 @@ Budget is an API for expenses control
 
 #### Income
 
-- `Incomes` are a type of `FinancialOccurences`
+- `Incomes` are a type of `Event`
 - Should have a `status`:
     - PENDING, if it is not received, but the due date has not expired yet;
     - RECEIVED, if it is... received;
