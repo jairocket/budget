@@ -1,7 +1,7 @@
 package com.app.budget.core.domain;
 
 import com.app.budget.core.enums.ExpenseStatus;
-import com.app.budget.core.exceptions.FinancialOccurrenceException;
+import com.app.budget.core.exceptions.EventException;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -29,7 +29,7 @@ public class Expense extends Event {
     }
 
     public void setStatus(ExpenseStatus status) {
-        status = Optional.ofNullable(status).orElseThrow(() -> new FinancialOccurrenceException("Status cannot be null"));
+        status = Optional.ofNullable(status).orElseThrow(() -> new EventException("Status cannot be null"));
         this.status = status;
     }
 
