@@ -114,10 +114,10 @@ public class EventTest {
         Category category = new Category("Clothing");
         Set<Category> categories = Set.of(category);
 
-        var financialOccurrence = new EventTestHelper(id, categories, title, null, null, null, dueDate);
+        var event = new EventTestHelper(id, categories, title, null, null, null, dueDate);
 
-        assertEquals(0.00, financialOccurrence.getActualValue(), 0.0);
-        assertEquals(0.00, financialOccurrence.getPredictedValue(), 0.0);
+        assertEquals(0.00, event.getActualValue(), 0.0);
+        assertEquals(0.00, event.getPredictedValue(), 0.0);
 
     }
 
