@@ -1,7 +1,7 @@
 package com.app.budget.core.domain;
 
 import com.app.budget.core.enums.ExpenseStatus;
-import com.app.budget.core.exceptions.FinancialOccurrenceException;
+import com.app.budget.core.exceptions.EventException;
 import org.junit.Test;
 import org.testcontainers.shaded.org.apache.commons.lang3.RandomStringUtils;
 
@@ -11,7 +11,7 @@ import java.util.Set;
 
 import static org.junit.Assert.*;
 
-public class FinancialOccurrenceTest {
+public class EventTest {
 
     @Test
     public void shouldValidateCategories() {
@@ -22,7 +22,7 @@ public class FinancialOccurrenceTest {
         Double predictedValue = 35.90;
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
 
-        FinancialOccurrenceTestHelper expense = new FinancialOccurrenceTestHelper(id, categories, title, null, predictedValue, null, dueDate);
+        EventTestHelper expense = new EventTestHelper(id, categories, title, null, predictedValue, null, dueDate);
 
         assertTrue(expense.getId() == 1);
         assertEquals("Clothing", expense.getCategories().stream().toList().get(0).getName());
@@ -38,7 +38,7 @@ public class FinancialOccurrenceTest {
         String title = "Uber";
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
 
-        FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> new FinancialOccurrenceTestHelper(id, null, title, null, value, null, dueDate));
+        EventException exception = assertThrows(EventException.class, () -> new EventTestHelper(id, null, title, null, value, null, dueDate));
         assertEquals("Categories cannot be null", exception.getMessage());
     }
 
@@ -50,7 +50,7 @@ public class FinancialOccurrenceTest {
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
         Set<Category> categories = new HashSet<>();
 
-        FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> new FinancialOccurrenceTestHelper(id, categories, title, null, value, null, dueDate));
+        EventException exception = assertThrows(EventException.class, () -> new EventTestHelper(id, categories, title, null, value, null, dueDate));
         assertEquals("Should inform at least one category", exception.getMessage());
     }
 
@@ -62,7 +62,7 @@ public class FinancialOccurrenceTest {
         Category category = new Category("Clothing");
         Set<Category> categories = Set.of(category);
 
-        FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> new FinancialOccurrenceTestHelper(id, categories, null, null, value, null, dueDate));
+        EventException exception = assertThrows(EventException.class, () -> new EventTestHelper(id, categories, null, null, value, null, dueDate));
         assertEquals("Title cannot be null", exception.getMessage());
     }
 
@@ -75,7 +75,7 @@ public class FinancialOccurrenceTest {
         Category category = new Category("Clothing");
         Set<Category> categories = Set.of(category);
 
-        FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> new Expense(categories, title, null, value, null, dueDate, status));
+        EventException exception = assertThrows(EventException.class, () -> new Expense(categories, title, null, value, null, dueDate, status));
         assertEquals("Title should have at least three characters", exception.getMessage());
     }
 
@@ -88,7 +88,7 @@ public class FinancialOccurrenceTest {
         Category category = new Category("Clothing");
         Set<Category> categories = Set.of(category);
 
-        FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> new Expense(categories, longTitle, null, value, null, dueDate, status));
+        EventException exception = assertThrows(EventException.class, () -> new Expense(categories, longTitle, null, value, null, dueDate, status));
         assertEquals("Title should have less than forty-five characters", exception.getMessage());
     }
 
@@ -102,7 +102,7 @@ public class FinancialOccurrenceTest {
         Category category = new Category("Clothing");
         Set<Category> categories = Set.of(category);
 
-        FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> new FinancialOccurrenceTestHelper(id, categories, title, longDescription, value, null, dueDate));
+        EventException exception = assertThrows(EventException.class, () -> new EventTestHelper(id, categories, title, longDescription, value, null, dueDate));
         assertEquals("Description should have less than 256 characters", exception.getMessage());
     }
 
@@ -114,10 +114,10 @@ public class FinancialOccurrenceTest {
         Category category = new Category("Clothing");
         Set<Category> categories = Set.of(category);
 
-        var financialOccurrence = new FinancialOccurrenceTestHelper(id, categories, title, null, null, null, dueDate);
+        var event = new EventTestHelper(id, categories, title, null, null, null, dueDate);
 
-        assertEquals(0.00, financialOccurrence.getActualValue(), 0.0);
-        assertEquals(0.00, financialOccurrence.getPredictedValue(), 0.0);
+        assertEquals(0.00, event.getActualValue(), 0.0);
+        assertEquals(0.00, event.getPredictedValue(), 0.0);
 
     }
 
@@ -130,7 +130,7 @@ public class FinancialOccurrenceTest {
         Set<Category> categories = Set.of(category);
         Double value = -40.99;
 
-        FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> new FinancialOccurrenceTestHelper(id, categories, title, null, value, null, dueDate));
+        EventException exception = assertThrows(EventException.class, () -> new EventTestHelper(id, categories, title, null, value, null, dueDate));
         assertEquals("Value should not be lower than zero", exception.getMessage());
     }
 
@@ -176,7 +176,7 @@ public class FinancialOccurrenceTest {
         Set<Category> categories = Set.of(category);
         Double value = -40.99;
 
-        FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> new FinancialOccurrenceTestHelper(id, categories, title, null, value, null, null));
+        EventException exception = assertThrows(EventException.class, () -> new EventTestHelper(id, categories, title, null, value, null, null));
         assertEquals("Value should not be lower than zero", exception.getMessage());
     }
 
@@ -188,7 +188,7 @@ public class FinancialOccurrenceTest {
         Set<Category> categories = Set.of(category);
         Double value = 40.99;
 
-        FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> new FinancialOccurrenceTestHelper(id, categories, title, null, value, null, null));
+        EventException exception = assertThrows(EventException.class, () -> new EventTestHelper(id, categories, title, null, value, null, null));
         assertEquals("Due date should not be null", exception.getMessage());
     }
 
@@ -201,7 +201,7 @@ public class FinancialOccurrenceTest {
         Double predictedValue = 35.90;
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
 
-        FinancialOccurrenceTestHelper expense = new FinancialOccurrenceTestHelper(id, categories, title, null, predictedValue, null, dueDate);
+        EventTestHelper expense = new EventTestHelper(id, categories, title, null, predictedValue, null, dueDate);
         categories.add(new Category("Transportation"));
 
         expense.setTitle("Taxi");
@@ -229,9 +229,9 @@ public class FinancialOccurrenceTest {
         Double predictedValue = 35.90;
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
 
-        FinancialOccurrenceTestHelper expense = new FinancialOccurrenceTestHelper(id, categories, title, null, predictedValue, null, dueDate);
+        EventTestHelper expense = new EventTestHelper(id, categories, title, null, predictedValue, null, dueDate);
 
-        FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> expense.setDueDate(null));
+        EventException exception = assertThrows(EventException.class, () -> expense.setDueDate(null));
         assertEquals("Due date should not be null", exception.getMessage());
     }
 
@@ -244,9 +244,9 @@ public class FinancialOccurrenceTest {
         Double predictedValue = 35.90;
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
 
-        FinancialOccurrenceTestHelper expense = new FinancialOccurrenceTestHelper(id, categories, title, null, predictedValue, null, dueDate);
+        EventTestHelper expense = new EventTestHelper(id, categories, title, null, predictedValue, null, dueDate);
 
-        FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> expense.setTitle(null));
+        EventException exception = assertThrows(EventException.class, () -> expense.setTitle(null));
         assertEquals("Title cannot be null", exception.getMessage());
     }
 
@@ -260,9 +260,9 @@ public class FinancialOccurrenceTest {
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
         String longDescription = RandomStringUtils.randomAlphabetic(257);
 
-        FinancialOccurrenceTestHelper expense = new FinancialOccurrenceTestHelper(id, categories, title, null, predictedValue, null, dueDate);
+        EventTestHelper expense = new EventTestHelper(id, categories, title, null, predictedValue, null, dueDate);
 
-        FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> expense.setDescription(longDescription));
+        EventException exception = assertThrows(EventException.class, () -> expense.setDescription(longDescription));
         assertEquals("Description should have less than 256 characters", exception.getMessage());
     }
 
@@ -275,9 +275,9 @@ public class FinancialOccurrenceTest {
         Double predictedValue = 35.90;
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
 
-        FinancialOccurrenceTestHelper expense = new FinancialOccurrenceTestHelper(id, categories, title, null, predictedValue, null, dueDate);
+        EventTestHelper expense = new EventTestHelper(id, categories, title, null, predictedValue, null, dueDate);
 
-        FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> expense.setPredictedValue(-100.99));
+        EventException exception = assertThrows(EventException.class, () -> expense.setPredictedValue(-100.99));
         assertEquals("Value should not be lower than zero", exception.getMessage());
     }
 
@@ -290,9 +290,9 @@ public class FinancialOccurrenceTest {
         Double predictedValue = 35.90;
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
 
-        FinancialOccurrenceTestHelper expense = new FinancialOccurrenceTestHelper(id, categories, title, null, predictedValue, null, dueDate);
+        EventTestHelper expense = new EventTestHelper(id, categories, title, null, predictedValue, null, dueDate);
 
-        FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> expense.setActualValue(-100.99));
+        EventException exception = assertThrows(EventException.class, () -> expense.setActualValue(-100.99));
         assertEquals("Value should not be lower than zero", exception.getMessage());
     }
 
@@ -305,9 +305,9 @@ public class FinancialOccurrenceTest {
         Double predictedValue = 35.90;
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
 
-        FinancialOccurrenceTestHelper expense = new FinancialOccurrenceTestHelper(id, categories, title, null, predictedValue, null, dueDate);
+        EventTestHelper expense = new EventTestHelper(id, categories, title, null, predictedValue, null, dueDate);
 
-        FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> expense.setCategories(null));
+        EventException exception = assertThrows(EventException.class, () -> expense.setCategories(null));
         assertEquals("Categories cannot be null", exception.getMessage());
     }
 

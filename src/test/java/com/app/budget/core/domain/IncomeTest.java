@@ -1,7 +1,7 @@
 package com.app.budget.core.domain;
 
 import com.app.budget.core.enums.IncomeStatus;
-import com.app.budget.core.exceptions.FinancialOccurrenceException;
+import com.app.budget.core.exceptions.EventException;
 import org.junit.Test;
 
 import java.time.LocalDate;
@@ -44,7 +44,7 @@ public class IncomeTest {
 
         Income income = new Income(id, categories, title, null, predictedValue, null, dueDate, null);
 
-        FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> income.setStatus(null));
+        EventException exception = assertThrows(EventException.class, () -> income.setStatus(null));
         assertEquals("Status cannot be null", exception.getMessage());
     }
 

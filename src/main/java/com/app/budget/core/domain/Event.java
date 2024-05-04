@@ -1,13 +1,13 @@
 package com.app.budget.core.domain;
 
-import com.app.budget.core.exceptions.FinancialOccurrenceException;
+import com.app.budget.core.exceptions.EventException;
 import org.apache.commons.math3.util.Precision;
 
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 
-abstract class FinancialOccurrence {
+abstract class Event {
     private Long id;
     private Set<Category> categories;
     private String title;
@@ -16,7 +16,7 @@ abstract class FinancialOccurrence {
     private Double actualValue;
     private LocalDate dueDate;
 
-    public FinancialOccurrence(Long id, Set<Category> categories, String title, String description, Double predictedValue, Double actualValue, LocalDate dueDate) {
+    public Event(Long id, Set<Category> categories, String title, String description, Double predictedValue, Double actualValue, LocalDate dueDate) {
         validateCategories(categories);
         validateTitle(title);
         validateValue(predictedValue);
@@ -37,7 +37,7 @@ abstract class FinancialOccurrence {
         this.dueDate = dueDate;
     }
 
-    public FinancialOccurrence(Set<Category> categories, String title, String description, Double predictedValue, Double actualValue, LocalDate dueDate) {
+    public Event(Set<Category> categories, String title, String description, Double predictedValue, Double actualValue, LocalDate dueDate) {
         validateCategories(categories);
         validateTitle(title);
         validateValue(predictedValue);
@@ -116,31 +116,31 @@ abstract class FinancialOccurrence {
     }
 
     private void validateCategories(Set<Category> categories) {
-        categories = Optional.ofNullable(categories).orElseThrow(() -> new FinancialOccurrenceException("Categories cannot be null"));
+        categories = Optional.ofNullable(categories).orElseThrow(() -> new EventException("Categories cannot be null"));
 
         if (categories.isEmpty()) {
-            throw new FinancialOccurrenceException("Should inform at least one category");
+            throw new EventException("Should inform at least one category");
         }
     }
 
     private void validateTitle(String title) {
         if (title == null) {
-            throw new FinancialOccurrenceException("Title cannot be null");
+            throw new EventException("Title cannot be null");
         }
 
         if (title.length() < 3) {
-            throw new FinancialOccurrenceException("Title should have at least three characters");
+            throw new EventException("Title should have at least three characters");
         }
 
         if (title.length() > 45) {
-            throw new FinancialOccurrenceException("Title should have less than forty-five characters");
+            throw new EventException("Title should have less than forty-five characters");
         }
     }
 
     private void validateValue(Double value) {
         value = Optional.ofNullable(value).orElse(0.00);
         if (value < 0.00) {
-            throw new FinancialOccurrenceException("Value should not be lower than zero");
+            throw new EventException("Value should not be lower than zero");
         }
     }
 
@@ -150,7 +150,7 @@ abstract class FinancialOccurrence {
 
     private void validateDueDate(LocalDate dueDate) {
         if (dueDate == null) {
-            throw new FinancialOccurrenceException("Due date should not be null");
+            throw new EventException("Due date should not be null");
         }
     }
 
@@ -160,7 +160,7 @@ abstract class FinancialOccurrence {
 
     private void validateDescription(String description) {
         if (description.length() > 256) {
-            throw new FinancialOccurrenceException("Description should have less than 256 characters");
+            throw new EventException("Description should have less than 256 characters");
         }
     }
 }

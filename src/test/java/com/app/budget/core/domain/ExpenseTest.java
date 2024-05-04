@@ -1,7 +1,7 @@
 package com.app.budget.core.domain;
 
 import com.app.budget.core.enums.ExpenseStatus;
-import com.app.budget.core.exceptions.FinancialOccurrenceException;
+import com.app.budget.core.exceptions.EventException;
 import org.junit.Test;
 
 import java.time.LocalDate;
@@ -75,7 +75,7 @@ public class ExpenseTest {
 
         Expense expense = new Expense(id, categories, title, null, predictedValue, null, dueDate, null);
 
-        FinancialOccurrenceException exception = assertThrows(FinancialOccurrenceException.class, () -> expense.setStatus(null));
+        EventException exception = assertThrows(EventException.class, () -> expense.setStatus(null));
         assertEquals("Status cannot be null", exception.getMessage());
     }
 
