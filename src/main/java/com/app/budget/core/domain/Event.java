@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 
-abstract class FinancialOccurrence {
+abstract class Event {
     private Long id;
     private Set<Category> categories;
     private String title;
@@ -16,7 +16,7 @@ abstract class FinancialOccurrence {
     private Double actualValue;
     private LocalDate dueDate;
 
-    public FinancialOccurrence(Long id, Set<Category> categories, String title, String description, Double predictedValue, Double actualValue, LocalDate dueDate) {
+    public Event(Long id, Set<Category> categories, String title, String description, Double predictedValue, Double actualValue, LocalDate dueDate) {
         validateCategories(categories);
         validateTitle(title);
         validateValue(predictedValue);
@@ -37,7 +37,7 @@ abstract class FinancialOccurrence {
         this.dueDate = dueDate;
     }
 
-    public FinancialOccurrence(Set<Category> categories, String title, String description, Double predictedValue, Double actualValue, LocalDate dueDate) {
+    public Event(Set<Category> categories, String title, String description, Double predictedValue, Double actualValue, LocalDate dueDate) {
         validateCategories(categories);
         validateTitle(title);
         validateValue(predictedValue);

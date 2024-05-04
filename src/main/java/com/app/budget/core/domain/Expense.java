@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 
-public class Expense extends FinancialOccurrence {
+public class Expense extends Event {
     private ExpenseStatus status;
 
     public Expense(Long id, Set<Category> categories, String title, String description, Double predictedValue, Double actualValue, LocalDate dueDate, ExpenseStatus status) {
