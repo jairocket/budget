@@ -1,5 +1,11 @@
 Budget is an API for expenses control
 
+## Swagger
+
+```
+http://localhost:8080/swagger-ui/index.html
+``
+
 ## Business Rules
 
 ### Domain
