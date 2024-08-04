@@ -1,5 +1,13 @@
 Budget is an API for expenses control
 
+## Infra
+
+- Run local database container
+
+```
+docker-compose up
+```
+
 ## Swagger
 
 - Run application locally then access [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
