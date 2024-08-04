@@ -75,14 +75,20 @@ public class UserService {
         return updatedUser;
     }
 
-    public User updateRole(Long id, String role) {
+    public User updateRole(Long userId, String role) {
         UserEntity entity = this.userRepository
-                .findById(id)
+                .findById(userId)
                 .orElseThrow(() -> new UserException("Could not update user role. User not found"));
 
         User user = this.userMapper.toDomain(entity);
         user.setRole(UserRole.valueOf(role));
-        UserEntity updatedUserEntity = userMapper.toEntity(user.getId(), user.getName(), user.getEmail(), user.getPassword(), user.getRole());
+        UserEntity updatedUserEntity = userMapper.toEntity(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getRole()
+        );
 
         return userMapper.toDomain(userRepository.save(updatedUserEntity));
     }
