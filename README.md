@@ -10,8 +10,7 @@ docker-compose up
 
 ## Swagger
 
-- Rub application locally then
-  access [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+- Run application locally then access [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
 
 ## Business Rules
 
