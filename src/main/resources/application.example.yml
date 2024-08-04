@@ -2,13 +2,13 @@ spring:
   application:
     name: budget
   datasource:
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/budget_db
+    url: "jdbc:postgresql://localhost:5431/budget_db"
     username: yours
     password: yours
-    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update
+      dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
 api:
   security:
