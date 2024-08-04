@@ -4,7 +4,7 @@ Budget is an API for expenses control
 
 ```
 http://localhost:8080/swagger-ui/index.html
-``
+```
 
 ## Business Rules
 
