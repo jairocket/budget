@@ -28,7 +28,10 @@ public class UserController {
         UserRole role = UserRole.USER;
         User user = userDTOMapper.toDomain(userRegisterDTO, role);
         User newUser = userService.register(user);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(newUser.getId()).toUri();
+        URI uri = ServletUriComponentsBuilder
+                .fromCurrentRequestUri()
+                .path("/{id}")
+                .buildAndExpand(newUser.getId()).toUri();
         UserRegisterResponseDTO userRegisterResponseDTO = userDTOMapper.toResponse(newUser);
 
         return ResponseEntity.created(uri).body(userRegisterResponseDTO);
@@ -39,7 +42,10 @@ public class UserController {
         UserRole role = UserRole.ADMIN;
         User user = userDTOMapper.toDomain(userRegisterDTO, role);
         User newUser = userService.register(user);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(newUser.getId()).toUri();
+        URI uri = ServletUriComponentsBuilder
+                .fromCurrentRequestUri()
+                .path("/{id}")
+                .buildAndExpand(newUser.getId()).toUri();
         UserRegisterResponseDTO userRegisterResponseDTO = userDTOMapper.toResponse(newUser);
 
         return ResponseEntity.created(uri).body(userRegisterResponseDTO);
@@ -56,7 +62,6 @@ public class UserController {
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @RequestBody UpdatePasswordDTO updatePasswordDTO
     ) {
-
         userService.updatePassword(token, updatePasswordDTO.password());
         return ResponseEntity.ok().build();
     }
@@ -66,7 +71,6 @@ public class UserController {
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @RequestBody UpdateNameDTO updateNameDTO
     ) {
-
         User user = userService.updateName(token, updateNameDTO.name());
         UserRegisterResponseDTO userRegisterResponseDTO = userDTOMapper.toResponse(user);
 
