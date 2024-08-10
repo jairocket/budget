@@ -53,7 +53,7 @@ docker-compose up
 
 #### Expense
 
-- `Expenses` are a type of `Event`
+- `Expense` is a type of `Event`
 - Should have a `status`:
     - PENDING, if it is not paid, but you still have time to do it;
     - PAID, if it is... paid;
@@ -61,7 +61,7 @@ docker-compose up
 
 #### Income
 
-- `Incomes` are a type of `Event`
+- `Income` is a type of `Event`
 - Should have a `status`:
     - PENDING, if it is not received, but the due date has not expired yet;
     - RECEIVED, if it is... received;
