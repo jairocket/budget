@@ -37,8 +37,7 @@ public class UserService {
     }
 
     public List<UserEntity> findAll() {
-        List<UserEntity> userEntities = this.userRepository.findAll();
-        return userEntities;
+        return this.userRepository.findAll();
     }
 
     public UserEntity updatePassword(String token, String password) {
@@ -53,9 +52,7 @@ public class UserService {
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
         UserEntity updatedEntity = userMapper.toEntity(user.getId(), user.getName(), user.getEmail(), encryptedPassword, user.getRole());
 
-        UserEntity updatedUser = userRepository.save(updatedEntity);
-
-        return updatedUser;
+        return userRepository.save(updatedEntity);
     }
 
     public UserEntity updateName(String token, String name) {
@@ -69,9 +66,7 @@ public class UserService {
 
         UserEntity updatedEntity = userMapper.toEntity(user.getId(), user.getName(), user.getEmail(), user.getPassword(), user.getRole());
 
-        UserEntity updatedUser = userRepository.save(updatedEntity);
-
-        return updatedUser;
+        return userRepository.save(updatedEntity);
     }
 
     public UserEntity updateRole(Long userId, String role) {
