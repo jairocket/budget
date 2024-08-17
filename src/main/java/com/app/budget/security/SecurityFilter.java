@@ -1,4 +1,4 @@
-package com.app.budget.main;
+package com.app.budget.security;
 
 import com.app.budget.core.services.TokenService;
 import com.app.budget.infrastructure.persistence.repositories.UserRepository;
