@@ -1,5 +1,6 @@
-package com.app.budget.main;
+package com.app.budget.security;
 
+import com.app.budget.security.handler.CustomLogoutHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,9 @@ public class SecurityConfiguration {
     @Autowired
     SecurityFilter securityFilter;
 
+    @Autowired
+    private CustomLogoutHandler customLogoutHandler;
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -37,7 +41,14 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/users/role/*").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/users/register/admin").hasRole("ADMIN")
+                        .requestMatchers("/auth/logout").permitAll()
                         .anyRequest().authenticated()
+                )
+                .logout((logout) -> logout
+                        .logoutUrl("/auth/logout")
+                        .logoutSuccessHandler(customLogoutHandler)
+                        .invalidateHttpSession(true)
+                        .deleteCookies("token")
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
