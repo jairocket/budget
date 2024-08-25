@@ -27,11 +27,15 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     public UserEntity register(String name, String email, String password, UserRole role) {
-        String encryptedPassword = passwordEncoder.encode(password);
-        UserEntity entity = userMapper.toEntity(null, name, email, encryptedPassword, role);
-        if (this.userRepository.findByEmail(entity.getEmail()) != null) {
+        if (this.userRepository.findByEmail(email) != null) {
             throw new UserException("User already exists");
         }
+
+        String encryptedPassword = passwordEncoder.encode(password);
+
+        User user = new User(name, email, password, role);
+
+        UserEntity entity = userMapper.toEntity(user, encryptedPassword);
 
         return this.userRepository.save(entity);
     }
@@ -50,7 +54,8 @@ public class UserService {
         user.setPassword(password);
 
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
-        UserEntity updatedEntity = userMapper.toEntity(user.getId(), user.getName(), user.getEmail(), encryptedPassword, user.getRole());
+
+        UserEntity updatedEntity = userMapper.toEntity(user, encryptedPassword);
 
         return userRepository.save(updatedEntity);
     }
@@ -64,7 +69,7 @@ public class UserService {
         User user = userMapper.toDomain(entity);
         user.setName(name);
 
-        UserEntity updatedEntity = userMapper.toEntity(user.getId(), user.getName(), user.getEmail(), user.getPassword(), user.getRole());
+        UserEntity updatedEntity = userMapper.toEntity(user, entity.getPassword());
 
         return userRepository.save(updatedEntity);
     }
@@ -76,13 +81,7 @@ public class UserService {
 
         User user = this.userMapper.toDomain(entity);
         user.setRole(UserRole.valueOf(role));
-        UserEntity updatedUserEntity = userMapper.toEntity(
-                user.getId(),
-                user.getName(),
-                user.getEmail(),
-                user.getPassword(),
-                user.getRole()
-        );
+        UserEntity updatedUserEntity = userMapper.toEntity(user, entity.getPassword());
 
         return userRepository.save(updatedUserEntity);
     }

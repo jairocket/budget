@@ -1,7 +1,6 @@
 package com.app.budget.infrastructure.gateways;
 
 import com.app.budget.core.domain.User;
-import com.app.budget.core.enums.UserRole;
 import com.app.budget.infrastructure.persistence.entities.UserEntity;
 import org.springframework.stereotype.Component;
 
@@ -10,9 +9,8 @@ import java.util.Optional;
 @Component
 public class UserMapper {
 
-    public UserEntity toEntity(Long id, String name, String email, String password, UserRole role) {
-        id = Optional.ofNullable(id).orElse(null);
-        return new UserEntity(id, name, email, password, role);
+    public UserEntity toEntity(User user, String encryptedPassword) {
+        return new UserEntity(user.getId(), user.getName(), user.getEmail(), encryptedPassword, user.getRole());
     }
 
     public User toDomain(UserEntity entity) {
