@@ -38,10 +38,10 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/v3/api-docs").permitAll()
                         .requestMatchers(HttpMethod.GET, "/v3/api-docs/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/swagger-ui/*").permitAll()
+                        .requestMatchers("/auth/logout").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/users/role/*").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/users/register/admin").hasRole("ADMIN")
-                        .requestMatchers("/auth/logout").permitAll()
                         .anyRequest().authenticated()
                 )
                 .logout((logout) -> logout

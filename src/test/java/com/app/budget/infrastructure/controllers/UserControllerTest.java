@@ -59,7 +59,7 @@ public class UserControllerTest extends AbstractIntegrationTest {
     @Test
     void shouldBeAbleToRegisterAdminUser() {
         var adminUser = new User("Marcelinho", "marcelinho@br.com", "Pipoc@85", UserRole.ADMIN);
-        var adminUserEntity = userMapper.toEntity(adminUser.getId(), adminUser.getName(), adminUser.getEmail(), adminUser.getPassword(), adminUser.getRole());
+        var adminUserEntity = userMapper.toEntity(adminUser, adminUser.getPassword());
         var adminToken = tokenService.generateToken(adminUserEntity);
         repository.save(adminUserEntity);
 
@@ -88,7 +88,7 @@ public class UserControllerTest extends AbstractIntegrationTest {
         String email = "os@nba.com";
         String password = "Pipoc@85";
         var adminUser = new User(name, email, password, UserRole.ADMIN);
-        var adminUserEntity = userMapper.toEntity(adminUser.getId(), adminUser.getName(), adminUser.getEmail(), adminUser.getPassword(), adminUser.getRole());
+        var adminUserEntity = userMapper.toEntity(adminUser, adminUser.getPassword());
         repository.save(adminUserEntity);
 
         UserRegisterDTO registerDTO = new UserRegisterDTO(adminUserEntity.getName(), adminUserEntity.getEmail(), adminUser.getPassword());
@@ -123,7 +123,7 @@ public class UserControllerTest extends AbstractIntegrationTest {
     @Test
     void shouldNotBeAbleToRegisterNewAdminUserIfDoesNotHaveRoleAdmin() {
         var regularUser = new User("Marcelinho", "marcelinho@br.com", "Pipoc@85", UserRole.USER);
-        var regularUserEntity = userMapper.toEntity(regularUser.getId(), regularUser.getName(), regularUser.getEmail(), regularUser.getPassword(), regularUser.getRole());
+        var regularUserEntity = userMapper.toEntity(regularUser, regularUser.getPassword());
         var regularUserToken = tokenService.generateToken(regularUserEntity);
         repository.save(regularUserEntity);
 
@@ -145,10 +145,10 @@ public class UserControllerTest extends AbstractIntegrationTest {
     @Test
     void shouldBeAbleToFindAllUsers() {
         var adminUser = new User("Oscar Schmidt", "oscar2@nba.com", "Pipoc@85", UserRole.ADMIN);
-        var adminUserEntity = userMapper.toEntity(adminUser.getId(), adminUser.getName(), adminUser.getEmail(), adminUser.getPassword(), adminUser.getRole());
+        var adminUserEntity = userMapper.toEntity(adminUser, adminUser.getPassword());
         var adminToken = tokenService.generateToken(adminUserEntity);
         var regularUser = new User("Marcelinho", "marcelinho@br.com", "Pipoc@85", UserRole.USER);
-        var regularUserEntity = userMapper.toEntity(regularUser.getId(), regularUser.getName(), regularUser.getEmail(), regularUser.getPassword(), regularUser.getRole());
+        var regularUserEntity = userMapper.toEntity(regularUser, regularUser.getPassword());
         repository.saveAll(List.of(regularUserEntity, adminUserEntity));
 
         given()
@@ -166,9 +166,9 @@ public class UserControllerTest extends AbstractIntegrationTest {
     @Test
     void shouldNotBeAbleToFindAllUsersIfDoesNotHaveAdminRole() {
         var adminUser = new User("Oscar Schmidt", "oscar2@nba.com", "Pipoc@85", UserRole.ADMIN);
-        var adminUserEntity = userMapper.toEntity(adminUser.getId(), adminUser.getName(), adminUser.getEmail(), adminUser.getPassword(), adminUser.getRole());
+        var adminUserEntity = userMapper.toEntity(adminUser, adminUser.getPassword());
         var regularUser = new User("Marcelinho", "marcelinho@br.com", "Pipoc@85", UserRole.USER);
-        var regularUserEntity = userMapper.toEntity(regularUser.getId(), regularUser.getName(), regularUser.getEmail(), regularUser.getPassword(), regularUser.getRole());
+        var regularUserEntity = userMapper.toEntity(regularUser, regularUser.getPassword());
         var regularToken = tokenService.generateToken(regularUserEntity);
 
         repository.saveAll(List.of(regularUserEntity, adminUserEntity));
@@ -185,7 +185,7 @@ public class UserControllerTest extends AbstractIntegrationTest {
     @Test
     void shouldBeAbleToUpdatePassword() {
         var regularUser = new User("Marcelinho", "marcelinho@br.com", "Pipoc@85", UserRole.USER);
-        var regularUserEntity = userMapper.toEntity(regularUser.getId(), regularUser.getName(), regularUser.getEmail(), regularUser.getPassword(), regularUser.getRole());
+        var regularUserEntity = userMapper.toEntity(regularUser, regularUser.getPassword());
         var regularToken = tokenService.generateToken(regularUserEntity);
 
         repository.save(regularUserEntity);
@@ -204,9 +204,9 @@ public class UserControllerTest extends AbstractIntegrationTest {
     @Test
     void shouldNotBeAbleToUpdateUserRoleIfDoesNotHaveAdminRole() {
         var adminUser = new User("Oscar Schmidt", "oscar2@nba.com", "Pipoc@85", UserRole.ADMIN);
-        var adminUserEntity = userMapper.toEntity(adminUser.getId(), adminUser.getName(), adminUser.getEmail(), adminUser.getPassword(), adminUser.getRole());
+        var adminUserEntity = userMapper.toEntity(adminUser, adminUser.getPassword());
         var regularUser = new User("Marcelinho", "marcelinho@br.com", "Pipoc@85", UserRole.USER);
-        var regularUserEntity = userMapper.toEntity(regularUser.getId(), regularUser.getName(), regularUser.getEmail(), regularUser.getPassword(), regularUser.getRole());
+        var regularUserEntity = userMapper.toEntity(regularUser, regularUser.getPassword());
         var regularToken = tokenService.generateToken(regularUserEntity);
 
         repository.save(adminUserEntity);
@@ -225,10 +225,10 @@ public class UserControllerTest extends AbstractIntegrationTest {
     @Test
     void shouldBeAbleToToUpdateUserRoleIfHasAdminRole() {
         var adminUser = new User("Oscar Schmidt", "oscar2@nba.com", "Pipoc@85", UserRole.ADMIN);
-        var adminUserEntity = userMapper.toEntity(adminUser.getId(), adminUser.getName(), adminUser.getEmail(), adminUser.getPassword(), adminUser.getRole());
+        var adminUserEntity = userMapper.toEntity(adminUser, adminUser.getPassword());
         var adminToken = tokenService.generateToken(adminUserEntity);
         var regularUser = new User("Marcelinho", "marcelinho@br.com", "Pipoc@85", UserRole.USER);
-        var regularUserEntity = userMapper.toEntity(regularUser.getId(), regularUser.getName(), regularUser.getEmail(), regularUser.getPassword(), regularUser.getRole());
+        var regularUserEntity = userMapper.toEntity(regularUser, regularUser.getPassword());
         repository.save(adminUserEntity);
         var savedRegularUser = repository.save(regularUserEntity);
 
@@ -247,7 +247,7 @@ public class UserControllerTest extends AbstractIntegrationTest {
     @Test
     void shouldBeAbleToUpdateUserName() {
         var regularUser = new User("Marcelinho", "marcelinho@br.com", "Pipoc@85", UserRole.USER);
-        var regularUserEntity = userMapper.toEntity(regularUser.getId(), regularUser.getName(), regularUser.getEmail(), regularUser.getPassword(), regularUser.getRole());
+        var regularUserEntity = userMapper.toEntity(regularUser, regularUser.getPassword());
         var regularToken = tokenService.generateToken(regularUserEntity);
 
         repository.save(regularUserEntity);
