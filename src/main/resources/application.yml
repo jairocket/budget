@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: budget
+
+  datasource:
+    url: "jdbc:postgresql://localhost:5431/budget_db"
+    username: postgres
+    password: postgres
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+app:
+  datasource:
+    jdbc-url: "jdbc:postgresql://localhost:5431/budget_db"
+    username: postgres
+    password: postgres
+    maximum-pool-size: 10
+
+api:
+  security:
+    token:
+      secret: mySecret
+
+jwt:
+  cookie-expiration: 10800
