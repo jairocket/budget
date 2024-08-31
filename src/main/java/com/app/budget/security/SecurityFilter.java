@@ -46,9 +46,7 @@ public class SecurityFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
         var token = this.recoverToken(request);
-        if (token == null) {
-            token = this.recoverTokenFromCookie(request);
-        }
+        
         if (token != null) {
             var email = tokenService.validateToken(token);
             UserDetails userDetails = userRepository.findByEmail(email);
