@@ -4,6 +4,7 @@ import com.app.budget.core.enums.UserRole;
 import com.app.budget.core.services.UserService;
 import com.app.budget.infrastructure.controllers.dto.*;
 import com.app.budget.infrastructure.gateways.UserDTOMapper;
+import com.app.budget.infrastructure.persistence.entities.JDBCUser;
 import com.app.budget.infrastructure.persistence.entities.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -46,6 +47,13 @@ public class UserController {
         UserRegisterResponseDTO userRegisterResponseDTO = userDTOMapper.toResponse(newUser);
 
         return ResponseEntity.created(uri).body(userRegisterResponseDTO);
+    }
+
+    @GetMapping("/jdbc")
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
+        List<JDBCUser> users = userService.getAll();
+        List<UserResponseDTO> userResponseList = users.stream().map(user -> userDTOMapper.toUserDTO(user)).toList();
+        return ResponseEntity.ok().body(userResponseList);
     }
 
     @GetMapping
