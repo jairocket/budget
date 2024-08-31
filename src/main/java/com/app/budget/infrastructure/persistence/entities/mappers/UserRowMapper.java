@@ -3,10 +3,12 @@ package com.app.budget.infrastructure.persistence.entities.mappers;
 import com.app.budget.core.enums.UserRole;
 import com.app.budget.infrastructure.persistence.entities.JDBCUser;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@Component
 public class UserRowMapper implements RowMapper<JDBCUser> {
     @Override
     public JDBCUser mapRow(ResultSet rs, int rowNum) throws SQLException {

@@ -32,6 +32,9 @@ public class UserService {
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
 
+    @Autowired
+    private UserRowMapper userRowMapper;
+
     public UserEntity register(String name, String email, String password, UserRole role) {
         if (this.userRepository.findByEmail(email) != null) {
             throw new UserException("User already exists");
@@ -95,7 +98,7 @@ public class UserService {
     public List<JDBCUser> getAll() {
         var users = jdbcTemplate.query(
                 "SELECT id, name, email, password, role FROM USERS;",
-                new UserRowMapper()
+                userRowMapper
         );
 
         return users;
