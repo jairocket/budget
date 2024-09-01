@@ -8,6 +8,7 @@ import com.app.budget.infrastructure.persistence.entities.JDBCUser;
 import com.app.budget.infrastructure.persistence.entities.UserEntity;
 import com.app.budget.infrastructure.persistence.entities.mappers.UserRowMapper;
 import com.app.budget.infrastructure.persistence.repositories.UserRepository;
+import com.app.budget.infrastructure.persistence.repositories.UserRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,6 +35,9 @@ public class UserService {
 
     @Autowired
     private UserRowMapper userRowMapper;
+
+    @Autowired
+    private UserRepositoryImpl jdbcUserRepository;
 
     public UserEntity register(String name, String email, String password, UserRole role) {
         if (this.userRepository.findByEmail(email) != null) {
@@ -96,12 +100,7 @@ public class UserService {
     }
 
     public List<JDBCUser> getAll() {
-        var users = jdbcTemplate.query(
-                "SELECT id, name, email, password, role FROM USERS;",
-                userRowMapper
-        );
-
-        return users;
+        return jdbcUserRepository.getAllUsers();
     }
 
 }
