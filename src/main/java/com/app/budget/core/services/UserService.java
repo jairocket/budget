@@ -6,11 +6,9 @@ import com.app.budget.core.exceptions.UserException;
 import com.app.budget.infrastructure.gateways.UserMapper;
 import com.app.budget.infrastructure.persistence.entities.JDBCUser;
 import com.app.budget.infrastructure.persistence.entities.UserEntity;
-import com.app.budget.infrastructure.persistence.entities.mappers.UserRowMapper;
 import com.app.budget.infrastructure.persistence.repositories.UserRepository;
 import com.app.budget.infrastructure.persistence.repositories.UserRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,12 +27,6 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private NamedParameterJdbcTemplate jdbcTemplate;
-
-    @Autowired
-    private UserRowMapper userRowMapper;
 
     @Autowired
     private UserRepositoryImpl jdbcUserRepository;
