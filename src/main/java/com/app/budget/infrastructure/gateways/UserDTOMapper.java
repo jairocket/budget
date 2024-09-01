@@ -1,6 +1,5 @@
 package com.app.budget.infrastructure.gateways;
 
-import com.app.budget.infrastructure.controllers.dto.AuthorityDTO;
 import com.app.budget.infrastructure.controllers.dto.UserRegisterResponseDTO;
 import com.app.budget.infrastructure.controllers.dto.UserResponseDTO;
 import com.app.budget.infrastructure.persistence.entities.JDBCUser;
@@ -21,8 +20,8 @@ public class UserDTOMapper {
                 user.getUsername(),
                 user.getAuthorities()
                         .stream()
-                        .map(grantedAuthority -> new AuthorityDTO(
+                        .map(grantedAuthority ->
                                 grantedAuthority.getAuthority()
-                        )).toList());
+                        ).toList());
     }
 }
