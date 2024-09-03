@@ -1,12 +1,10 @@
 spring:
   application:
     name: budget
-
   datasource:
     url: "jdbc:postgresql://localhost:5431/budget_db"
     username: postgres
     password: postgres
-
   jpa:
     hibernate:
       ddl-auto: update
