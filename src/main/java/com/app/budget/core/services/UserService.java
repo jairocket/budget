@@ -30,6 +30,18 @@ public class UserService {
     @Autowired
     private UserRepositoryImpl jdbcUserRepository;
 
+    public Long save(User user) {
+        if (this.userRepository.findByEmail(user.getEmail()) != null) {
+            throw new UserException("User already exists");
+        }
+
+        String encryptedPassword = passwordEncoder.encode(user.getPassword());
+
+        UserEntity entity = userMapper.toEntity(user, encryptedPassword);
+        Long savedUserEntityId = jdbcUserRepository.save(entity);
+        return savedUserEntityId;
+    }
+
     public User register(String name, String email, String password, UserRole role) {
         if (this.userRepository.findByEmail(email) != null) {
             throw new UserException("User already exists");
@@ -91,7 +103,7 @@ public class UserService {
         user.setRole(UserRole.valueOf(role));
         UserEntity updatedUserEntity = userMapper.toEntity(user, entity.getPassword());
         UserEntity updatedUser = userRepository.save(updatedUserEntity);
-        
+
         return userMapper.toDomain(updatedUser);
     }
 

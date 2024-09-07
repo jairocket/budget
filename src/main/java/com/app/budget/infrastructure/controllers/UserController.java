@@ -23,6 +23,25 @@ public class UserController {
     @Autowired
     private UserDTOMapper userDTOMapper;
 
+    @PostMapping("/save")
+    public ResponseEntity<UserRegisterResponseDTO> save(@RequestBody UserRegisterDTO userRegisterDTO) {
+        User newUser = new User(
+                userRegisterDTO.name(),
+                userRegisterDTO.email(),
+                userRegisterDTO.password(),
+                UserRole.USER
+        );
+        Long savedNewUserId = userService.save(newUser);
+        URI uri = ServletUriComponentsBuilder
+                .fromCurrentRequestUri()
+                .path("/{id}")
+                .buildAndExpand(savedNewUserId).toUri();
+        
+        UserRegisterResponseDTO userRegisterResponseDTO = userDTOMapper.toResponse(newUser);
+
+        return ResponseEntity.created(uri).body(userRegisterResponseDTO);
+    }
+
     @PostMapping("/register")
     public ResponseEntity<UserRegisterResponseDTO> register(@RequestBody UserRegisterDTO userRegisterDTO) {
         User newUser = userService.register(userRegisterDTO.name(), userRegisterDTO.email(), userRegisterDTO.password(), UserRole.USER);
