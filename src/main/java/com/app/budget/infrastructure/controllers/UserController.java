@@ -24,7 +24,7 @@ public class UserController {
     private UserDTOMapper userDTOMapper;
 
     @PostMapping("/save")
-    public ResponseEntity<UserRegisterResponseDTO> save(@RequestBody UserRegisterDTO userRegisterDTO) {
+    public ResponseEntity<String> save(@RequestBody UserRegisterDTO userRegisterDTO) {
         User newUser = new User(
                 userRegisterDTO.name(),
                 userRegisterDTO.email(),
@@ -36,10 +36,8 @@ public class UserController {
                 .fromCurrentRequestUri()
                 .path("/{id}")
                 .buildAndExpand(savedNewUserId).toUri();
-        
-        UserRegisterResponseDTO userRegisterResponseDTO = userDTOMapper.toResponse(newUser);
 
-        return ResponseEntity.created(uri).body(userRegisterResponseDTO);
+        return ResponseEntity.created(uri).body("Success!");
     }
 
     @PostMapping("/register")
