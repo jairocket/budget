@@ -19,7 +19,6 @@
         <spring-security.version>6.2.3</spring-security.version>
         <flyway.user>postgres</flyway.user>
         <flyway.password>postgres</flyway.password>
-        <flyway.schemas>budget_db</flyway.schemas>
         <flyway.url>jdbc:postgresql://localhost:5431/budget_db</flyway.url>
         <flyway.baselineOnMigrate>true</flyway.baselineOnMigrate>
     </properties>
@@ -100,7 +99,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>

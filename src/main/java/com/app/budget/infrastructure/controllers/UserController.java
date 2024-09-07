@@ -40,29 +40,21 @@ public class UserController {
         return ResponseEntity.created(uri).body("Success!");
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<UserRegisterResponseDTO> register(@RequestBody UserRegisterDTO userRegisterDTO) {
-        User newUser = userService.register(userRegisterDTO.name(), userRegisterDTO.email(), userRegisterDTO.password(), UserRole.USER);
+    @PostMapping("/save/admin")
+    public ResponseEntity<String> saveAdmin(@RequestBody UserRegisterDTO userRegisterDTO) {
+        User newUser = new User(
+                userRegisterDTO.name(),
+                userRegisterDTO.email(),
+                userRegisterDTO.password(),
+                UserRole.ADMIN
+        );
+        Long savedNewUserId = userService.save(newUser);
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequestUri()
                 .path("/{id}")
-                .buildAndExpand(newUser.getId()).toUri();
-        UserRegisterResponseDTO userRegisterResponseDTO = userDTOMapper.toResponse(newUser);
+                .buildAndExpand(savedNewUserId).toUri();
 
-        return ResponseEntity.created(uri).body(userRegisterResponseDTO);
-    }
-
-    @PostMapping("/register/admin")
-    public ResponseEntity<UserRegisterResponseDTO> registerAdmin(@RequestBody UserRegisterDTO userRegisterDTO) {
-        User newUser = userService.register(userRegisterDTO.name(), userRegisterDTO.email(), userRegisterDTO.password(), UserRole.ADMIN);
-
-        URI uri = ServletUriComponentsBuilder
-                .fromCurrentRequestUri()
-                .path("/{id}")
-                .buildAndExpand(newUser.getId()).toUri();
-        UserRegisterResponseDTO userRegisterResponseDTO = userDTOMapper.toResponse(newUser);
-
-        return ResponseEntity.created(uri).body(userRegisterResponseDTO);
+        return ResponseEntity.created(uri).body("Success!");
     }
 
     @GetMapping
