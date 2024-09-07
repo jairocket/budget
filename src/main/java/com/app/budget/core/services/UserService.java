@@ -4,7 +4,6 @@ import com.app.budget.core.domain.User;
 import com.app.budget.core.enums.UserRole;
 import com.app.budget.core.exceptions.UserException;
 import com.app.budget.infrastructure.gateways.UserMapper;
-import com.app.budget.infrastructure.persistence.entities.JDBCUser;
 import com.app.budget.infrastructure.persistence.entities.UserEntity;
 import com.app.budget.infrastructure.persistence.repositories.UserRepository;
 import com.app.budget.infrastructure.persistence.repositories.UserRepositoryImpl;
@@ -91,8 +90,9 @@ public class UserService {
         return userRepository.save(updatedUserEntity);
     }
 
-    public List<JDBCUser> getAll() {
-        return jdbcUserRepository.getAllUsers();
+    public List<User> getAll() {
+        List<UserEntity> userEntityList = jdbcUserRepository.getAllUsers();
+        return userEntityList.stream().map(userEntity -> userMapper.toDomain(userEntity)).toList();
     }
 
 }

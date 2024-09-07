@@ -1,7 +1,7 @@
 package com.app.budget.infrastructure.persistence.repositories;
 
 
-import com.app.budget.infrastructure.persistence.entities.JDBCUser;
+import com.app.budget.infrastructure.persistence.entities.UserEntity;
 import com.app.budget.infrastructure.persistence.entities.mappers.UserRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -16,8 +16,8 @@ public class UserRepositoryImpl {
 
     @Autowired
     private UserRowMapper userRowMapper;
-    
-    public List<JDBCUser> getAllUsers() {
+
+    public List<UserEntity> getAllUsers() {
         var users = jdbcTemplate.query(
                 "SELECT id, name, email, password, role FROM USERS;",
                 userRowMapper
