@@ -30,7 +30,7 @@ public class UserService {
     @Autowired
     private UserRepositoryImpl jdbcUserRepository;
 
-    public UserEntity register(String name, String email, String password, UserRole role) {
+    public User register(String name, String email, String password, UserRole role) {
         if (this.userRepository.findByEmail(email) != null) {
             throw new UserException("User already exists");
         }
@@ -41,14 +41,16 @@ public class UserService {
 
         UserEntity entity = userMapper.toEntity(user, encryptedPassword);
 
-        return this.userRepository.save(entity);
+        UserEntity newUser = this.userRepository.save(entity);
+
+        return userMapper.toDomain(newUser);
     }
 
     public List<UserEntity> findAll() {
         return this.userRepository.findAll();
     }
 
-    public UserEntity updatePassword(String token, String password) {
+    public User updatePassword(String token, String password) {
         String jwt = token.replace("Bearer ", "");
         String email = tokenService.extractEmailFromToken(jwt);
 
@@ -58,13 +60,14 @@ public class UserService {
         user.setPassword(password);
 
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
-
         UserEntity updatedEntity = userMapper.toEntity(user, encryptedPassword);
 
-        return userRepository.save(updatedEntity);
+        UserEntity updatedUser = userRepository.save(updatedEntity);
+
+        return userMapper.toDomain(updatedUser);
     }
 
-    public UserEntity updateName(String token, String name) {
+    public User updateName(String token, String name) {
         String jwt = token.replace("Bearer ", "");
         String email = tokenService.extractEmailFromToken(jwt);
 
@@ -74,11 +77,12 @@ public class UserService {
         user.setName(name);
 
         UserEntity updatedEntity = userMapper.toEntity(user, entity.getPassword());
+        UserEntity updatedUser = userRepository.save(updatedEntity);
 
-        return userRepository.save(updatedEntity);
+        return userMapper.toDomain(updatedUser);
     }
 
-    public UserEntity updateRole(Long userId, String role) {
+    public User updateRole(Long userId, String role) {
         UserEntity entity = this.userRepository
                 .findById(userId)
                 .orElseThrow(() -> new UserException("Could not update user role. User not found"));
@@ -86,8 +90,9 @@ public class UserService {
         User user = this.userMapper.toDomain(entity);
         user.setRole(UserRole.valueOf(role));
         UserEntity updatedUserEntity = userMapper.toEntity(user, entity.getPassword());
-
-        return userRepository.save(updatedUserEntity);
+        UserEntity updatedUser = userRepository.save(updatedUserEntity);
+        
+        return userMapper.toDomain(updatedUser);
     }
 
     public List<User> getAll() {
