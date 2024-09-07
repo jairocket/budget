@@ -34,7 +34,6 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/users/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users/save").permitAll()
                         .requestMatchers(HttpMethod.GET, "/v3/api-docs").permitAll()
                         .requestMatchers(HttpMethod.GET, "/v3/api-docs/*").permitAll()
@@ -42,7 +41,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/auth/logout").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/users/role/*").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/users/register/admin").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/users/save/admin").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .logout((logout) -> logout
