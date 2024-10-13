@@ -39,7 +39,7 @@ public class UserControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void shouldBeAbleToRegisterNewUser() {
+    void shouldBeAbleToSaveNewUser() {
         String name = "Michael Jordan";
         String email = "mj@nba.com";
         String password = "Pipoc@85";
@@ -56,7 +56,7 @@ public class UserControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void shouldBeAbleToRegisterAdminUser() {
+    void shouldBeAbleToSaveAdminUserWithAdminCredentials() {
         var adminUser = new User("Marcelinho", "marcelinho@br.com", "Pipoc@85", UserRole.ADMIN);
         var adminUserEntity = userMapper.toEntity(adminUser, adminUser.getPassword());
         var adminToken = tokenService.generateToken(adminUserEntity);
@@ -100,7 +100,7 @@ public class UserControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void shouldNotBeAbleToRegisterNewAdminUserIfNotAuthenticated() {
+    void shouldNotBeAbleToSaveNewAdminUserIfNotAuthenticated() {
         String name = "Magic Johnson";
         String email = "magic@nba.com";
         String password = "Pipoc@85";
@@ -117,7 +117,7 @@ public class UserControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void shouldNotBeAbleToRegisterNewAdminUserIfDoesNotHaveRoleAdmin() {
+    void shouldNotBeAbleToRegisterNewSaveUserIfDoesNotHaveRoleAdmin() {
         var regularUser = new User("Marcelinho", "marcelinho@br.com", "Pipoc@85", UserRole.USER);
         var regularUserEntity = userMapper.toEntity(regularUser, regularUser.getPassword());
         var regularUserToken = tokenService.generateToken(regularUserEntity);
@@ -256,8 +256,49 @@ public class UserControllerTest extends AbstractIntegrationTest {
                 .put("/users/name")
                 .then()
                 .statusCode(200);
-
     }
 
+    @Test
+    void shouldBeAbleToFindUserByIdWithAdminCredentials() {
+        var adminUser = new User("Oscar Schmidt", "oscar2@nba.com", "Pipoc@85", UserRole.ADMIN);
+        var adminUserEntity = userMapper.toEntity(adminUser, adminUser.getPassword());
+        var adminToken = tokenService.generateToken(adminUserEntity);
+        var regularUser = new User("Marcelinho", "marcelinho@br.com", "Pipoc@85", UserRole.USER);
+        var regularUserEntity = userMapper.toEntity(regularUser, regularUser.getPassword());
+        Long userId = jdbcUserRepository.save(regularUserEntity);
+        jdbcUserRepository.save(adminUserEntity);
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + adminToken)
+                .when()
+                .get("/users/get/" + userId.toString())
+                .then()
+                .statusCode(200)
+                .body("id", equalTo(1))
+                .body("name", not(equalTo("Oscar Schmidt")))
+                .body("name", equalTo("Marcelinho"))
+                .body("role", equalTo("USER"));
+    }
+
+    @Test
+    void shouldNotBeAbleToFindUserByIdWithoutAdminCredentials() {
+        var adminUser = new User("Oscar Schmidt", "oscar2@nba.com", "Pipoc@85", UserRole.ADMIN);
+        var adminUserEntity = userMapper.toEntity(adminUser, adminUser.getPassword());
+        var regularUser = new User("Marcelinho", "marcelinho@br.com", "Pipoc@85", UserRole.USER);
+        var regularUserEntity = userMapper.toEntity(regularUser, regularUser.getPassword());
+        var regularUserToken = tokenService.generateToken(regularUserEntity);
+
+        Long userId = jdbcUserRepository.save(regularUserEntity);
+        jdbcUserRepository.save(adminUserEntity);
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + regularUserToken)
+                .when()
+                .get("/users/get/" + userId.toString())
+                .then()
+                .statusCode(403);
+    }
 
 }

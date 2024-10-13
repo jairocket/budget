@@ -60,8 +60,17 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
         List<User> users = userService.getAll();
-        List<UserResponseDTO> userResponseList = users.stream().map(user -> userDTOMapper.toUserDTO(user)).toList();
+        List<UserResponseDTO> userResponseList = users
+                .stream()
+                .map(user -> userDTOMapper.toUserDTO(user))
+                .toList();
         return ResponseEntity.ok().body(userResponseList);
+    }
+
+    @GetMapping("/get/{id}")
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
+        User user = userService.getUserById(id);
+        return ResponseEntity.ok().body(userDTOMapper.toUserDTO(user));
     }
 
     @PutMapping
