@@ -84,7 +84,7 @@ public class UserController {
 
     @PutMapping("/role/{id}")
     public ResponseEntity<UserRegisterResponseDTO> updateRole(
-            @PathVariable Integer id,
+            @PathVariable Long id,
             @RequestBody UpdateRoleDTO updateRoleDTO
     ) {
         userService.updateRole(id, updateRoleDTO.role());

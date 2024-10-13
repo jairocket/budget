@@ -55,7 +55,7 @@ public class UserRepositoryImpl {
         return users.get(0);
     }
 
-    public UserEntity getUserById(Integer id) {
+    public UserEntity getUserById(Long id) {
         List<UserEntity> users = jdbcTemplate.query(
                 "SELECT * FROM USERS WHERE id = :id ",
                 new MapSqlParameterSource("id", id),

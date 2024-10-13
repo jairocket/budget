@@ -67,7 +67,7 @@ public class UserService {
         jdbcUserRepository.update(updatedEntity);
     }
 
-    public void updateRole(Integer userId, String role) {
+    public void updateRole(Long userId, String role) {
         UserEntity entity = this.jdbcUserRepository.getUserById(userId);
 
         if (entity == null)
