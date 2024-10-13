@@ -1,7 +1,7 @@
 package com.app.budget.security;
 
 import com.app.budget.core.services.TokenService;
-import com.app.budget.infrastructure.persistence.repositories.UserRepository;
+import com.app.budget.infrastructure.persistence.repositories.UserRepositoryImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +22,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     private TokenService tokenService;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepositoryImpl jdbcUserRepository;
 
     private String recoverToken(HttpServletRequest request) {
         var authHeader = request.getHeader("Authorization");
@@ -46,10 +46,10 @@ public class SecurityFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
         var token = this.recoverToken(request);
-        
+
         if (token != null) {
             var email = tokenService.validateToken(token);
-            UserDetails userDetails = userRepository.findByEmail(email);
+            UserDetails userDetails = jdbcUserRepository.getUserDetailsByEmail(email);
 
             var authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);

@@ -78,10 +78,8 @@ public class UserController {
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @RequestBody UpdateNameDTO updateNameDTO
     ) {
-        User user = userService.updateName(token, updateNameDTO.name());
-        UserRegisterResponseDTO userRegisterResponseDTO = userDTOMapper.toResponse(user);
-
-        return ResponseEntity.ok().body(userRegisterResponseDTO);
+        userService.updateName(token, updateNameDTO.name());
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/role/{id}")
@@ -89,9 +87,7 @@ public class UserController {
             @PathVariable Long id,
             @RequestBody UpdateRoleDTO updateRoleDTO
     ) {
-        User user = userService.updateRole(id, updateRoleDTO.role());
-        UserRegisterResponseDTO userRegisterResponseDTO = userDTOMapper.toResponse(user);
-
-        return ResponseEntity.ok().body(userRegisterResponseDTO);
+        userService.updateRole(id, updateRoleDTO.role());
+        return ResponseEntity.ok().build();
     }
 }

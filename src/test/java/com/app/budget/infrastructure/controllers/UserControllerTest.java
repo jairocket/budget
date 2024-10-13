@@ -9,20 +9,20 @@ import com.app.budget.infrastructure.controllers.dto.UpdatePasswordDTO;
 import com.app.budget.infrastructure.controllers.dto.UpdateRoleDTO;
 import com.app.budget.infrastructure.controllers.dto.UserRegisterDTO;
 import com.app.budget.infrastructure.gateways.UserMapper;
-import com.app.budget.infrastructure.persistence.repositories.UserRepository;
+import com.app.budget.infrastructure.persistence.repositories.UserRepositoryImpl;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.jdbc.JdbcTestUtils;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
 public class UserControllerTest extends AbstractIntegrationTest {
     @Autowired
-    private UserRepository repository;
+    private UserRepositoryImpl jdbcUserRepository;
 
     @Autowired
     private TokenService tokenService;
@@ -31,8 +31,11 @@ public class UserControllerTest extends AbstractIntegrationTest {
     private UserMapper userMapper;
 
     @BeforeEach
-    void clearRepository() {
-        repository.deleteAll();
+    void clearRepository(@Autowired JdbcTemplate jdbcTemplate) {
+        JdbcTestUtils.deleteFromTables(
+                jdbcTemplate,
+                "users"
+        );
     }
 
     @Test
@@ -47,13 +50,9 @@ public class UserControllerTest extends AbstractIntegrationTest {
                 .contentType(ContentType.JSON)
                 .body(registerDTO)
                 .when()
-                .post("users/register")
+                .post("users/save")
                 .then()
-                .statusCode(201)
-                .body("id", notNullValue())
-                .body("name", is("Michael Jordan"))
-                .body("email", is("mj@nba.com"))
-                .body("role", is("USER"));
+                .statusCode(201).body(equalTo("Success!"));
     }
 
     @Test
@@ -61,7 +60,7 @@ public class UserControllerTest extends AbstractIntegrationTest {
         var adminUser = new User("Marcelinho", "marcelinho@br.com", "Pipoc@85", UserRole.ADMIN);
         var adminUserEntity = userMapper.toEntity(adminUser, adminUser.getPassword());
         var adminToken = tokenService.generateToken(adminUserEntity);
-        repository.save(adminUserEntity);
+        jdbcUserRepository.save(adminUserEntity);
 
         String name = "Michael Jordan";
         String email = "mj@nba.com";
@@ -73,13 +72,10 @@ public class UserControllerTest extends AbstractIntegrationTest {
                 .header("Authorization", "Bearer " + adminToken)
                 .body(registerDTO)
                 .when()
-                .post("users/register/admin")
+                .post("users/save/admin")
                 .then()
                 .statusCode(201)
-                .body("id", notNullValue())
-                .body("name", is("Michael Jordan"))
-                .body("email", is("mj@nba.com"))
-                .body("role", is("ADMIN"));
+                .body(equalTo("Success!"));
     }
 
     @Test
@@ -89,7 +85,7 @@ public class UserControllerTest extends AbstractIntegrationTest {
         String password = "Pipoc@85";
         var adminUser = new User(name, email, password, UserRole.ADMIN);
         var adminUserEntity = userMapper.toEntity(adminUser, adminUser.getPassword());
-        repository.save(adminUserEntity);
+        jdbcUserRepository.save(adminUserEntity);
 
         UserRegisterDTO registerDTO = new UserRegisterDTO(adminUserEntity.getName(), adminUserEntity.getEmail(), adminUser.getPassword());
 
@@ -97,7 +93,7 @@ public class UserControllerTest extends AbstractIntegrationTest {
                 .contentType(ContentType.JSON)
                 .body(registerDTO)
                 .when()
-                .post("users/register")
+                .post("users/save")
                 .then()
                 .statusCode(400)
                 .body("message", is("User already exists"));
@@ -115,7 +111,7 @@ public class UserControllerTest extends AbstractIntegrationTest {
                 .contentType(ContentType.JSON)
                 .body(registerDTO)
                 .when()
-                .post("users/register/admin")
+                .post("users/save/admin")
                 .then()
                 .statusCode(403);
     }
@@ -125,7 +121,7 @@ public class UserControllerTest extends AbstractIntegrationTest {
         var regularUser = new User("Marcelinho", "marcelinho@br.com", "Pipoc@85", UserRole.USER);
         var regularUserEntity = userMapper.toEntity(regularUser, regularUser.getPassword());
         var regularUserToken = tokenService.generateToken(regularUserEntity);
-        repository.save(regularUserEntity);
+        jdbcUserRepository.save(regularUserEntity);
 
         String name = "Michael Jordan";
         String email = "mj@nba.com";
@@ -137,7 +133,7 @@ public class UserControllerTest extends AbstractIntegrationTest {
                 .header("Authorization", "Bearer" + regularUserToken)
                 .body(registerDTO)
                 .when()
-                .post("users/register/admin")
+                .post("users/save/admin")
                 .then()
                 .statusCode(403);
     }
@@ -149,7 +145,8 @@ public class UserControllerTest extends AbstractIntegrationTest {
         var adminToken = tokenService.generateToken(adminUserEntity);
         var regularUser = new User("Marcelinho", "marcelinho@br.com", "Pipoc@85", UserRole.USER);
         var regularUserEntity = userMapper.toEntity(regularUser, regularUser.getPassword());
-        repository.saveAll(List.of(regularUserEntity, adminUserEntity));
+        jdbcUserRepository.save(regularUserEntity);
+        jdbcUserRepository.save(adminUserEntity);
 
         given()
                 .contentType(ContentType.JSON)
@@ -171,7 +168,8 @@ public class UserControllerTest extends AbstractIntegrationTest {
         var regularUserEntity = userMapper.toEntity(regularUser, regularUser.getPassword());
         var regularToken = tokenService.generateToken(regularUserEntity);
 
-        repository.saveAll(List.of(regularUserEntity, adminUserEntity));
+        jdbcUserRepository.save(regularUserEntity);
+        jdbcUserRepository.save(adminUserEntity);
 
         given()
                 .contentType(ContentType.JSON)
@@ -188,7 +186,7 @@ public class UserControllerTest extends AbstractIntegrationTest {
         var regularUserEntity = userMapper.toEntity(regularUser, regularUser.getPassword());
         var regularToken = tokenService.generateToken(regularUserEntity);
 
-        repository.save(regularUserEntity);
+        jdbcUserRepository.save(regularUserEntity);
 
         given()
                 .contentType(ContentType.JSON)
@@ -209,15 +207,15 @@ public class UserControllerTest extends AbstractIntegrationTest {
         var regularUserEntity = userMapper.toEntity(regularUser, regularUser.getPassword());
         var regularToken = tokenService.generateToken(regularUserEntity);
 
-        repository.save(adminUserEntity);
-        var savedRegularUser = repository.save(regularUserEntity);
+        jdbcUserRepository.save(adminUserEntity);
+        var savedRegularUser = jdbcUserRepository.save(regularUserEntity);
 
         given()
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + regularToken)
                 .body(new UpdateRoleDTO("ADMIN"))
                 .when()
-                .put("/users/role/" + savedRegularUser.getId())
+                .put("/users/role/" + savedRegularUser)
                 .then()
                 .statusCode(403);
     }
@@ -229,19 +227,17 @@ public class UserControllerTest extends AbstractIntegrationTest {
         var adminToken = tokenService.generateToken(adminUserEntity);
         var regularUser = new User("Marcelinho", "marcelinho@br.com", "Pipoc@85", UserRole.USER);
         var regularUserEntity = userMapper.toEntity(regularUser, regularUser.getPassword());
-        repository.save(adminUserEntity);
-        var savedRegularUser = repository.save(regularUserEntity);
+        jdbcUserRepository.save(adminUserEntity);
+        var savedRegularUser = jdbcUserRepository.save(regularUserEntity);
 
         given()
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + adminToken)
                 .body(new UpdateRoleDTO("ADMIN"))
                 .when()
-                .put("/users/role/" + savedRegularUser.getId())
+                .put("/users/role/" + savedRegularUser)
                 .then()
-                .statusCode(200)
-                .body("name", is("Marcelinho"))
-                .body("role", is("ADMIN"));
+                .statusCode(200);
     }
 
     @Test
@@ -250,7 +246,7 @@ public class UserControllerTest extends AbstractIntegrationTest {
         var regularUserEntity = userMapper.toEntity(regularUser, regularUser.getPassword());
         var regularToken = tokenService.generateToken(regularUserEntity);
 
-        repository.save(regularUserEntity);
+        jdbcUserRepository.save(regularUserEntity);
 
         given()
                 .contentType(ContentType.JSON)
@@ -259,8 +255,7 @@ public class UserControllerTest extends AbstractIntegrationTest {
                 .when()
                 .put("/users/name")
                 .then()
-                .statusCode(200)
-                .body("name", is("Lucas"));
+                .statusCode(200);
 
     }
 

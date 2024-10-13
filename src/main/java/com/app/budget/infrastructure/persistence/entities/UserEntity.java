@@ -1,19 +1,17 @@
 package com.app.budget.infrastructure.persistence.entities;
 
 import com.app.budget.core.enums.UserRole;
-import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.List;
 
-@Entity(name = "users")
-@Table(name = "users")
+@Component
 public class UserEntity implements UserDetails {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
     private Long id;
     private String name;
     private String email;
@@ -91,5 +89,5 @@ public class UserEntity implements UserDetails {
         return true;
     }
 
-        
+
 }

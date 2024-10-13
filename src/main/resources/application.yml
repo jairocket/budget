@@ -1,23 +1,21 @@
 spring:
   application:
     name: budget
-  datasource:
-    url: "jdbc:postgresql://localhost:5431/budget_db"
-    username: postgres
-    password: postgres
   flyway:
     user: postgres
     password: postgres
     url: "jdbc:postgresql://localhost:5431/budget_db"
-    baselineOnMigrate: true
-    cleanDisabled: false
-    cleanOnValidationError: true
+    baseline-on-migrate: true
+    clean-disabled: false
+    clean-on-validation-error: true
+
 app:
   datasource:
     jdbc-url: "jdbc:postgresql://localhost:5431/budget_db"
     username: postgres
     password: postgres
     maximum-pool-size: 10
+    driver-class-name: org.postgresql.Driver
 
 api:
   security:
