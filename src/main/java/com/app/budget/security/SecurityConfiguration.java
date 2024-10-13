@@ -40,6 +40,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/swagger-ui/*").permitAll()
                         .requestMatchers("/auth/logout").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/users/get/*").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/users/role/*").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/users/save/admin").hasRole("ADMIN")
                         .anyRequest().authenticated()

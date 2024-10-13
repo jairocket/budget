@@ -84,4 +84,9 @@ public class UserService {
         return userEntityList.stream().map(userEntity -> userMapper.toDomain(userEntity)).toList();
     }
 
+    public User getUserById(Long id) {
+        UserEntity userEntity = jdbcUserRepository.getUserById(id);
+        return userMapper.toDomain(userEntity);
+    }
+
 }
