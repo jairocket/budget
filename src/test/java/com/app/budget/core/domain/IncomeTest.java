@@ -1,7 +1,7 @@
 package com.app.budget.core.domain;
 
-import com.app.budget.core.enums.IncomeStatus;
-import com.app.budget.core.exceptions.EventException;
+import com.app.budget.core.enums.TransactionStatus;
+import com.app.budget.core.exceptions.TransactionException;
 import org.junit.Test;
 
 import java.time.LocalDate;
@@ -30,7 +30,7 @@ public class IncomeTest {
         assertEquals(35.90, income.getPredictedValue(), 0.00);
         assertEquals("2024-02-01", income.getDueDate().toString());
         assertEquals("", income.getDescription());
-        assertEquals(IncomeStatus.PENDING, income.getStatus());
+        assertEquals(TransactionStatus.PENDING, income.getStatus());
     }
 
     @Test
@@ -44,12 +44,12 @@ public class IncomeTest {
 
         Income income = new Income(id, categories, title, null, predictedValue, null, dueDate, null);
 
-        EventException exception = assertThrows(EventException.class, () -> income.setStatus(null));
+        TransactionException exception = assertThrows(TransactionException.class, () -> income.setStatus(null));
         assertEquals("Status cannot be null", exception.getMessage());
     }
 
     @Test
-    public void shouldBeAbleToUpdateIncomeStatus() {
+    public void shouldBeAbleToUpdateTransactionStatus() {
         Long id = 1L;
         Set<Category> categories = new HashSet<>();
         categories.add(new Category("Transportation"));
@@ -58,8 +58,8 @@ public class IncomeTest {
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
         Income income = new Income(id, categories, title, null, value, null, dueDate, null);
 
-        income.setStatus(IncomeStatus.RECEIVED);
+        income.setStatus(TransactionStatus.OK);
 
-        assertEquals(IncomeStatus.RECEIVED, income.getStatus());
+        assertEquals(TransactionStatus.OK, income.getStatus());
     }
 }

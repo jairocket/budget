@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.2</version>
+        <version>3.4.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.app</groupId>
@@ -14,7 +14,7 @@
     <name>budget</name>
     <description>personal budget api</description>
     <properties>
-        <java.version>17</java.version>
+        <java.version>21</java.version>
         <spring.version>6.1.5</spring.version>
         <spring-security.version>6.2.3</spring-security.version>
         <flyway.user>postgres</flyway.user>
@@ -64,7 +64,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-testcontainers</artifactId>
-            <version>3.3.2</version>
+            <version>3.4.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -76,6 +76,7 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
+            <version>1.20.5</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -86,6 +87,7 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>postgresql</artifactId>
+            <version>1.20.5</version>
             <scope>test</scope>
         </dependency>
         <dependency>

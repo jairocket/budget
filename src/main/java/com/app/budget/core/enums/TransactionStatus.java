@@ -1,7 +1,7 @@
 package com.app.budget.core.enums;
 
-public enum IncomeStatus {
+public enum TransactionStatus {
     PENDING,
-    RECEIVED,
+    OK,
     LATE
 }
