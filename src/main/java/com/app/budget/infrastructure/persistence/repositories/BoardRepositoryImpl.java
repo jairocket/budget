@@ -20,8 +20,8 @@ public class BoardRepositoryImpl implements BoardRepository {
         boardProperties.put("user_id", userId);
 
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(dataSource)
-                .withTableName("board")
-                .usingGeneratedKeyColumns("user_id");
+                .withTableName("boards")
+                .usingGeneratedKeyColumns("id");
 
         Long id = simpleJdbcInsert.executeAndReturnKey(boardProperties).longValue();
 
