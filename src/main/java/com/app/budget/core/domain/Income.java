@@ -10,7 +10,16 @@ import java.util.Set;
 public class Income extends Transaction {
     TransactionStatus status;
 
-    public Income(Long id, Set<Category> categories, String title, String description, Double predictedValue, Double actualValue, LocalDate dueDate, TransactionStatus status) {
+    public Income(
+            Long id,
+            Set<Category> categories,
+            String title,
+            String description,
+            Double predictedValue,
+            Double actualValue,
+            LocalDate dueDate,
+            TransactionStatus status
+    ) {
         super(id, categories, title, description, predictedValue, actualValue, dueDate);
         status = Optional.ofNullable(status).orElse(TransactionStatus.PENDING);
 

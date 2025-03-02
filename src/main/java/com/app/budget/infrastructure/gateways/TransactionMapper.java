@@ -23,7 +23,7 @@ public class TransactionMapper {
         );
     }
 
-    public TransactionEntity toExpenseEntity(Income income) {
+    public TransactionEntity toIncomeEntity(Income income) {
         return new TransactionEntity(
                 income.getActualValue(),
                 income.getCategories(),
@@ -51,13 +51,14 @@ public class TransactionMapper {
     }
 
     public Expense toExpenseDomain(TransactionEntity entity) {
+
         return new Expense(
                 entity.getId(),
                 entity.getCategories(),
                 entity.getTitle(),
                 entity.getDescription(),
-                entity.getPredictedValue() * -1,
-                entity.getActualValue() * -1,
+                Math.abs(entity.getPredictedValue()),
+                Math.abs(entity.getActualValue()),
                 entity.getDueDate(),
                 TransactionStatus.valueOf(entity.getStatus().toString())
         );

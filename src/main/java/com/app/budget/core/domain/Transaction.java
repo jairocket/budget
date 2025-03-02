@@ -27,7 +27,6 @@ abstract class Transaction {
         predictedValue = Optional.ofNullable(predictedValue).orElse(0.00);
         actualValue = Optional.ofNullable(actualValue).orElse(0.00);
 
-
         this.id = id;
         this.categories = categories;
         this.title = title;

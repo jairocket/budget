@@ -48,4 +48,5 @@ public class AbstractIntegrationTest {
     void setUp() {
         RestAssured.baseURI = "http://localhost:" + port;
     }
+
 }

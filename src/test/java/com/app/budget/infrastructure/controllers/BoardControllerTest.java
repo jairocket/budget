@@ -1,0 +1,62 @@
+package com.app.budget.infrastructure.controllers;
+
+import com.app.budget.core.domain.User;
+import com.app.budget.core.enums.UserRole;
+import com.app.budget.core.services.TokenService;
+import com.app.budget.infrastructure.AbstractIntegrationTest;
+import com.app.budget.infrastructure.controllers.dto.BoardSaveDTO;
+import com.app.budget.infrastructure.gateways.UserMapper;
+import com.app.budget.infrastructure.persistence.entities.UserEntity;
+import com.app.budget.infrastructure.persistence.repositories.UserRepository;
+import io.restassured.http.ContentType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.jdbc.JdbcTestUtils;
+
+import static io.restassured.RestAssured.given;
+
+public class BoardControllerTest extends AbstractIntegrationTest {
+
+    @Autowired
+    private TokenService tokenService;
+
+    @Autowired
+    private UserRepository jdbcUserRepository;
+    
+    private String loggedUserToken = getUserToken();
+
+    @BeforeEach
+    void clearRepository(@Autowired JdbcTemplate jdbcTemplate) {
+        JdbcTestUtils.deleteFromTables(
+                jdbcTemplate,
+                "boards"
+        );
+    }
+
+    @Test
+    void shouldBeAbleToCreateBoard() {
+        BoardSaveDTO boardSaveDTO = new BoardSaveDTO(1L);
+
+        given().contentType(ContentType.JSON).
+                header("Authorization", "Bearer " + loggedUserToken).
+                body(boardSaveDTO)
+                .when()
+                .post("board")
+                .then()
+                .statusCode(201);
+
+    }
+
+    protected String getUserToken() {
+        UserMapper userMapper = new UserMapper();
+        User loggedUser = new User("Jack", "jack@bauer.com", "Pipoc@85", UserRole.USER);
+        UserEntity loggedUserEntity = userMapper.toEntity(loggedUser, loggedUser.getPassword());
+
+        jdbcUserRepository.save(loggedUserEntity);
+
+        return tokenService.generateToken(loggedUserEntity);
+    }
+
+}

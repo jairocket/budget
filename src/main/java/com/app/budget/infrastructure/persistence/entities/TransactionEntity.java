@@ -60,32 +60,16 @@ public class TransactionEntity {
         return actualValue;
     }
 
-    public void setActualValue(Double actualValue) {
-        this.actualValue = actualValue;
-    }
-
     public Set<Category> getCategories() {
         return categories;
-    }
-
-    public void setCategories(Set<Category> categories) {
-        this.categories = categories;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public LocalDate getDueDate() {
         return dueDate;
-    }
-
-    public void setDueDate(LocalDate dueDate) {
-        this.dueDate = dueDate;
     }
 
     public Long getId() {
@@ -96,31 +80,16 @@ public class TransactionEntity {
         return predictedValue;
     }
 
-    public void setPredictedValue(Double predictedValue) {
-        this.predictedValue = predictedValue;
-    }
-
     public TransactionStatus getStatus() {
         return status;
-    }
-
-    public void setStatus(TransactionStatus status) {
-        this.status = status;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public TransactionType getType() {
         return type;
     }
 
-    public void setType(TransactionType type) {
-        this.type = type;
-    }
 }

@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class UserRepositoryImpl {
+public class UserRepositoryImpl implements UserRepository {
 
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
@@ -31,6 +31,7 @@ public class UserRepositoryImpl {
     @Autowired
     private HikariDataSource dataSource;
 
+    @Override
     public List<UserEntity> getAllUsers() {
         List<UserEntity> users = jdbcTemplate.query(
                 "SELECT id, name, email, password, role FROM USERS;",
@@ -39,6 +40,7 @@ public class UserRepositoryImpl {
         return users;
     }
 
+    @Override
     public UserDetails getUserDetailsByEmail(String email) {
         List<UserDetails> users = jdbcTemplate.query(
                 "SELECT * FROM users WHERE email = :email ",
@@ -55,6 +57,7 @@ public class UserRepositoryImpl {
         return users.get(0);
     }
 
+    @Override
     public UserEntity getUserById(Long id) {
         List<UserEntity> users = jdbcTemplate.query(
                 "SELECT * FROM USERS WHERE id = :id ",
@@ -71,6 +74,7 @@ public class UserRepositoryImpl {
         return users.get(0);
     }
 
+    @Override
     public Long save(UserEntity userEntity) {
         Map<String, Object> userProperties = new HashMap<>();
 

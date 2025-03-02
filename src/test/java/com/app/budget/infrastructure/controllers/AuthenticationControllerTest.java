@@ -17,6 +17,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
 public class AuthenticationControllerTest extends AbstractIntegrationTest {
+
     @AfterEach
     void clearRepository(@Autowired JdbcTemplate jdbcTemplate) {
         JdbcTestUtils.deleteFromTables(

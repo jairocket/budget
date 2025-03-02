@@ -6,7 +6,6 @@ import com.app.budget.core.exceptions.BoardException;
 import org.junit.Test;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -17,10 +16,10 @@ public class BoardTest {
 
     @Test
     public void shouldBeAbleToCreateBoard() {
-        Board board = new Board(2L, user);
+        Board board = new Board(2L, user.getId());
 
         assertTrue(board.getId() == 2);
-        assertTrue(board.getUser().getId() == 1);
+        assertTrue(board.getUserId() == 1);
         assertEquals(0, board.getExpenses().size());
         assertEquals(0, board.getIncomes().size());
     }
@@ -34,7 +33,7 @@ public class BoardTest {
 
     @Test
     public void shouldThrowExceptionWhenTryToUpdateIncomesToNull() {
-        Board board = new Board(2L, user);
+        Board board = new Board(2L, user.getId());
         BoardException exception = assertThrows(BoardException.class, () -> board.setIncomes(null));
 
         assertEquals("Incomes cannot be null", exception.getMessage());
@@ -42,7 +41,7 @@ public class BoardTest {
 
     @Test
     public void shouldThrowExceptionWhenTryToUpdateExpensesToNull() {
-        Board board = new Board(2L, user);
+        Board board = new Board(2L, user.getId());
         BoardException exception = assertThrows(BoardException.class, () -> board.setExpenses(null));
 
         assertEquals("Expenses cannot be null", exception.getMessage());
@@ -57,8 +56,8 @@ public class BoardTest {
         Income income_2 = new Income(categories, "Uber", null, 25.00, 25.00, LocalDate.of(2024, 3, 2), TransactionStatus.LATE);
         Income income_3 = new Income(categories, "Uber", null, 45.00, 45.00, LocalDate.of(2024, 3, 3), TransactionStatus.PENDING);
 
-        Board board = new Board(user);
-        board.setIncomes(List.of(income_1, income_2, income_3));
+        Board board = new Board(user.getId());
+        board.setIncomes(Set.of(income_1, income_2, income_3));
 
         assertEquals(100.00, board.getTotalPredictedIncomes(), 0.00);
     }
@@ -72,8 +71,8 @@ public class BoardTest {
         Expense expense_2 = new Expense(categories, "Uber", null, 25.00, 25.00, LocalDate.of(2024, 3, 2), TransactionStatus.PENDING);
         Expense expense_3 = new Expense(categories, "Uber", null, 45.00, 45.00, LocalDate.of(2024, 3, 3), TransactionStatus.PENDING);
 
-        Board board = new Board(user);
-        board.setExpenses(List.of(expense_1, expense_2, expense_3));
+        Board board = new Board(user.getId());
+        board.setExpenses(Set.of(expense_1, expense_2, expense_3));
 
         assertEquals(100.00, board.getTotalPredictedExpenses(), 0.00);
     }
@@ -87,8 +86,8 @@ public class BoardTest {
         Income income_2 = new Income(categories, "Uber", null, 25.00, 25.00, LocalDate.of(2024, 3, 2), TransactionStatus.LATE);
         Income income_3 = new Income(categories, "Uber", null, 45.00, 45.00, LocalDate.of(2024, 3, 3), TransactionStatus.PENDING);
 
-        Board board = new Board(user);
-        board.setIncomes(List.of(income_1, income_2, income_3));
+        Board board = new Board(user.getId());
+        board.setIncomes(Set.of(income_1, income_2, income_3));
 
         assertEquals(100.00, board.getTotalActualIncomes(), 0.00);
     }
@@ -102,8 +101,8 @@ public class BoardTest {
         Expense expense_2 = new Expense(categories, "Uber", null, 25.00, 25.00, LocalDate.of(2024, 3, 2), TransactionStatus.PENDING);
         Expense expense_3 = new Expense(categories, "Uber", null, 45.00, 45.00, LocalDate.of(2024, 3, 3), TransactionStatus.PENDING);
 
-        Board board = new Board(user);
-        board.setExpenses(List.of(expense_1, expense_2, expense_3));
+        Board board = new Board(user.getId());
+        board.setExpenses(Set.of(expense_1, expense_2, expense_3));
 
         assertEquals(100.00, board.getTotalActualExpenses(), 0.00);
     }
