@@ -4,7 +4,6 @@ import com.app.budget.core.domain.User;
 import com.app.budget.core.enums.UserRole;
 import com.app.budget.core.services.TokenService;
 import com.app.budget.infrastructure.AbstractIntegrationTest;
-import com.app.budget.infrastructure.controllers.dto.BoardSaveDTO;
 import com.app.budget.infrastructure.gateways.UserMapper;
 import com.app.budget.infrastructure.persistence.entities.UserEntity;
 import com.app.budget.infrastructure.persistence.repositories.UserRepository;
@@ -40,11 +39,8 @@ public class BoardControllerTest extends AbstractIntegrationTest {
 
     @Test
     void shouldBeAbleToCreateBoard() {
-        BoardSaveDTO boardSaveDTO = new BoardSaveDTO(1L);
-
         given().contentType(ContentType.JSON).
-                header("Authorization", "Bearer " + loggedUserToken).
-                body(boardSaveDTO)
+                header("Authorization", "Bearer " + loggedUserToken)
                 .when()
                 .post("/board")
                 .then()
