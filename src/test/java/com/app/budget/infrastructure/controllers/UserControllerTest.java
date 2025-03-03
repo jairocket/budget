@@ -9,7 +9,7 @@ import com.app.budget.infrastructure.controllers.dto.UpdatePasswordDTO;
 import com.app.budget.infrastructure.controllers.dto.UpdateRoleDTO;
 import com.app.budget.infrastructure.controllers.dto.UserRegisterDTO;
 import com.app.budget.infrastructure.gateways.UserMapper;
-import com.app.budget.infrastructure.persistence.repositories.UserRepositoryImpl;
+import com.app.budget.infrastructure.persistence.repositories.UserRepository;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ import static org.hamcrest.Matchers.*;
 
 public class UserControllerTest extends AbstractIntegrationTest {
     @Autowired
-    private UserRepositoryImpl jdbcUserRepository;
+    private UserRepository jdbcUserRepository;
 
     @Autowired
     private TokenService tokenService;

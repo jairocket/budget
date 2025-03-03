@@ -1,13 +1,13 @@
 package com.app.budget.core.domain;
 
-import com.app.budget.core.exceptions.EventException;
+import com.app.budget.core.exceptions.TransactionException;
 import org.apache.commons.math3.util.Precision;
 
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 
-abstract class Event {
+abstract class Transaction {
     private Long id;
     private Set<Category> categories;
     private String title;
@@ -16,7 +16,7 @@ abstract class Event {
     private Double actualValue;
     private LocalDate dueDate;
 
-    public Event(Long id, Set<Category> categories, String title, String description, Double predictedValue, Double actualValue, LocalDate dueDate) {
+    public Transaction(Long id, Set<Category> categories, String title, String description, Double predictedValue, Double actualValue, LocalDate dueDate) {
         validateCategories(categories);
         validateTitle(title);
         validateValue(predictedValue);
@@ -27,7 +27,6 @@ abstract class Event {
         predictedValue = Optional.ofNullable(predictedValue).orElse(0.00);
         actualValue = Optional.ofNullable(actualValue).orElse(0.00);
 
-
         this.id = id;
         this.categories = categories;
         this.title = title;
@@ -37,7 +36,7 @@ abstract class Event {
         this.dueDate = dueDate;
     }
 
-    public Event(Set<Category> categories, String title, String description, Double predictedValue, Double actualValue, LocalDate dueDate) {
+    public Transaction(Set<Category> categories, String title, String description, Double predictedValue, Double actualValue, LocalDate dueDate) {
         validateCategories(categories);
         validateTitle(title);
         validateValue(predictedValue);
@@ -116,31 +115,31 @@ abstract class Event {
     }
 
     private void validateCategories(Set<Category> categories) {
-        categories = Optional.ofNullable(categories).orElseThrow(() -> new EventException("Categories cannot be null"));
+        categories = Optional.ofNullable(categories).orElseThrow(() -> new TransactionException("Categories cannot be null"));
 
         if (categories.isEmpty()) {
-            throw new EventException("Should inform at least one category");
+            throw new TransactionException("Should inform at least one category");
         }
     }
 
     private void validateTitle(String title) {
         if (title == null) {
-            throw new EventException("Title cannot be null");
+            throw new TransactionException("Title cannot be null");
         }
 
         if (title.length() < 3) {
-            throw new EventException("Title should have at least three characters");
+            throw new TransactionException("Title should have at least three characters");
         }
 
         if (title.length() > 45) {
-            throw new EventException("Title should have less than forty-five characters");
+            throw new TransactionException("Title should have less than forty-five characters");
         }
     }
 
     private void validateValue(Double value) {
         value = Optional.ofNullable(value).orElse(0.00);
         if (value < 0.00) {
-            throw new EventException("Value should not be lower than zero");
+            throw new TransactionException("Value should not be lower than zero");
         }
     }
 
@@ -150,7 +149,7 @@ abstract class Event {
 
     private void validateDueDate(LocalDate dueDate) {
         if (dueDate == null) {
-            throw new EventException("Due date should not be null");
+            throw new TransactionException("Due date should not be null");
         }
     }
 
@@ -160,7 +159,7 @@ abstract class Event {
 
     private void validateDescription(String description) {
         if (description.length() > 256) {
-            throw new EventException("Description should have less than 256 characters");
+            throw new TransactionException("Description should have less than 256 characters");
         }
     }
 }

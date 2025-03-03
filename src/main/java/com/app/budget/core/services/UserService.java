@@ -5,7 +5,7 @@ import com.app.budget.core.enums.UserRole;
 import com.app.budget.core.exceptions.UserException;
 import com.app.budget.infrastructure.gateways.UserMapper;
 import com.app.budget.infrastructure.persistence.entities.UserEntity;
-import com.app.budget.infrastructure.persistence.repositories.UserRepositoryImpl;
+import com.app.budget.infrastructure.persistence.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private UserRepositoryImpl jdbcUserRepository;
+    private UserRepository jdbcUserRepository;
 
     public Long save(User user) {
         if (this.jdbcUserRepository.getUserDetailsByEmail(user.getEmail()) != null) {
