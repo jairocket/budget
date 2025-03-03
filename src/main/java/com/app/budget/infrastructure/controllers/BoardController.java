@@ -19,7 +19,7 @@ public class BoardController {
     private BoardService boardService;
 
     @PostMapping
-    public ResponseEntity<Long> save(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+    public ResponseEntity<String> save(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         Long createdBoardId = boardService.save(token);
 
         URI uri = ServletUriComponentsBuilder
@@ -27,7 +27,7 @@ public class BoardController {
                 .path("/")
                 .buildAndExpand(createdBoardId).toUri();
 
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity.created(uri).body("Board created successfully!");
     }
 
 

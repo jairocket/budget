@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 
 public class BoardControllerTest extends AbstractIntegrationTest {
 
@@ -24,8 +25,8 @@ public class BoardControllerTest extends AbstractIntegrationTest {
 
     @Autowired
     private UserRepository jdbcUserRepository;
-    
-    private String loggedUserToken = getUserToken();
+
+    private String loggedUserToken;
 
     @BeforeEach
     void clearRepository(@Autowired JdbcTemplate jdbcTemplate) {
@@ -33,6 +34,8 @@ public class BoardControllerTest extends AbstractIntegrationTest {
                 jdbcTemplate,
                 "boards"
         );
+
+        loggedUserToken = getUserToken();
     }
 
     @Test
@@ -43,13 +46,13 @@ public class BoardControllerTest extends AbstractIntegrationTest {
                 header("Authorization", "Bearer " + loggedUserToken).
                 body(boardSaveDTO)
                 .when()
-                .post("board")
+                .post("/board")
                 .then()
-                .statusCode(201);
-
+                .statusCode(201)
+                .body(equalTo("Board created successfully!"));
     }
 
-    protected String getUserToken() {
+    private String getUserToken() {
         UserMapper userMapper = new UserMapper();
         User loggedUser = new User("Jack", "jack@bauer.com", "Pipoc@85", UserRole.USER);
         UserEntity loggedUserEntity = userMapper.toEntity(loggedUser, loggedUser.getPassword());
