@@ -1,6 +1,7 @@
 package com.app.budget.infrastructure.controllers;
 
 import com.app.budget.core.services.BoardService;
+import com.app.budget.core.services.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +19,13 @@ public class BoardController {
     @Autowired
     private BoardService boardService;
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping
     public ResponseEntity<String> save(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        Long createdBoardId = boardService.save(token);
+        Long loggedUserId = tokenService.getUserIdFromToken(token);
+        Long createdBoardId = boardService.save(loggedUserId);
 
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequestUri()
