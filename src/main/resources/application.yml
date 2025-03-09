@@ -1,6 +1,8 @@
 spring:
   application:
     name: budget
+  profiles:
+    active: dev
   flyway:
     user: postgres
     password: postgres

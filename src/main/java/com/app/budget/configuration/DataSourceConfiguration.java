@@ -13,10 +13,20 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 public class DataSourceConfiguration {
     @Bean
     @ConfigurationProperties("app.datasource")
-    @Profile("!test-containers")
+    @Profile("dev")
     @Qualifier("datasource")
     public HikariDataSource dataSource() {
         return DataSourceBuilder.create().type(HikariDataSource.class).build();
+    }
+
+    @Bean
+    @Profile("test")
+    @ConfigurationProperties("spring.datasource")
+    @Qualifier("test")
+    public HikariDataSource repositoryTestDatasource() {
+        return DataSourceBuilder.create()
+                .type(HikariDataSource.class)
+                .build();
     }
 
     @Bean
@@ -36,5 +46,16 @@ public class DataSourceConfiguration {
     ) {
         return new NamedParameterJdbcTemplate(dataSource);
     }
+
+    @Bean
+    @Profile("test")
+    @ConfigurationProperties("spring.datasource")
+    public NamedParameterJdbcTemplate getH2JdbcTemplate(
+            @Qualifier("test")
+            HikariDataSource dataSource
+    ) {
+        return new NamedParameterJdbcTemplate(dataSource);
+    }
+
 
 }
