@@ -8,6 +8,7 @@ import com.app.budget.infrastructure.gateways.UserMapper;
 import com.app.budget.infrastructure.persistence.entities.UserEntity;
 import com.app.budget.infrastructure.persistence.repositories.UserRepository;
 import io.restassured.http.ContentType;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +29,13 @@ public class BoardControllerTest extends AbstractIntegrationTest {
     private String loggedUserToken;
 
     @BeforeEach
-    void clearRepository(@Autowired JdbcTemplate jdbcTemplate) {
-        JdbcTestUtils.deleteFromTables(
-                jdbcTemplate,
-                "boards"
-        );
-
+    void getLoggedUser() {
         loggedUserToken = getUserToken();
+    }
+
+    @AfterEach
+    void clearRepository(@Autowired JdbcTemplate jdbcTemplate) {
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "boards");
     }
 
     @Test
