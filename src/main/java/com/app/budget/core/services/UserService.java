@@ -27,7 +27,9 @@ public class UserService {
     private UserRepository jdbcUserRepository;
 
     public Long save(User user) {
-        if (this.jdbcUserRepository.getUserDetailsByEmail(user.getEmail()) != null) {
+        final UserEntity newUser = (UserEntity) jdbcUserRepository.getUserDetailsByEmail(user.getEmail());
+
+        if (newUser != null) {
             throw new UserException("User already exists");
         }
 
@@ -39,8 +41,7 @@ public class UserService {
     }
 
     public void updatePassword(String token, String password) {
-        String jwt = token.replace("Bearer ", "");
-        String email = tokenService.extractEmailFromToken(jwt);
+        String email = tokenService.extractEmailFromToken(token);
 
         UserEntity entity = (UserEntity) jdbcUserRepository.getUserDetailsByEmail(email);
 
@@ -54,8 +55,7 @@ public class UserService {
     }
 
     public void updateName(String token, String name) {
-        String jwt = token.replace("Bearer ", "");
-        String email = tokenService.extractEmailFromToken(jwt);
+        String email = tokenService.extractEmailFromToken(token);
 
         UserEntity entity = (UserEntity) jdbcUserRepository.getUserDetailsByEmail(email);
 
