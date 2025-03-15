@@ -14,8 +14,7 @@ public class BoardRepositoryImplTest {
 
     @Autowired
     BoardRepository boardRepository;
-
-
+    
     @Test
     public void shouldBeAbleToSaveBoard() {
         final Long userId = 1L;
