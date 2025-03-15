@@ -25,8 +25,7 @@ public class TokenService {
     private UserRepository jdbcUserRepository;
 
     public Long getUserIdFromToken(String token) {
-        String jwt = token.replace("Bearer ", "");
-        String email = this.extractEmailFromToken(jwt);
+        String email = this.extractEmailFromToken(token);
         UserEntity loggedUser = (UserEntity) jdbcUserRepository.getUserDetailsByEmail(email);
 
         Long userId = Optional
@@ -64,7 +63,8 @@ public class TokenService {
     }
 
     public String extractEmailFromToken(String token) {
-        return JWT.decode(token).getSubject();
+        String jwt = token.replace("Bearer ", "");
+        return JWT.decode(jwt).getSubject();
     }
 
     private Instant generateExpirationDate() {

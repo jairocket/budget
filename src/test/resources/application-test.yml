@@ -8,3 +8,10 @@ app-test:
 spring:
   flyway:
     enabled: false
+  datasource:
+    jdbcUrl: "jdbc:h2:mem:budget_db"
+    username: "budget"
+    password: "password"
+    driverClassName: "org.h2.Driver"
+
+
