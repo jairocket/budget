@@ -1,4 +1,4 @@
-package com.app.budget.infrastructure.persistence.repositories;
+package com.app.budget.infrastructure.persistence.repositories.UserRepository;
 
 import com.app.budget.infrastructure.persistence.entities.UserEntity;
 import org.springframework.security.core.userdetails.UserDetails;

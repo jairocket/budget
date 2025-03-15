@@ -1,6 +1,6 @@
 package com.app.budget.infrastructure.persistance;
 
-import com.app.budget.infrastructure.persistence.repositories.BoardRepository;
+import com.app.budget.infrastructure.persistence.repositories.BoardRepository.BoardRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,7 +14,7 @@ public class BoardRepositoryImplTest {
 
     @Autowired
     BoardRepository boardRepository;
-    
+
     @Test
     public void shouldBeAbleToSaveBoard() {
         final Long userId = 1L;

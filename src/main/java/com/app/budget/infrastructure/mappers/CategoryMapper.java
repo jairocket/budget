@@ -1,4 +1,4 @@
-package com.app.budget.infrastructure.gateways;
+package com.app.budget.infrastructure.mappers;
 
 import com.app.budget.core.domain.Category;
 import com.app.budget.infrastructure.persistence.entities.CategoryEntity;

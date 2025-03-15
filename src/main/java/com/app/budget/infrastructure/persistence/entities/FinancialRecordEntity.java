@@ -1,15 +1,15 @@
 package com.app.budget.infrastructure.persistence.entities;
 
 import com.app.budget.core.domain.Category;
-import com.app.budget.core.enums.TransactionStatus;
-import com.app.budget.core.enums.TransactionType;
+import com.app.budget.core.enums.FinancialRecordStatus;
+import com.app.budget.core.enums.FinancialRecordType;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.Set;
 
 @Component
-public class TransactionEntity {
+public class FinancialRecordEntity {
     private Long id;
     private Set<Category> categories;
     private String title;
@@ -17,19 +17,19 @@ public class TransactionEntity {
     private Double predictedValue;
     private Double actualValue;
     private LocalDate dueDate;
-    private TransactionStatus status;
-    private TransactionType type;
+    private FinancialRecordStatus status;
+    private FinancialRecordType type;
 
-    public TransactionEntity(
+    public FinancialRecordEntity(
             Double actualValue,
             Set<Category> categories,
             String description,
             LocalDate dueDate,
             Long id,
             Double predictedValue,
-            TransactionStatus status,
+            FinancialRecordStatus status,
             String title,
-            TransactionType type
+            FinancialRecordType type
     ) {
         this.actualValue = actualValue;
         this.categories = categories;
@@ -42,7 +42,7 @@ public class TransactionEntity {
         this.type = type;
     }
 
-    public TransactionEntity(Double actualValue, Set<Category> categories, String description, LocalDate dueDate, Double predictedValue, TransactionStatus status, String title, TransactionType type) {
+    public FinancialRecordEntity(Double actualValue, Set<Category> categories, String description, LocalDate dueDate, Double predictedValue, FinancialRecordStatus status, String title, FinancialRecordType type) {
         this.actualValue = actualValue;
         this.categories = categories;
         this.description = description;
@@ -53,7 +53,7 @@ public class TransactionEntity {
         this.type = type;
     }
 
-    public TransactionEntity() {
+    public FinancialRecordEntity() {
     }
 
     public Double getActualValue() {
@@ -80,7 +80,7 @@ public class TransactionEntity {
         return predictedValue;
     }
 
-    public TransactionStatus getStatus() {
+    public FinancialRecordStatus getStatus() {
         return status;
     }
 
@@ -88,7 +88,7 @@ public class TransactionEntity {
         return title;
     }
 
-    public TransactionType getType() {
+    public FinancialRecordType getType() {
         return type;
     }
 

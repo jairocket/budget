@@ -1,6 +1,6 @@
 package com.app.budget.core.services;
 
-import com.app.budget.infrastructure.persistence.repositories.UserRepositoryImpl;
+import com.app.budget.infrastructure.persistence.repositories.UserRepository.UserRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

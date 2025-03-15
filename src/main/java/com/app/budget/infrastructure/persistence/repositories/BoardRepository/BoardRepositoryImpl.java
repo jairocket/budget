@@ -1,4 +1,4 @@
-package com.app.budget.infrastructure.persistence.repositories;
+package com.app.budget.infrastructure.persistence.repositories.BoardRepository;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Autowired;

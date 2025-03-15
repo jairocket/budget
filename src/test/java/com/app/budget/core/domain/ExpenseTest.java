@@ -1,7 +1,7 @@
 package com.app.budget.core.domain;
 
-import com.app.budget.core.enums.TransactionStatus;
-import com.app.budget.core.exceptions.TransactionException;
+import com.app.budget.core.enums.FinancialRecordStatus;
+import com.app.budget.core.exceptions.FinancialRecordException;
 import org.junit.Test;
 
 import java.time.LocalDate;
@@ -19,7 +19,7 @@ public class ExpenseTest {
         Double predictedValue = 35.90;
         Double actualValue = 35.90;
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
-        TransactionStatus status = TransactionStatus.LATE;
+        FinancialRecordStatus status = FinancialRecordStatus.LATE;
         String description = "Going to the doctor";
 
         Expense expense = new Expense(id, categories, title, description, predictedValue, actualValue, dueDate, status);
@@ -30,7 +30,7 @@ public class ExpenseTest {
         assertEquals("Going to the doctor", expense.getDescription());
         assertEquals(35.90, expense.getPredictedValue(), 0.00);
         assertEquals("2024-02-01", expense.getDueDate().toString());
-        assertEquals(TransactionStatus.LATE, expense.getStatus());
+        assertEquals(FinancialRecordStatus.LATE, expense.getStatus());
         assertArrayEquals(categories.toArray(), expense.getCategories().toArray());
     }
 
@@ -45,7 +45,7 @@ public class ExpenseTest {
 
         Expense expense = new Expense(id, categories, title, null, predictedValue, null, dueDate, null);
 
-        assertEquals(TransactionStatus.PENDING, expense.getStatus());
+        assertEquals(FinancialRecordStatus.PENDING, expense.getStatus());
     }
 
     @Test
@@ -58,9 +58,9 @@ public class ExpenseTest {
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
         Expense expense = new Expense(id, categories, title, null, predictedValue, null, dueDate, null);
 
-        expense.setStatus(TransactionStatus.OK);
+        expense.setStatus(FinancialRecordStatus.OK);
 
-        assertEquals(TransactionStatus.OK, expense.getStatus());
+        assertEquals(FinancialRecordStatus.OK, expense.getStatus());
 
     }
 
@@ -75,7 +75,7 @@ public class ExpenseTest {
 
         Expense expense = new Expense(id, categories, title, null, predictedValue, null, dueDate, null);
 
-        TransactionException exception = assertThrows(TransactionException.class, () -> expense.setStatus(null));
+        FinancialRecordException exception = assertThrows(FinancialRecordException.class, () -> expense.setStatus(null));
         assertEquals("Status cannot be null", exception.getMessage());
     }
 

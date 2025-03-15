@@ -9,24 +9,24 @@ import java.util.Set;
 public class BoardEntity {
     private Long id;
     private Long userId;
-    private Set<TransactionEntity> transactionsList;
+    private Set<FinancialRecordEntity> financialRecordsList;
 
-    public BoardEntity(Long id, Set<TransactionEntity> transactionsList, Long userId) {
+    public BoardEntity(Long id, Set<FinancialRecordEntity> financialRecordsList, Long userId) {
         this.id = id;
-        this.transactionsList = transactionsList;
+        this.financialRecordsList = financialRecordsList;
         this.userId = userId;
     }
 
     public BoardEntity(Long userId) {
         this.userId = userId;
-        this.transactionsList = new HashSet<>();
+        this.financialRecordsList = new HashSet<>();
     }
 
     public BoardEntity() {
     }
 
-    public BoardEntity(Set<TransactionEntity> transactionsList, Long userId) {
-        this.transactionsList = transactionsList;
+    public BoardEntity(Set<FinancialRecordEntity> financialRecordsList, Long userId) {
+        this.financialRecordsList = financialRecordsList;
         this.userId = userId;
     }
 
@@ -34,8 +34,8 @@ public class BoardEntity {
         return id;
     }
 
-    public Set<TransactionEntity> getTransactionsList() {
-        return transactionsList;
+    public Set<FinancialRecordEntity> getFinancialRecordsList() {
+        return financialRecordsList;
     }
 
     public Long getUserId() {

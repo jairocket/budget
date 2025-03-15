@@ -1,6 +1,6 @@
 package com.app.budget.core.services;
 
-import com.app.budget.infrastructure.persistence.repositories.BoardRepository;
+import com.app.budget.infrastructure.persistence.repositories.BoardRepository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
