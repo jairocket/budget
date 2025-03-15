@@ -2,7 +2,7 @@ package com.app.budget.core.services;
 
 import com.app.budget.core.exceptions.AuthenticationException;
 import com.app.budget.infrastructure.persistence.entities.UserEntity;
-import com.app.budget.infrastructure.persistence.repositories.UserRepository;
+import com.app.budget.infrastructure.persistence.repositories.UserRepository.UserRepository;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;

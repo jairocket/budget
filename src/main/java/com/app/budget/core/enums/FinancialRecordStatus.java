@@ -1,6 +1,6 @@
 package com.app.budget.core.enums;
 
-public enum TransactionStatus {
+public enum FinancialRecordStatus {
     PENDING,
     OK,
     LATE

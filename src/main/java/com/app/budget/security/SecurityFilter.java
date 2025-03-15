@@ -1,7 +1,7 @@
 package com.app.budget.security;
 
 import com.app.budget.core.services.TokenService;
-import com.app.budget.infrastructure.persistence.repositories.UserRepositoryImpl;
+import com.app.budget.infrastructure.persistence.repositories.UserRepository.UserRepositoryImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

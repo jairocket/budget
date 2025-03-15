@@ -1,13 +1,13 @@
 package com.app.budget.core.domain;
 
-import com.app.budget.core.exceptions.TransactionException;
+import com.app.budget.core.exceptions.FinancialRecordException;
 import org.apache.commons.math3.util.Precision;
 
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 
-abstract class Transaction {
+abstract class FinancialRecord {
     private Long id;
     private Set<Category> categories;
     private String title;
@@ -16,7 +16,7 @@ abstract class Transaction {
     private Double actualValue;
     private LocalDate dueDate;
 
-    public Transaction(Long id, Set<Category> categories, String title, String description, Double predictedValue, Double actualValue, LocalDate dueDate) {
+    public FinancialRecord(Long id, Set<Category> categories, String title, String description, Double predictedValue, Double actualValue, LocalDate dueDate) {
         validateCategories(categories);
         validateTitle(title);
         validateValue(predictedValue);
@@ -36,7 +36,7 @@ abstract class Transaction {
         this.dueDate = dueDate;
     }
 
-    public Transaction(Set<Category> categories, String title, String description, Double predictedValue, Double actualValue, LocalDate dueDate) {
+    public FinancialRecord(Set<Category> categories, String title, String description, Double predictedValue, Double actualValue, LocalDate dueDate) {
         validateCategories(categories);
         validateTitle(title);
         validateValue(predictedValue);
@@ -115,31 +115,31 @@ abstract class Transaction {
     }
 
     private void validateCategories(Set<Category> categories) {
-        categories = Optional.ofNullable(categories).orElseThrow(() -> new TransactionException("Categories cannot be null"));
+        categories = Optional.ofNullable(categories).orElseThrow(() -> new FinancialRecordException("Categories cannot be null"));
 
         if (categories.isEmpty()) {
-            throw new TransactionException("Should inform at least one category");
+            throw new FinancialRecordException("Should inform at least one category");
         }
     }
 
     private void validateTitle(String title) {
         if (title == null) {
-            throw new TransactionException("Title cannot be null");
+            throw new FinancialRecordException("Title cannot be null");
         }
 
         if (title.length() < 3) {
-            throw new TransactionException("Title should have at least three characters");
+            throw new FinancialRecordException("Title should have at least three characters");
         }
 
         if (title.length() > 45) {
-            throw new TransactionException("Title should have less than forty-five characters");
+            throw new FinancialRecordException("Title should have less than forty-five characters");
         }
     }
 
     private void validateValue(Double value) {
         value = Optional.ofNullable(value).orElse(0.00);
         if (value < 0.00) {
-            throw new TransactionException("Value should not be lower than zero");
+            throw new FinancialRecordException("Value should not be lower than zero");
         }
     }
 
@@ -149,7 +149,7 @@ abstract class Transaction {
 
     private void validateDueDate(LocalDate dueDate) {
         if (dueDate == null) {
-            throw new TransactionException("Due date should not be null");
+            throw new FinancialRecordException("Due date should not be null");
         }
     }
 
@@ -159,7 +159,7 @@ abstract class Transaction {
 
     private void validateDescription(String description) {
         if (description.length() > 256) {
-            throw new TransactionException("Description should have less than 256 characters");
+            throw new FinancialRecordException("Description should have less than 256 characters");
         }
     }
 }

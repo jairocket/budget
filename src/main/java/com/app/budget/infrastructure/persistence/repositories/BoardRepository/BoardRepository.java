@@ -1,4 +1,4 @@
-package com.app.budget.infrastructure.persistence.repositories;
+package com.app.budget.infrastructure.persistence.repositories.BoardRepository;
 
 import org.springframework.stereotype.Repository;
 

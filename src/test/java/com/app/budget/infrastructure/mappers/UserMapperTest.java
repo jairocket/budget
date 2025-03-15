@@ -1,4 +1,4 @@
-package com.app.budget.infrastructure.gateways;
+package com.app.budget.infrastructure.mappers;
 
 import com.app.budget.core.domain.User;
 import com.app.budget.core.enums.UserRole;

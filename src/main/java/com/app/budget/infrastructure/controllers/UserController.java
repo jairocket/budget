@@ -4,7 +4,7 @@ import com.app.budget.core.domain.User;
 import com.app.budget.core.enums.UserRole;
 import com.app.budget.core.services.UserService;
 import com.app.budget.infrastructure.controllers.dto.*;
-import com.app.budget.infrastructure.gateways.UserDTOMapper;
+import com.app.budget.infrastructure.mappers.UserDTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;

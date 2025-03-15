@@ -1,6 +1,6 @@
 package com.app.budget.core.enums;
 
-public enum TransactionType {
+public enum FinancialRecordType {
     INCOME,
     EXPENSE
 }

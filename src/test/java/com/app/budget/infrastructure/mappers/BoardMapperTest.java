@@ -1,13 +1,13 @@
-package com.app.budget.infrastructure.gateways;
+package com.app.budget.infrastructure.mappers;
 
 import com.app.budget.core.domain.Board;
 import com.app.budget.core.domain.Category;
 import com.app.budget.core.domain.Expense;
 import com.app.budget.core.domain.Income;
-import com.app.budget.core.enums.TransactionStatus;
-import com.app.budget.core.enums.TransactionType;
+import com.app.budget.core.enums.FinancialRecordStatus;
+import com.app.budget.core.enums.FinancialRecordType;
 import com.app.budget.infrastructure.persistence.entities.BoardEntity;
-import com.app.budget.infrastructure.persistence.entities.TransactionEntity;
+import com.app.budget.infrastructure.persistence.entities.FinancialRecordEntity;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
@@ -29,7 +29,7 @@ public class BoardMapperTest {
                 500.00,
                 499.90,
                 LocalDate.of(2024, 10, 2),
-                TransactionStatus.OK
+                FinancialRecordStatus.OK
         );
         Income income = new Income(
                 2L,
@@ -39,7 +39,7 @@ public class BoardMapperTest {
                 2500.00,
                 2499.90,
                 LocalDate.of(2024, 10, 2),
-                TransactionStatus.OK
+                FinancialRecordStatus.OK
         );
 
         return new Board(4L, Set.of(income), 5L, Set.of(expense));
@@ -47,27 +47,27 @@ public class BoardMapperTest {
 
     @Test
     public void shouldBeAbleToConvertToDomain() {
-        TransactionEntity expense = new TransactionEntity(
+        FinancialRecordEntity expense = new FinancialRecordEntity(
                 500.00 * -1,
                 Set.of(new Category(1L, "health")),
                 "consulta",
                 LocalDate.of(2024, 10, 2),
                 2L,
                 499.90 * -1,
-                TransactionStatus.OK,
+                FinancialRecordStatus.OK,
                 "oftalmologista",
-                TransactionType.EXPENSE
+                FinancialRecordType.EXPENSE
         );
-        TransactionEntity income = new TransactionEntity(
+        FinancialRecordEntity income = new FinancialRecordEntity(
                 2500.00,
                 Set.of(new Category(1L, "salary")),
                 "salário de 11/2024",
                 LocalDate.of(2024, 10, 1),
                 3L,
                 2500.90,
-                TransactionStatus.OK,
+                FinancialRecordStatus.OK,
                 "oftalmologista",
-                TransactionType.INCOME
+                FinancialRecordType.INCOME
         );
 
         BoardEntity boardEntity = new BoardEntity(4L, Set.of(expense, income), 5L);
@@ -88,21 +88,21 @@ public class BoardMapperTest {
         BoardEntity boardEntity = boardMapper.toEntity(board);
 
         assertEquals(5L, boardEntity.getId(), 0);
-        assertEquals(2, boardEntity.getTransactionsList().size());
+        assertEquals(2, boardEntity.getFinancialRecordsList().size());
         assertTrue(boardEntity
-                .getTransactionsList()
+                .getFinancialRecordsList()
                 .stream()
                 .anyMatch(
-                        transactionEntity ->
-                                transactionEntity.getId().equals(2L) &&
-                                        transactionEntity.getType().equals(TransactionType.INCOME)));
+                        financialRecordEntity ->
+                                financialRecordEntity.getId().equals(2L) &&
+                                        financialRecordEntity.getType().equals(FinancialRecordType.INCOME)));
         assertTrue(boardEntity
-                .getTransactionsList()
+                .getFinancialRecordsList()
                 .stream()
                 .anyMatch(
-                        transactionEntity ->
-                                transactionEntity.getId().equals(1L) &&
-                                        transactionEntity.getType().equals(TransactionType.EXPENSE)));
+                        financialRecordEntity ->
+                                financialRecordEntity.getId().equals(1L) &&
+                                        financialRecordEntity.getType().equals(FinancialRecordType.EXPENSE)));
 
     }
 }
