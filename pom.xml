@@ -10,9 +10,15 @@
     </parent>
     <groupId>com.app</groupId>
     <artifactId>budget</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>3.4.2</version>
+    <packaging>pom</packaging>
     <name>budget</name>
     <description>personal budget api</description>
+    <modules>
+        <module>infrastructure</module>
+        <module>domain</module>
+        <module>application</module>
+    </modules>
     <properties>
         <java.version>21</java.version>
         <spring.version>6.1.5</spring.version>
