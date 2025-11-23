@@ -1,6 +1,5 @@
-package com.app.budget.domain;
+package com.app.budget.domain.User;
 
-import com.app.budget.domain.User.User;
 import com.app.budget.domain.User.enums.UserRoleType;
 import com.app.budget.domain.exceptions.DomainException;
 import com.app.budget.domain.validation.handler.ThrowsValidationHandler;
@@ -125,6 +124,22 @@ public class UserTest {
 
         assertEquals("User name should have less than sixty characters", exception.getErrors().getFirst().message());
         assertEquals(1, exception.getErrors().size());
+
+    }
+
+    @Test
+    public void given_invalid_params_when_validate_should_throw_exception_with_all_errors() {
+        String longName = "qwertyuiopasdfghjklzxcvbnmmnbvcxzlkjhgfdsapoiuytrewqqwertyuiop";
+        String email = "new.user#budget.com";
+        String password = "InvalidPassword";
+
+        var user = User.newUser(longName, email, password, UserRoleType.USER);
+        var exception = assertThrows(DomainException.class, () -> user.validate(new ThrowsValidationHandler()));
+
+        assertEquals("User name should have less than sixty characters", exception.getErrors().getFirst().message());
+        assertEquals("User email is invalid", exception.getErrors().get(1).message());
+        assertEquals("Inform a valid password", exception.getErrors().getLast().message());
+        assertEquals(3, exception.getErrors().size());
 
     }
 }
