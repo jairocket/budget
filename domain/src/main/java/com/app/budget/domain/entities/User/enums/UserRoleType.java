@@ -1,4 +1,4 @@
-package com.app.budget.domain.User.enums;
+package com.app.budget.domain.entities.User.enums;
 
 public enum UserRoleType {
     ADMIN("admin"),

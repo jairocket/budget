@@ -1,4 +1,4 @@
-package com.app.budget.domain.User;
+package com.app.budget.domain.entities.User;
 
 import com.app.budget.domain.validation.Error;
 import com.app.budget.domain.validation.ValidationHandler;

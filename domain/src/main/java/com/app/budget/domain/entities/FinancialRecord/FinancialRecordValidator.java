@@ -1,4 +1,4 @@
-package com.app.budget.domain.FinancialRecord;
+package com.app.budget.domain.entities.FinancialRecord;
 
 import com.app.budget.domain.validation.Error;
 import com.app.budget.domain.validation.ValidationHandler;

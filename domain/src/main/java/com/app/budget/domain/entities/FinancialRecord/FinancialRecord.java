@@ -1,9 +1,9 @@
-package com.app.budget.domain.FinancialRecord;
+package com.app.budget.domain.entities.FinancialRecord;
 
 import com.app.budget.domain.AggregateRoot;
-import com.app.budget.domain.Category.Category;
-import com.app.budget.domain.FinancialRecord.enums.FinancialRecordStatus;
-import com.app.budget.domain.FinancialRecord.enums.FinancialRecordType;
+import com.app.budget.domain.entities.Category.Category;
+import com.app.budget.domain.entities.FinancialRecord.enums.FinancialRecordStatus;
+import com.app.budget.domain.entities.FinancialRecord.enums.FinancialRecordType;
 import com.app.budget.domain.validation.ValidationHandler;
 import org.apache.commons.math3.util.Precision;
 

@@ -1,4 +1,4 @@
-package com.app.budget.domain.Category;
+package com.app.budget.domain.entities.Category;
 
 import com.app.budget.domain.validation.Error;
 import com.app.budget.domain.validation.ValidationHandler;

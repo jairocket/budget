@@ -1,6 +1,6 @@
-package com.app.budget.domain.User;
+package com.app.budget.domain.entities.User;
 
-import com.app.budget.domain.User.enums.UserRoleType;
+import com.app.budget.domain.entities.User.enums.UserRoleType;
 import com.app.budget.domain.exceptions.DomainException;
 import com.app.budget.domain.validation.handler.ThrowsValidationHandler;
 import org.junit.jupiter.api.Test;

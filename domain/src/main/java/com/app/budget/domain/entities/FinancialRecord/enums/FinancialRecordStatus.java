@@ -1,4 +1,4 @@
-package com.app.budget.domain.FinancialRecord.enums;
+package com.app.budget.domain.entities.FinancialRecord.enums;
 
 public enum FinancialRecordStatus {
     PENDING,

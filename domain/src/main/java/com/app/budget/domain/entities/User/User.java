@@ -1,7 +1,7 @@
-package com.app.budget.domain.User;
+package com.app.budget.domain.entities.User;
 
 import com.app.budget.domain.AggregateRoot;
-import com.app.budget.domain.User.enums.UserRoleType;
+import com.app.budget.domain.entities.User.enums.UserRoleType;
 import com.app.budget.domain.validation.ValidationHandler;
 
 public class User extends AggregateRoot<UserID> {
