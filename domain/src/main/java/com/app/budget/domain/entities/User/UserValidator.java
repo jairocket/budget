@@ -41,11 +41,11 @@ public class UserValidator extends Validator {
             this.validationHandler().append(new Error("User name cannot be null"));
         }
 
-        if (this.user.getName().length() < 3) {
+        if (this.user.getName().trim().length() < 3) {
             this.validationHandler().append(new Error("User name should have at least three characters"));
         }
 
-        if (this.user.getName().length() > 60) {
+        if (this.user.getName().trim().length() > 60) {
             this.validationHandler().append(new Error("User name should have less than sixty characters"));
         }
     }

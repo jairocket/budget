@@ -40,11 +40,11 @@ public class FinancialRecordValidator extends Validator {
             this.validationHandler().append(new Error("Title cannot be null"));
         }
 
-        if (this.financialRecord.getTitle().length() < 3) {
+        if (this.financialRecord.getTitle().trim().length() < 3) {
             this.validationHandler().append(new Error("Title should have at least three characters"));
         }
 
-        if (this.financialRecord.getTitle().length() > 45) {
+        if (this.financialRecord.getTitle().trim().length() > 45) {
             this.validationHandler().append(new Error("Title should have less than forty-five characters"));
         }
     }

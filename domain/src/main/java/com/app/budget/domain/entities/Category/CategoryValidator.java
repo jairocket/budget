@@ -18,11 +18,11 @@ public class CategoryValidator extends Validator {
             this.validationHandler().append(new Error("Category name cannot be null"));
         }
 
-        if (this.category.getName().length() < 3) {
+        if (this.category.getName().trim().length() < 3) {
             this.validationHandler().append(new Error("User category should have at least three characters"));
         }
 
-        if (this.category.getName().length() > 45) {
+        if (this.category.getName().trim().length() > 45) {
             this.validationHandler().append(new Error("User category should have less than forty-five characters"));
         }
     }
