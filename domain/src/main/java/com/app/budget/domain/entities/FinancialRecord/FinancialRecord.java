@@ -2,24 +2,27 @@ package com.app.budget.domain.entities.FinancialRecord;
 
 import com.app.budget.domain.AggregateRoot;
 import com.app.budget.domain.entities.Category.Category;
+import com.app.budget.domain.entities.Category.CategoryID;
 import com.app.budget.domain.entities.FinancialRecord.enums.FinancialRecordStatus;
 import com.app.budget.domain.entities.FinancialRecord.enums.FinancialRecordType;
 import com.app.budget.domain.validation.ValidationHandler;
 import org.apache.commons.math3.util.Precision;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class FinancialRecord extends AggregateRoot<FinancialRecordID> {
-    private final Set<Category> categories;
     private final String title;
     private final String description;
     private final Double predictedValue;
-    private final Double actualValue;
     private final LocalDate dueDate;
-    private final FinancialRecordStatus status;
     private final FinancialRecordType type;
+    private Set<Category> categories;
+    private Double actualValue;
+    private FinancialRecordStatus status;
 
     private FinancialRecord(
             final FinancialRecordID financialRecordID,
@@ -46,7 +49,7 @@ public class FinancialRecord extends AggregateRoot<FinancialRecordID> {
     public static FinancialRecord newFinancialRecord(
             final String title,
             final String description,
-            final Set<Category> categories,
+            Set<Category> categories,
             final Double predictedValue,
             final Double actualValue,
             final LocalDate dueDate,
@@ -58,6 +61,7 @@ public class FinancialRecord extends AggregateRoot<FinancialRecordID> {
         var parsedStatus = Optional.ofNullable(status).orElse(FinancialRecordStatus.PENDING);
         var parsedPredictedValue = parseValue(predictedValue);
         var parsedActualValue = parseValue(actualValue);
+        categories = new HashSet<>(Optional.ofNullable(categories).orElse(new HashSet<>()));
 
         return new FinancialRecord(
                 id,
@@ -111,6 +115,21 @@ public class FinancialRecord extends AggregateRoot<FinancialRecordID> {
 
     public FinancialRecordType getType() {
         return type;
+    }
+
+    public void finishFinancialRecord(Double actualValue) {
+        this.actualValue = actualValue;
+        this.status = FinancialRecordStatus.OK;
+    }
+
+    public void addCategory(Category category) {
+        this.categories.add(category);
+    }
+
+    public void removeCategoryById(CategoryID id) {
+        this.categories = categories.stream()
+                .filter(category -> !category.getId().equals(id))
+                .collect(Collectors.toSet());
     }
 
     @Override

@@ -124,6 +124,76 @@ public class UserTest {
 
         assertEquals("User name should have less than sixty characters", exception.getErrors().getFirst().message());
         assertEquals(1, exception.getErrors().size());
+    }
+
+    @Test
+    public void given_user_params_then_should_be_able_to_update_name() {
+        String name = "New User";
+        String email = "new.user@budget.com";
+        String password = "P@inK1ller";
+        UserRoleType role = UserRoleType.USER;
+
+        User user = User.newUser(name, email, password, role);
+        assertEquals("new.user@budget.com", user.getEmail());
+        assertEquals("New User", user.getName());
+        assertEquals(UserRoleType.USER, user.getRole());
+        assertNotNull(user.getId());
+        assertDoesNotThrow(() -> user.validate(new ThrowsValidationHandler()));
+
+        assertDoesNotThrow(() -> user.setName("New User Name"));
+
+        assertEquals("new.user@budget.com", user.getEmail());
+        assertEquals("New User Name", user.getName());
+        assertEquals(UserRoleType.USER, user.getRole());
+        assertNotNull(user.getId());
+    }
+
+    @Test
+    public void given_user_params_then_should_be_able_to_update_password() {
+        String name = "New User";
+        String email = "new.user@budget.com";
+        String password = "P@inK1ller";
+        UserRoleType role = UserRoleType.USER;
+
+        User user = User.newUser(name, email, password, role);
+        assertEquals("new.user@budget.com", user.getEmail());
+        assertEquals("New User", user.getName());
+        assertEquals(UserRoleType.USER, user.getRole());
+        assertEquals("P@inK1ller", user.getPassword());
+        assertNotNull(user.getId());
+        assertDoesNotThrow(() -> user.validate(new ThrowsValidationHandler()));
+
+        assertDoesNotThrow(() -> user.setPassword("P@inK1ller2"));
+
+        assertEquals("new.user@budget.com", user.getEmail());
+        assertEquals("New User", user.getName());
+        assertEquals("P@inK1ller2", user.getPassword());
+        assertEquals(UserRoleType.USER, user.getRole());
+        assertNotNull(user.getId());
+    }
+
+    @Test
+    public void given_user_params_then_should_be_able_to_update_role() {
+        String name = "New User";
+        String email = "new.user@budget.com";
+        String password = "P@inK1ller";
+        UserRoleType role = UserRoleType.USER;
+
+        User user = User.newUser(name, email, password, role);
+        assertEquals("new.user@budget.com", user.getEmail());
+        assertEquals("New User", user.getName());
+        assertEquals(UserRoleType.USER, user.getRole());
+        assertEquals("P@inK1ller", user.getPassword());
+        assertNotNull(user.getId());
+        assertDoesNotThrow(() -> user.validate(new ThrowsValidationHandler()));
+
+        assertDoesNotThrow(() -> user.setRole(UserRoleType.ADMIN));
+
+        assertEquals("new.user@budget.com", user.getEmail());
+        assertEquals("New User", user.getName());
+        assertEquals("P@inK1ller", user.getPassword());
+        assertEquals(UserRoleType.ADMIN, user.getRole());
+        assertNotNull(user.getId());
 
     }
 }

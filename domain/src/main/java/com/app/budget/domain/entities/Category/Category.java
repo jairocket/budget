@@ -4,7 +4,7 @@ import com.app.budget.domain.AggregateRoot;
 import com.app.budget.domain.validation.ValidationHandler;
 
 public class Category extends AggregateRoot<CategoryID> {
-    private final String name;
+    private String name;
 
     private Category(CategoryID categoryID, String name) {
         super(categoryID);
@@ -18,6 +18,10 @@ public class Category extends AggregateRoot<CategoryID> {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

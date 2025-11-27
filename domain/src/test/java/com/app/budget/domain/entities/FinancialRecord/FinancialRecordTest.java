@@ -62,7 +62,7 @@ public class FinancialRecordTest {
         );
 
         DomainException exception = assertThrows(DomainException.class, () -> expense.validate(new ThrowsValidationHandler()));
-        assertEquals("Categories cannot be null", exception.getErrors().getFirst().message());
+        assertEquals("Should inform at least one category", exception.getErrors().getFirst().message());
     }
 
     @Test
@@ -279,4 +279,100 @@ public class FinancialRecordTest {
         assertEquals("Due date should not be null", exception.getErrors().getFirst().message());
     }
 
+    @Test
+    public void given_financial_record_should_be_able_to_finish_itself() {
+        Double value = 35.90;
+        String title = "Uber";
+        String longDescription = RandomStringUtils.random(255);
+        LocalDate dueDate = LocalDate.of(2024, 2, 1);
+        Category category = Category.newCategory("Clothing");
+
+        var expense = FinancialRecord.newFinancialRecord(
+                title,
+                longDescription,
+                Set.of(category),
+                value,
+                null,
+                dueDate,
+                FinancialRecordStatus.PENDING,
+                FinancialRecordType.EXPENSE
+        );
+
+        assertEquals(35.90, expense.getPredictedValue(), 0.0);
+        assertEquals(0.00, expense.getActualValue(), 0.0);
+        assertEquals(FinancialRecordStatus.PENDING, expense.getStatus());
+
+        assertDoesNotThrow(() -> expense.finishFinancialRecord(40.00));
+
+        assertEquals(35.90, expense.getPredictedValue(), 0.0);
+        assertEquals(40.00, expense.getActualValue(), 0.0);
+        assertEquals(FinancialRecordStatus.OK, expense.getStatus());
+    }
+
+    @Test
+    public void given_financial_record_should_be_able_to_add_category() {
+        Double value = 35.90;
+        String title = "Uber";
+        String longDescription = RandomStringUtils.random(255);
+        LocalDate dueDate = LocalDate.of(2024, 2, 1);
+        Category category = Category.newCategory("Uber");
+
+        var expense = FinancialRecord.newFinancialRecord(
+                title,
+                longDescription,
+                Set.of(category),
+                value,
+                null,
+                dueDate,
+                FinancialRecordStatus.PENDING,
+                FinancialRecordType.EXPENSE
+        );
+
+        assertEquals(35.90, expense.getPredictedValue(), 0.0);
+        assertEquals(0.00, expense.getActualValue(), 0.0);
+        assertEquals(FinancialRecordStatus.PENDING, expense.getStatus());
+
+        assertDoesNotThrow(() -> expense.addCategory(Category.newCategory("Travel")));
+
+        assertEquals(2, expense.getCategories().size());
+        assertTrue(() -> expense.getCategories().stream().anyMatch(category1 -> category1.getName().equals("Uber")));
+        assertTrue(() -> expense.getCategories().stream().anyMatch(category2 -> category2.getName().equals("Travel")));
+
+    }
+
+
+    @Test
+    public void given_financial_record_should_be_able_to_remove_category_by_id() {
+        var value = 35.90;
+        var title = "Uber";
+        var longDescription = RandomStringUtils.random(255);
+        var dueDate = LocalDate.of(2024, 2, 1);
+        var uberCategory = Category.newCategory("Uber");
+        var travelCategory = Category.newCategory("Travel");
+
+        var expense = FinancialRecord.newFinancialRecord(
+                title,
+                longDescription,
+                Set.of(uberCategory, travelCategory),
+                value,
+                null,
+                dueDate,
+                FinancialRecordStatus.PENDING,
+                FinancialRecordType.EXPENSE
+        );
+
+        assertEquals(35.90, expense.getPredictedValue(), 0.0);
+        assertEquals(0.00, expense.getActualValue(), 0.0);
+        assertEquals(FinancialRecordStatus.PENDING, expense.getStatus());
+        assertEquals(2, expense.getCategories().size());
+        assertTrue(() -> expense.getCategories().stream().anyMatch(category1 -> category1.getName().equals("Uber")));
+        assertTrue(() -> expense.getCategories().stream().anyMatch(category2 -> category2.getName().equals("Travel")));
+
+        assertDoesNotThrow(() -> expense.removeCategoryById(uberCategory.getId()));
+
+        assertEquals(1, expense.getCategories().size());
+        assertTrue(() -> expense.getCategories().stream().noneMatch(category1 -> category1.getName().equals("Uber")));
+        assertTrue(() -> expense.getCategories().stream().anyMatch(category2 -> category2.getName().equals("Travel")));
+
+    }
 }

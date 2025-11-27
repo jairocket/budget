@@ -6,9 +6,9 @@ import com.app.budget.domain.validation.ValidationHandler;
 
 public class User extends AggregateRoot<UserID> {
     private final String email;
-    private final String name;
-    private final String password;
-    private final String role;
+    private String name;
+    private String password;
+    private String role;
 
     private User(
             final UserID id,
@@ -43,8 +43,16 @@ public class User extends AggregateRoot<UserID> {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getEmail() {
@@ -53,6 +61,10 @@ public class User extends AggregateRoot<UserID> {
 
     public UserRoleType getRole() {
         return UserRoleType.valueOf(role);
+    }
+
+    public void setRole(UserRoleType role) {
+        this.role = role.toString();
     }
 
     @Override

@@ -38,4 +38,15 @@ public class CategoryTest {
         DomainException exception = assertThrows(DomainException.class, () -> category.validate(new ThrowsValidationHandler()));
         assertEquals("User category should have less than forty-five characters", exception.getErrors().getFirst().message());
     }
+
+    @Test
+    public void given_category_should_be_able_to_update_name() {
+        Category category = Category.newCategory("Transportation");
+        assertEquals("Transportation", category.getName());
+        assertNotNull(category.getId());
+
+        assertDoesNotThrow(() -> category.setName("Travel"));
+
+        assertEquals("Travel", category.getName());
+    }
 }

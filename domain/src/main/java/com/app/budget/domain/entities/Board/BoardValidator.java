@@ -17,5 +17,9 @@ public class BoardValidator extends Validator {
         if (this.board.getUserID() == null) {
             validationHandler().append(new Error("User cannot be null"));
         }
+
+        if (this.board.getFinancialRecords().stream().anyMatch(financialRecord -> financialRecord == null)) {
+            validationHandler().append(new Error("Financial Record cannot be null"));
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.app.budget.domain.entities.Board;
 
 import com.app.budget.domain.entities.Category.Category;
 import com.app.budget.domain.entities.FinancialRecord.FinancialRecord;
+import com.app.budget.domain.entities.FinancialRecord.FinancialRecordID;
 import com.app.budget.domain.entities.FinancialRecord.enums.FinancialRecordStatus;
 import com.app.budget.domain.entities.FinancialRecord.enums.FinancialRecordType;
 import com.app.budget.domain.entities.User.User;
@@ -35,6 +36,23 @@ public class BoardTest {
         DomainException exception = assertThrows(DomainException.class, () -> board.validate(new ThrowsValidationHandler()));
 
         assertEquals("User cannot be null", exception.getErrors().getFirst().message());
+    }
+
+    @Test
+    public void given_null_financial_record_added_to_board_when_validate_should_throw_exception() {
+        Board board = Board.newBoard(null, user.getId());
+
+        assertNotNull(board.getId());
+        assertEquals(board.getUserID(), user.getId());
+        assertEquals(0, board.getExpenses().size());
+        assertEquals(0, board.getIncomes().size());
+        assertDoesNotThrow(() -> board.validate(new ThrowsValidationHandler()));
+
+        board.addFinancialRecord(null);
+
+        DomainException exception = assertThrows(DomainException.class, () -> board.validate(new ThrowsValidationHandler()));
+
+        assertEquals("Financial Record cannot be null", exception.getErrors().getFirst().message());
     }
 
     @Test
@@ -94,5 +112,101 @@ public class BoardTest {
         Board board = Board.newBoard(Set.of(expense_1, expense_2, expense_3), user.getId());
 
         assertEquals(105.00, board.getTotalActualExpenses(), 0.00);
+    }
+
+    @Test
+    public void given_board_should_be_able_to_add_financial_records() {
+        var board = Board.newBoard(null, user.getId());
+
+        assertNotNull(board.getId());
+        assertEquals(board.getUserID(), user.getId());
+        assertEquals(0, board.getExpenses().size());
+        assertEquals(0, board.getIncomes().size());
+        assertDoesNotThrow(() -> board.validate(new ThrowsValidationHandler()));
+
+        var category = Category.newCategory("Clothing");
+        var title = "Uber";
+        var predictedValue = 35.90;
+        var dueDate = LocalDate.of(2024, 2, 1);
+
+        var expense = FinancialRecord.newFinancialRecord(
+                title,
+                null,
+                Set.of(category),
+                predictedValue,
+                null,
+                dueDate,
+                null,
+                FinancialRecordType.EXPENSE
+        );
+        assertDoesNotThrow(() -> board.addFinancialRecord(expense));
+
+        assertEquals(35.90, board.getTotalPredictedExpenses(), 0.00);
+    }
+
+    @Test
+    public void given_board_should_be_able_to_remove_financial_record_by_id() {
+        var category = Category.newCategory("Clothing");
+        var title = "Uber";
+        var predictedValue = 35.90;
+        var dueDate = LocalDate.of(2024, 2, 1);
+
+        var expense = FinancialRecord.newFinancialRecord(
+                title,
+                null,
+                Set.of(category),
+                predictedValue,
+                null,
+                dueDate,
+                null,
+                FinancialRecordType.EXPENSE
+        );
+
+        var board = Board.newBoard(Set.of(expense), user.getId());
+
+        assertNotNull(board.getId());
+        assertEquals(board.getUserID(), user.getId());
+        assertEquals(1, board.getExpenses().size());
+        assertEquals(0, board.getIncomes().size());
+        assertDoesNotThrow(() -> board.validate(new ThrowsValidationHandler()));
+        assertEquals(35.90, board.getTotalPredictedExpenses(), 0.00);
+
+        assertDoesNotThrow(() -> board.removeFinancialRecordByID(expense.getId()));
+
+        assertEquals(0, board.getExpenses().size());
+        assertEquals(0.00, board.getTotalPredictedExpenses(), 0.00);
+    }
+
+    @Test
+    public void given_wrong_id_should_not_remove_financial_record_from_board() {
+        var category = Category.newCategory("Clothing");
+        var title = "Uber";
+        var predictedValue = 35.90;
+        var dueDate = LocalDate.of(2024, 2, 1);
+
+        var expense = FinancialRecord.newFinancialRecord(
+                title,
+                null,
+                Set.of(category),
+                predictedValue,
+                null,
+                dueDate,
+                null,
+                FinancialRecordType.EXPENSE
+        );
+
+        var board = Board.newBoard(Set.of(expense), user.getId());
+
+        assertNotNull(board.getId());
+        assertEquals(board.getUserID(), user.getId());
+        assertEquals(1, board.getExpenses().size());
+        assertEquals(0, board.getIncomes().size());
+        assertDoesNotThrow(() -> board.validate(new ThrowsValidationHandler()));
+        assertEquals(35.90, board.getTotalPredictedExpenses(), 0.00);
+
+        assertDoesNotThrow(() -> board.removeFinancialRecordByID(FinancialRecordID.unique()));
+
+        assertEquals(1, board.getExpenses().size());
+        assertEquals(35.90, board.getTotalPredictedExpenses(), 0.00);
     }
 }
