@@ -9,7 +9,7 @@ import com.app.budget.domain.pagination.Pagination;
 import java.util.Optional;
 
 public interface UserGateway {
-    User save(User user);
+    User create(User user);
 
     void deleteById(UserID id);
 
