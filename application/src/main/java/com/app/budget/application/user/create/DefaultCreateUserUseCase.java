@@ -23,7 +23,9 @@ public class DefaultCreateUserUseCase extends CreateUserUseCase {
         );
         user.validate(new ThrowsValidationHandler());
 
-        return CreateUserOutput.from(this.userGateway.create(user));
+        return CreateUserOutput.from(
+                this.userGateway.create(user)
+        );
     }
 
 
