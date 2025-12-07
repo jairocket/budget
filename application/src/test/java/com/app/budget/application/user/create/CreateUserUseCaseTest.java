@@ -1,9 +1,7 @@
 package com.app.budget.application.user.create;
 
-
 import com.app.budget.domain.entities.User.enums.UserRoleType;
 import com.app.budget.domain.entities.User.gateway.UserGateway;
-import com.app.budget.domain.exceptions.DomainException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,7 +11,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -42,7 +41,7 @@ public class CreateUserUseCaseTest {
         );
 
         when(userGateway.create(any())).thenAnswer(returnsFirstArg());
-        final var actualOutput = useCase.execute(command);
+        final var actualOutput = useCase.execute(command).get();
 
         assertNotNull(actualOutput);
         assertNotNull(actualOutput.id());
@@ -61,8 +60,8 @@ public class CreateUserUseCaseTest {
     @Test
     public void given_invalid_name_when_create_user_should_return_domain_exception() {
         final var expectedName = "Us";
-        final var expectedEmail = "user#email.com";
-        final var expectedPassword = "Painkiller";
+        final var expectedEmail = "user@email.com";
+        final var expectedPassword = "P@ink1ller";
         final var expectedRole = UserRoleType.USER;
         final var expectedErrorMessage = "User name should have at least three characters";
         final var expectedErrorCount = 1;
@@ -73,10 +72,10 @@ public class CreateUserUseCaseTest {
                 expectedRole
         );
 
-        final var actualException = assertThrows(DomainException.class, () -> useCase.execute(command));
+        final var notification = useCase.execute(command).getLeft();
 
-        assertEquals(expectedErrorMessage, actualException.getErrors().getFirst().message());
-        assertEquals(expectedErrorCount, actualException.getErrors().size());
+        assertEquals(expectedErrorMessage, notification.getErrors().getFirst().message());
+        assertEquals(expectedErrorCount, notification.getErrors().size());
         verify(userGateway, times(0)).create(any());
     }
 
@@ -87,6 +86,7 @@ public class CreateUserUseCaseTest {
         final var expectedPassword = "P@ink1ller";
         final var expectedRole = UserRoleType.USER;
         final var expectedErrorMessage = "Gateway Exception";
+        final var expectedErrorCount = 1;
         final var command = CreateUserCommand.with(
                 expectedName,
                 expectedEmail,
@@ -95,9 +95,11 @@ public class CreateUserUseCaseTest {
         );
         when(userGateway.create(any())).thenThrow(new IllegalArgumentException(expectedErrorMessage));
 
-        final var actualException = assertThrows(IllegalArgumentException.class, () -> useCase.execute(command));
+        final var notification = useCase.execute(command).getLeft();
 
-        assertEquals(expectedErrorMessage, actualException.getMessage());
+        assertEquals(expectedErrorMessage, notification.getErrors().getFirst().message());
+        assertEquals(expectedErrorCount, notification.getErrors().size());
+        assertEquals(expectedErrorMessage, notification.getErrors().getFirst().message());
         verify(userGateway, Mockito.times(1))
                 .create(Mockito.argThat(
                                 user -> Objects.equals(expectedName, user.getName()) &&

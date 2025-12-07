@@ -15,11 +15,11 @@ public interface UserGateway {
 
     Optional<User> getById(UserID id);
 
-    void updatePassword(UserID id, String password);
+    UserID updatePassword(UserID id, String password);
 
-    void updateName(UserID id, String name);
+    UserID updateName(UserID id, String name);
 
-    void updateRole(UserID id, UserRoleType role);
+    UserID updateRole(UserID id, UserRoleType role);
 
     Pagination<User> findAll(UserSearchQuery query);
 }

@@ -51,8 +51,9 @@ public class User extends AggregateRoot<UserID> {
         return password;
     }
 
-    public void setPassword(String password) {
+    public User setPassword(String password) {
         this.password = password;
+        return this;
     }
 
     public String getEmail() {
