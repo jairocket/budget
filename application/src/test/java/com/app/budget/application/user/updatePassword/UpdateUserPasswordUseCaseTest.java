@@ -17,8 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UpdateUserPasswordUseCaseTest {
@@ -105,4 +104,35 @@ public class UpdateUserPasswordUseCaseTest {
         assertEquals(expectedErrorCount, notification.getErrors().size());
         verify(userGateway, times(0)).create(any());
     }
+
+    @Test
+    public void given_valid_password_when_gateway_throws_exception_should_return_exception() {
+        final var expectedName = "User";
+        final var expectedEmail = "user@email.com";
+        final var oldPassword = "P@ink1ller";
+        final var expectedPassword = "P@ink1ller2";
+        final var expectedRole = UserRoleType.USER;
+        final var user = User.newUser(expectedName, expectedEmail, oldPassword, expectedRole);
+        final var expectedErrorMessage = "Gateway Exception";
+        final var expectedErrorCount = 1;
+
+        final var command = UpdateUserPasswordCommand.with(user.getId(), expectedPassword);
+
+        Mockito.when(userGateway.getById(Mockito.eq(user.getId())))
+                .thenReturn(Optional.of(user));
+        when(userGateway.updatePassword(any(), any())).thenThrow(new IllegalArgumentException(expectedErrorMessage));
+
+        final var notification = useCase.execute(command).getLeft();
+
+        assertEquals(expectedErrorMessage, notification.getErrors().getFirst().message());
+        assertEquals(expectedErrorCount, notification.getErrors().size());
+        assertEquals(expectedErrorMessage, notification.getErrors().getFirst().message());
+
+        verify(userGateway, Mockito.times(1))
+                .getById(Mockito.eq(user.getId()));
+
+        verify(userGateway, Mockito.times(1))
+                .updatePassword(user.getId(), expectedPassword);
+    }
+
 }
