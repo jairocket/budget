@@ -1,4 +1,4 @@
-package com.app.budget.application.user.updatePassword;
+package com.app.budget.application.user.updateName;
 
 import com.app.budget.domain.entities.User.User;
 import com.app.budget.domain.entities.User.UserID;
@@ -20,28 +20,28 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class UpdateUserPasswordUseCaseTest {
+public class UpdateUserNameUseCaseTest {
     @InjectMocks
-    private DefaultUpdateUserPasswordUseCase useCase;
+    private DefaultUpdateUserNameUseCase useCase;
 
     @Mock
     private UserGateway userGateway;
 
     @Test
-    public void given_a_valid_command_when_update_user_password_should_return_success() {
-        final var expectedName = "User";
+    public void given_a_valid_command_when_update_user_name_should_return_success() {
+        final var oldName = "User";
+        final var expectedName = "User Novo";
         final var expectedEmail = "user@email.com";
-        final var oldPassword = "P@ink1ller";
-        final var expectedPassword = "P@ink1ller2";
+        final var expectedPassword = "P@ink1ller";
         final var expectedRole = UserRoleType.USER;
-        final var user = User.newUser(expectedName, expectedEmail, oldPassword, expectedRole);
+        final var user = User.newUser(oldName, expectedEmail, expectedPassword, expectedRole);
 
-        final var command = UpdateUserPasswordCommand.with(user.getId(), expectedPassword);
+        final var command = UpdateUserNameCommand.with(user.getId(), expectedName);
 
         Mockito.when(userGateway.getById(Mockito.eq(user.getId())))
                 .thenReturn(Optional.of(user));
 
-        Mockito.when(userGateway.updatePassword(any(), any()))
+        Mockito.when(userGateway.updateName(any(), any()))
                 .thenAnswer(returnsFirstArg());
 
         final var actualOutput = useCase.execute(command).get();
@@ -53,34 +53,34 @@ public class UpdateUserPasswordUseCaseTest {
                 .getById(Mockito.eq(user.getId()));
 
         verify(userGateway, Mockito.times(1))
-                .updatePassword(user.getId(), expectedPassword);
+                .updateName(user.getId(), expectedName);
     }
 
     @Test
-    public void given_invalid_password_when_update_password_should_return_domain_exception() {
-        final var expectedName = "User";
+    public void given_invalid_password_when_update_name_should_return_domain_exception() {
+        final var oldName = "User";
+        final var expectedName = "Us";
         final var expectedEmail = "user@email.com";
-        final var oldPassword = "P@ink1ller";
-        final var expectedPassword = "Painkiller";
+        final var expectedPassword = "P@ink1ller";
         final var expectedRole = UserRoleType.USER;
-        final var user = User.newUser(expectedName, expectedEmail, oldPassword, expectedRole);
+        final var user = User.newUser(oldName, expectedEmail, expectedPassword, expectedRole);
 
-        final var expectedErrorMessage = "Inform a valid password";
+        final var expectedErrorMessage = "User name should have at least three characters";
         final var expectedErrorCount = 1;
 
         Mockito.when(userGateway.getById(Mockito.eq(user.getId())))
                 .thenReturn(Optional.of(user));
 
-        final var command = UpdateUserPasswordCommand.with(
+        final var command = UpdateUserNameCommand.with(
                 user.getId(),
-                expectedPassword
+                expectedName
         );
 
         final var notification = useCase.execute(command).getLeft();
 
         assertEquals(expectedErrorMessage, notification.getErrors().getFirst().message());
         assertEquals(expectedErrorCount, notification.getErrors().size());
-        verify(userGateway, times(0)).updatePassword(any(), any());
+        verify(userGateway, times(0)).updateName(any(), any());
     }
 
     @Test
@@ -93,7 +93,7 @@ public class UpdateUserPasswordUseCaseTest {
         Mockito.when(userGateway.getById(Mockito.eq(userID)))
                 .thenReturn(Optional.empty());
 
-        final var command = UpdateUserPasswordCommand.with(
+        final var command = UpdateUserNameCommand.with(
                 userID,
                 expectedPassword
         );
@@ -107,20 +107,20 @@ public class UpdateUserPasswordUseCaseTest {
 
     @Test
     public void given_valid_password_when_gateway_throws_exception_should_return_exception() {
-        final var expectedName = "User";
+        final var expectedName = "Use";
         final var expectedEmail = "user@email.com";
-        final var oldPassword = "P@ink1ller";
+        final var oldName = "User";
         final var expectedPassword = "P@ink1ller2";
         final var expectedRole = UserRoleType.USER;
-        final var user = User.newUser(expectedName, expectedEmail, oldPassword, expectedRole);
+        final var user = User.newUser(oldName, expectedEmail, expectedPassword, expectedRole);
         final var expectedErrorMessage = "Gateway Exception";
         final var expectedErrorCount = 1;
 
-        final var command = UpdateUserPasswordCommand.with(user.getId(), expectedPassword);
+        final var command = UpdateUserNameCommand.with(user.getId(), expectedName);
 
         Mockito.when(userGateway.getById(Mockito.eq(user.getId())))
                 .thenReturn(Optional.of(user));
-        when(userGateway.updatePassword(any(), any())).thenThrow(new IllegalArgumentException(expectedErrorMessage));
+        when(userGateway.updateName(any(), any())).thenThrow(new IllegalArgumentException(expectedErrorMessage));
 
         final var notification = useCase.execute(command).getLeft();
 
@@ -132,7 +132,10 @@ public class UpdateUserPasswordUseCaseTest {
                 .getById(Mockito.eq(user.getId()));
 
         verify(userGateway, Mockito.times(1))
-                .updatePassword(user.getId(), expectedPassword);
+                .updateName(user.getId(), expectedName);
     }
-
 }
+
+
+
+

@@ -4,6 +4,8 @@ import com.app.budget.domain.AggregateRoot;
 import com.app.budget.domain.entities.User.enums.UserRoleType;
 import com.app.budget.domain.validation.ValidationHandler;
 
+import java.util.Objects;
+
 public class User extends AggregateRoot<UserID> {
     private final String email;
     private String name;
@@ -43,8 +45,9 @@ public class User extends AggregateRoot<UserID> {
         return name;
     }
 
-    public void setName(String name) {
+    public User setName(String name) {
         this.name = name;
+        return this;
     }
 
     public String getPassword() {
@@ -64,8 +67,10 @@ public class User extends AggregateRoot<UserID> {
         return UserRoleType.valueOf(role);
     }
 
-    public void setRole(UserRoleType role) {
+    public User setRole(UserRoleType role) {
+        Objects.requireNonNull(role, "Role cannot be null");
         this.role = role.toString();
+        return this;
     }
 
     @Override
