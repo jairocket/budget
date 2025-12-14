@@ -4,6 +4,7 @@ import com.app.budget.domain.entities.User.User;
 import com.app.budget.domain.entities.User.UserID;
 import com.app.budget.domain.entities.User.enums.UserRoleType;
 import com.app.budget.domain.entities.User.gateway.UserGateway;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,6 +27,12 @@ public class UpdateUserNameUseCaseTest {
 
     @Mock
     private UserGateway userGateway;
+
+    @BeforeEach
+    void cleanUp() {
+        Mockito.reset(userGateway);
+    }
+
 
     @Test
     public void given_a_valid_command_when_update_user_name_should_return_success() {
@@ -84,7 +91,7 @@ public class UpdateUserNameUseCaseTest {
     }
 
     @Test
-    public void given_user_not_found_when_create_user_should_return_domain_exception() {
+    public void given_user_not_found_when_update_user_name_should_return_domain_exception() {
         final var expectedPassword = "Painkiller";
         final var userID = UserID.unique();
         final var expectedErrorMessage = "User not found";
@@ -106,7 +113,7 @@ public class UpdateUserNameUseCaseTest {
     }
 
     @Test
-    public void given_valid_password_when_gateway_throws_exception_should_return_exception() {
+    public void given_valid_name_when_gateway_throws_exception_should_return_exception() {
         final var expectedName = "Use";
         final var expectedEmail = "user@email.com";
         final var oldName = "User";
@@ -135,7 +142,3 @@ public class UpdateUserNameUseCaseTest {
                 .updateName(user.getId(), expectedName);
     }
 }
-
-
-
-

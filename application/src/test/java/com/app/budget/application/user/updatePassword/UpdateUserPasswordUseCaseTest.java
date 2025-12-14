@@ -4,6 +4,7 @@ import com.app.budget.domain.entities.User.User;
 import com.app.budget.domain.entities.User.UserID;
 import com.app.budget.domain.entities.User.enums.UserRoleType;
 import com.app.budget.domain.entities.User.gateway.UserGateway;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,6 +27,11 @@ public class UpdateUserPasswordUseCaseTest {
 
     @Mock
     private UserGateway userGateway;
+
+    @BeforeEach
+    void cleanUp() {
+        Mockito.reset(userGateway);
+    }
 
     @Test
     public void given_a_valid_command_when_update_user_password_should_return_success() {
@@ -134,5 +140,4 @@ public class UpdateUserPasswordUseCaseTest {
         verify(userGateway, Mockito.times(1))
                 .updatePassword(user.getId(), expectedPassword);
     }
-
 }

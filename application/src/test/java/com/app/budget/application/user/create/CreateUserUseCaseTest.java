@@ -2,6 +2,7 @@ package com.app.budget.application.user.create;
 
 import com.app.budget.domain.entities.User.enums.UserRoleType;
 import com.app.budget.domain.entities.User.gateway.UserGateway;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,6 +26,11 @@ public class CreateUserUseCaseTest {
 
     @Mock
     private UserGateway userGateway;
+
+    @BeforeEach
+    void cleanUp() {
+        Mockito.reset(userGateway);
+    }
 
     @Test
     public void given_valid_command_when_create_user_should_return_category_id() {
