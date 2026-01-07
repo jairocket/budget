@@ -15,6 +15,8 @@ public interface UserGateway {
 
     Optional<User> getById(UserID id);
 
+    Optional<User> getByEmail(String email);
+
     UserID updatePassword(UserID id, String password);
 
     UserID updateName(UserID id, String name);
