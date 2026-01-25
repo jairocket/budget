@@ -6,8 +6,9 @@ import com.app.budget.domain.entities.Category.CategoryID;
 import com.app.budget.domain.entities.FinancialRecord.enums.FinancialRecordStatus;
 import com.app.budget.domain.entities.FinancialRecord.enums.FinancialRecordType;
 import com.app.budget.domain.validation.ValidationHandler;
-import org.apache.commons.math3.util.Precision;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Optional;
@@ -17,11 +18,11 @@ import java.util.stream.Collectors;
 public class FinancialRecord extends AggregateRoot<FinancialRecordID> {
     private final String title;
     private final String description;
-    private final Double predictedValue;
+    private final BigDecimal predictedValue;
     private final LocalDate dueDate;
     private final FinancialRecordType type;
     private Set<Category> categories;
-    private Double actualValue;
+    private BigDecimal actualValue;
     private FinancialRecordStatus status;
 
     private FinancialRecord(
@@ -29,8 +30,8 @@ public class FinancialRecord extends AggregateRoot<FinancialRecordID> {
             final String title,
             final String description,
             final Set<Category> categories,
-            final Double predictedValue,
-            final Double actualValue,
+            final BigDecimal predictedValue,
+            final BigDecimal actualValue,
             final LocalDate dueDate,
             final FinancialRecordStatus status,
             final FinancialRecordType type
@@ -50,8 +51,8 @@ public class FinancialRecord extends AggregateRoot<FinancialRecordID> {
             final String title,
             final String description,
             Set<Category> categories,
-            final Double predictedValue,
-            final Double actualValue,
+            final BigDecimal predictedValue,
+            final BigDecimal actualValue,
             final LocalDate dueDate,
             final FinancialRecordStatus status,
             final FinancialRecordType type
@@ -59,8 +60,8 @@ public class FinancialRecord extends AggregateRoot<FinancialRecordID> {
         var id = FinancialRecordID.unique();
         var parsedDescription = Optional.ofNullable(description).orElse("");
         var parsedStatus = Optional.ofNullable(status).orElse(FinancialRecordStatus.PENDING);
-        var parsedPredictedValue = parseValue(predictedValue);
-        var parsedActualValue = parseValue(actualValue);
+        var parsedPredictedValue = normalize(predictedValue);
+        var parsedActualValue = normalize(actualValue);
         categories = new HashSet<>(Optional.ofNullable(categories).orElse(new HashSet<>()));
 
         return new FinancialRecord(
@@ -76,16 +77,14 @@ public class FinancialRecord extends AggregateRoot<FinancialRecordID> {
         );
     }
 
-    private static Double round(Double value) {
-        return Precision.round(value, 2);
+    private static BigDecimal normalize(BigDecimal value) {
+        return Optional.ofNullable(value)
+                .orElse(BigDecimal.ZERO)
+                .setScale(2, RoundingMode.HALF_UP);
     }
 
-    private static Double parseValue(Double value) {
-        value = Optional.ofNullable(value).orElse(0.00);
-        return round(value);
-    }
 
-    public Double getActualValue() {
+    public BigDecimal getActualValue() {
         return actualValue;
     }
 
@@ -101,7 +100,7 @@ public class FinancialRecord extends AggregateRoot<FinancialRecordID> {
         return dueDate;
     }
 
-    public Double getPredictedValue() {
+    public BigDecimal getPredictedValue() {
         return predictedValue;
     }
 
@@ -117,8 +116,8 @@ public class FinancialRecord extends AggregateRoot<FinancialRecordID> {
         return type;
     }
 
-    public void finishFinancialRecord(Double actualValue) {
-        this.actualValue = actualValue;
+    public void finishFinancialRecord(BigDecimal actualValue) {
+        this.actualValue = normalize(actualValue);
         this.status = FinancialRecordStatus.OK;
     }
 

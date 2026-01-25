@@ -7,6 +7,8 @@ import com.app.budget.domain.entities.FinancialRecord.enums.FinancialRecordType;
 import com.app.budget.domain.entities.User.UserID;
 import com.app.budget.domain.validation.ValidationHandler;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -67,36 +69,37 @@ public class Board extends AggregateRoot<BoardID> {
                 .collect(Collectors.toSet());
     }
 
-    public Double getTotalPredictedIncomes() {
-        return getIncomes().stream().reduce(
-                0.00,
-                (subtotal, income) -> subtotal + income.getPredictedValue(),
-                Double::sum
-        );
+    public BigDecimal getTotalPredictedIncomes() {
+        return BigDecimal.valueOf(
+                getIncomes().stream().reduce(
+                        0.00,
+                        (subtotal, income) -> subtotal + income.getPredictedValue().doubleValue(),
+                        Double::sum
+                )).setScale(2, RoundingMode.HALF_UP);
     }
 
-    public Double getTotalPredictedExpenses() {
-        return getExpenses().stream().reduce(
+    public BigDecimal getTotalPredictedExpenses() {
+        return BigDecimal.valueOf(getExpenses().stream().reduce(
                 0.00,
-                (subtotal, expense) -> subtotal + expense.getPredictedValue(),
+                (subtotal, expense) -> subtotal + expense.getPredictedValue().doubleValue(),
                 Double::sum
-        );
+        )).setScale(2, RoundingMode.HALF_UP);
     }
 
-    public Double getTotalActualIncomes() {
-        return getIncomes().stream().reduce(
+    public BigDecimal getTotalActualIncomes() {
+        return BigDecimal.valueOf(getIncomes().stream().reduce(
                 0.00,
-                (subtotal, income) -> subtotal + income.getActualValue(),
+                (subtotal, income) -> subtotal + income.getActualValue().doubleValue(),
                 Double::sum
-        );
+        )).setScale(2, RoundingMode.HALF_UP);
     }
 
-    public Double getTotalActualExpenses() {
-        return getExpenses().stream().reduce(
+    public BigDecimal getTotalActualExpenses() {
+        return BigDecimal.valueOf(getExpenses().stream().reduce(
                 0.00,
-                (subtotal, expense) -> subtotal + expense.getActualValue(),
+                (subtotal, expense) -> subtotal + expense.getActualValue().doubleValue(),
                 Double::sum
-        );
+        ));
     }
 
     @Override

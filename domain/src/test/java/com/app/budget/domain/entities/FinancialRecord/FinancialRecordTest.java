@@ -6,8 +6,9 @@ import com.app.budget.domain.entities.FinancialRecord.enums.FinancialRecordType;
 import com.app.budget.domain.exceptions.DomainException;
 import com.app.budget.domain.validation.handler.ThrowsValidationHandler;
 import org.junit.jupiter.api.Test;
-import org.testcontainers.shaded.org.apache.commons.lang3.RandomStringUtils;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,7 +21,7 @@ public class FinancialRecordTest {
         var category = Category.newCategory("Clothing");
         Set<Category> categories = Set.of(category);
         String title = "Uber";
-        Double predictedValue = 35.90;
+        var predictedValue = BigDecimal.valueOf(35.90);
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
 
         FinancialRecord expense = FinancialRecord.newFinancialRecord(
@@ -37,7 +38,7 @@ public class FinancialRecordTest {
         assertNotNull(expense.getId());
         assertEquals("Clothing", expense.getCategories().stream().toList().getFirst().getName());
         assertEquals("Uber", expense.getTitle());
-        assertEquals(35.90, expense.getPredictedValue(), 0.0);
+        assertEquals(BigDecimal.valueOf(35.90).setScale(2, RoundingMode.HALF_UP), expense.getPredictedValue());
         assertEquals("2024-02-01", expense.getDueDate().toString());
         assertEquals(FinancialRecordStatus.PENDING, expense.getStatus());
 
@@ -46,7 +47,7 @@ public class FinancialRecordTest {
 
     @Test
     public void given_null_category_when_validating_should_throw_exception() {
-        Double value = 35.90;
+        var value = BigDecimal.valueOf(35.90);
         String title = "Uber";
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
 
@@ -67,9 +68,9 @@ public class FinancialRecordTest {
 
     @Test
     public void given_empty_category_list_when_validating_should_throw_exception() {
-        Double value = 35.90;
-        String title = "Uber";
-        LocalDate dueDate = LocalDate.of(2024, 2, 1);
+        var value = BigDecimal.valueOf(35.90);
+        var title = "Uber";
+        var dueDate = LocalDate.of(2024, 2, 1);
 
         var expense = FinancialRecord.newFinancialRecord(
                 title,
@@ -88,9 +89,9 @@ public class FinancialRecordTest {
 
     @Test
     public void given_null_title_when_validating_should_throw_exception() {
-        Double value = 35.90;
-        LocalDate dueDate = LocalDate.of(2024, 2, 1);
-        Category category = Category.newCategory("Clothing");
+        var value = BigDecimal.valueOf(35.90);
+        var dueDate = LocalDate.of(2024, 2, 1);
+        var category = Category.newCategory("Clothing");
 
         var expense = FinancialRecord.newFinancialRecord(
                 null,
@@ -109,10 +110,10 @@ public class FinancialRecordTest {
 
     @Test
     public void given_title_shorter_than_three_characters_when_validating_should_throw_exception() {
-        String title = "Ub";
-        Double value = 35.90;
-        LocalDate dueDate = LocalDate.of(2024, 2, 1);
-        Category category = Category.newCategory("Clothing");
+        var title = "Ub";
+        var value = BigDecimal.valueOf(35.90);
+        var dueDate = LocalDate.of(2024, 2, 1);
+        var category = Category.newCategory("Clothing");
 
         var financialRecord = FinancialRecord.newFinancialRecord(
                 title,
@@ -131,10 +132,10 @@ public class FinancialRecordTest {
 
     @Test
     public void given_title_longer_than_forty_five_characters_when_validating_should_throw_exception() {
-        String longTitle = "qwertyuiopasdfghjklzxcvbnmmnbvcxzlkjhgfdsapoiuytrewq";
-        Double value = 35.90;
-        LocalDate dueDate = LocalDate.of(2024, 2, 1);
-        Category category = Category.newCategory("Clothing");
+        var longTitle = "qwertyuiopasdfghjklzxcvbnmmnbvcxzlkjhgfdsapoiuytrewq";
+        var value = BigDecimal.valueOf(35.90);
+        var dueDate = LocalDate.of(2024, 2, 1);
+        var category = Category.newCategory("Clothing");
 
         var expense = FinancialRecord.newFinancialRecord(
                 longTitle,
@@ -153,9 +154,9 @@ public class FinancialRecordTest {
 
     @Test
     public void given_description_longer_than_256_characters_when_validating_should_throw_exception() {
-        Double value = 35.90;
+        var value = BigDecimal.valueOf(35.90);
         String title = "Uber";
-        String longDescription = RandomStringUtils.random(257);
+        String longDescription = "UberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUberUber";
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
         Category category = Category.newCategory("Clothing");
 
@@ -183,8 +184,8 @@ public class FinancialRecordTest {
 
         var event = FinancialRecord.newFinancialRecord(title, null, categories, null, null, dueDate, null, FinancialRecordType.INCOME);
 
-        assertEquals(0.00, event.getActualValue(), 0.0);
-        assertEquals(0.00, event.getPredictedValue(), 0.0);
+        assertEquals(BigDecimal.valueOf(0.00).setScale(2, RoundingMode.HALF_UP), event.getActualValue());
+        assertEquals(BigDecimal.valueOf(0.00).setScale(2, RoundingMode.HALF_UP), event.getPredictedValue());
     }
 
     @Test
@@ -192,7 +193,7 @@ public class FinancialRecordTest {
         String title = "Uber";
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
         Category category = Category.newCategory("Clothing");
-        Double value = -40.99;
+        var value = BigDecimal.valueOf(-40.99);
 
         var expense = FinancialRecord.newFinancialRecord(
                 title,
@@ -214,8 +215,8 @@ public class FinancialRecordTest {
         Set<Category> categories = new HashSet<>();
         categories.add(Category.newCategory("Transportation"));
         String title = "Uber";
-        Double predictedValue = 35.9563;
-        Double actualValue = 35.9563;
+        var predictedValue = BigDecimal.valueOf(35.9563);
+        var actualValue = BigDecimal.valueOf(35.9563);
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
         FinancialRecordStatus status = FinancialRecordStatus.PENDING;
 
@@ -230,8 +231,8 @@ public class FinancialRecordTest {
                 FinancialRecordType.EXPENSE
         );
 
-        assertEquals(35.96, expense.getActualValue(), 0.00);
-        assertEquals(35.96, expense.getPredictedValue(), 0.00);
+        assertEquals(BigDecimal.valueOf(35.96), expense.getActualValue());
+        assertEquals(BigDecimal.valueOf(35.96), expense.getPredictedValue());
 
     }
 
@@ -240,7 +241,7 @@ public class FinancialRecordTest {
         String title = "Uber";
         Category category = Category.newCategory("Clothing");
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
-        Double value = -40.99;
+        var value = BigDecimal.valueOf(-40.99);
 
         var expense = FinancialRecord.newFinancialRecord(
                 title,
@@ -262,7 +263,7 @@ public class FinancialRecordTest {
     public void given_null_due_date_when_validating_should_throw_exception() {
         String title = "Uber";
         Category category = Category.newCategory("Clothing");
-        Double value = 40.99;
+        var value = BigDecimal.valueOf(40.99);
 
         var expense = FinancialRecord.newFinancialRecord(
                 title,
@@ -281,9 +282,9 @@ public class FinancialRecordTest {
 
     @Test
     public void given_financial_record_should_be_able_to_finish_itself() {
-        Double value = 35.90;
+        var value = BigDecimal.valueOf(35.90);
         String title = "Uber";
-        String longDescription = RandomStringUtils.random(255);
+        String longDescription = "Shopping";
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
         Category category = Category.newCategory("Clothing");
 
@@ -298,22 +299,22 @@ public class FinancialRecordTest {
                 FinancialRecordType.EXPENSE
         );
 
-        assertEquals(35.90, expense.getPredictedValue(), 0.0);
-        assertEquals(0.00, expense.getActualValue(), 0.0);
+        assertEquals(BigDecimal.valueOf(35.90).setScale(2, RoundingMode.HALF_UP), expense.getPredictedValue());
+        assertEquals(BigDecimal.valueOf(0.00).setScale(2, RoundingMode.HALF_UP), expense.getActualValue());
         assertEquals(FinancialRecordStatus.PENDING, expense.getStatus());
 
-        assertDoesNotThrow(() -> expense.finishFinancialRecord(40.00));
+        assertDoesNotThrow(() -> expense.finishFinancialRecord(BigDecimal.valueOf(40.00)));
 
-        assertEquals(35.90, expense.getPredictedValue(), 0.0);
-        assertEquals(40.00, expense.getActualValue(), 0.0);
+        assertEquals(BigDecimal.valueOf(35.90).setScale(2, RoundingMode.HALF_UP), expense.getPredictedValue());
+        assertEquals(BigDecimal.valueOf(40.00).setScale(2, RoundingMode.HALF_UP), expense.getActualValue());
         assertEquals(FinancialRecordStatus.OK, expense.getStatus());
     }
 
     @Test
     public void given_financial_record_should_be_able_to_add_category() {
-        Double value = 35.90;
+        var value = BigDecimal.valueOf(35.90);
         String title = "Uber";
-        String longDescription = RandomStringUtils.random(255);
+        var longDescription = "Hospital ride";
         LocalDate dueDate = LocalDate.of(2024, 2, 1);
         Category category = Category.newCategory("Uber");
 
@@ -328,8 +329,8 @@ public class FinancialRecordTest {
                 FinancialRecordType.EXPENSE
         );
 
-        assertEquals(35.90, expense.getPredictedValue(), 0.0);
-        assertEquals(0.00, expense.getActualValue(), 0.0);
+        assertEquals(BigDecimal.valueOf(35.90).setScale(2, RoundingMode.HALF_UP), expense.getPredictedValue());
+        assertEquals(BigDecimal.valueOf(0.00).setScale(2, RoundingMode.HALF_UP), expense.getActualValue());
         assertEquals(FinancialRecordStatus.PENDING, expense.getStatus());
 
         assertDoesNotThrow(() -> expense.addCategory(Category.newCategory("Travel")));
@@ -343,9 +344,10 @@ public class FinancialRecordTest {
 
     @Test
     public void given_financial_record_should_be_able_to_remove_category_by_id() {
-        var value = 35.90;
+        var value = BigDecimal.valueOf(35.90);
         var title = "Uber";
-        var longDescription = RandomStringUtils.random(255);
+        var longDescription = "Groceries ride";
+
         var dueDate = LocalDate.of(2024, 2, 1);
         var uberCategory = Category.newCategory("Uber");
         var travelCategory = Category.newCategory("Travel");
@@ -361,8 +363,8 @@ public class FinancialRecordTest {
                 FinancialRecordType.EXPENSE
         );
 
-        assertEquals(35.90, expense.getPredictedValue(), 0.0);
-        assertEquals(0.00, expense.getActualValue(), 0.0);
+        assertEquals(BigDecimal.valueOf(35.90).setScale(2, RoundingMode.HALF_UP), expense.getPredictedValue());
+        assertEquals(BigDecimal.valueOf(0.00).setScale(2, RoundingMode.HALF_UP), expense.getActualValue());
         assertEquals(FinancialRecordStatus.PENDING, expense.getStatus());
         assertEquals(2, expense.getCategories().size());
         assertTrue(() -> expense.getCategories().stream().anyMatch(category1 -> category1.getName().equals("Uber")));

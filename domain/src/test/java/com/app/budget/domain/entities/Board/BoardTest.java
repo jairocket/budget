@@ -11,6 +11,8 @@ import com.app.budget.domain.exceptions.DomainException;
 import com.app.budget.domain.validation.handler.ThrowsValidationHandler;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -60,13 +62,13 @@ public class BoardTest {
         Category category_1 = Category.newCategory("Transṕortation");
 
         Set<Category> categories = Set.of(category_1);
-        var income_1 = FinancialRecord.newFinancialRecord("Uber", "Uber", categories, 30.00, 30.00, LocalDate.of(2024, 3, 1), FinancialRecordStatus.OK, FinancialRecordType.INCOME);
-        var income_2 = FinancialRecord.newFinancialRecord("Uber", "Uber", categories, 25.00, 25.00, LocalDate.of(2024, 3, 2), FinancialRecordStatus.LATE, FinancialRecordType.INCOME);
-        var income_3 = FinancialRecord.newFinancialRecord("Uber", "Uber", categories, 45.00, 45.00, LocalDate.of(2024, 3, 3), FinancialRecordStatus.PENDING, FinancialRecordType.INCOME);
+        var income_1 = FinancialRecord.newFinancialRecord("Uber", "Uber", categories, BigDecimal.valueOf(30.00), BigDecimal.valueOf(30.00), LocalDate.of(2024, 3, 1), FinancialRecordStatus.OK, FinancialRecordType.INCOME);
+        var income_2 = FinancialRecord.newFinancialRecord("Uber", "Uber", categories, BigDecimal.valueOf(25.00), BigDecimal.valueOf(25.00), LocalDate.of(2024, 3, 2), FinancialRecordStatus.LATE, FinancialRecordType.INCOME);
+        var income_3 = FinancialRecord.newFinancialRecord("Uber", "Uber", categories, BigDecimal.valueOf(45.00), BigDecimal.valueOf(45.00), LocalDate.of(2024, 3, 3), FinancialRecordStatus.PENDING, FinancialRecordType.INCOME);
 
         Board board = Board.newBoard(Set.of(income_1, income_2, income_3), user.getId());
 
-        assertEquals(100.00, board.getTotalPredictedIncomes(), 0.00);
+        assertEquals(BigDecimal.valueOf(100.00).setScale(2, RoundingMode.HALF_UP), board.getTotalPredictedIncomes());
     }
 
     @Test
@@ -74,14 +76,14 @@ public class BoardTest {
         Category category_1 = Category.newCategory("Transṕortation");
 
         Set<Category> categories = Set.of(category_1);
-        var income_1 = FinancialRecord.newFinancialRecord("Uber", "Uber", categories, 30.00, 30.00, LocalDate.of(2024, 3, 1), FinancialRecordStatus.OK, FinancialRecordType.INCOME);
-        var expense_1 = FinancialRecord.newFinancialRecord("Uber", "Uber", categories, 30.00, 30.00, LocalDate.of(2024, 3, 1), FinancialRecordStatus.OK, FinancialRecordType.EXPENSE);
-        var expense_2 = FinancialRecord.newFinancialRecord("Uber", "Uber", categories, 25.00, 25.00, LocalDate.of(2024, 3, 2), FinancialRecordStatus.LATE, FinancialRecordType.EXPENSE);
-        var expense_3 = FinancialRecord.newFinancialRecord("Uber", "Uber", categories, 45.00, 45.00, LocalDate.of(2024, 3, 3), FinancialRecordStatus.PENDING, FinancialRecordType.EXPENSE);
+        var income_1 = FinancialRecord.newFinancialRecord("Uber", "Uber", categories, BigDecimal.valueOf(30.00), BigDecimal.valueOf(30.00), LocalDate.of(2024, 3, 1), FinancialRecordStatus.OK, FinancialRecordType.INCOME);
+        var expense_1 = FinancialRecord.newFinancialRecord("Uber", "Uber", categories, BigDecimal.valueOf(30.00), BigDecimal.valueOf(30.00), LocalDate.of(2024, 3, 1), FinancialRecordStatus.OK, FinancialRecordType.EXPENSE);
+        var expense_2 = FinancialRecord.newFinancialRecord("Uber", "Uber", categories, BigDecimal.valueOf(25.00), BigDecimal.valueOf(25.00), LocalDate.of(2024, 3, 2), FinancialRecordStatus.LATE, FinancialRecordType.EXPENSE);
+        var expense_3 = FinancialRecord.newFinancialRecord("Uber", "Uber", categories, BigDecimal.valueOf(45.00), BigDecimal.valueOf(45.00), LocalDate.of(2024, 3, 3), FinancialRecordStatus.PENDING, FinancialRecordType.EXPENSE);
 
         Board board = Board.newBoard(Set.of(income_1, expense_1, expense_2, expense_3), user.getId());
 
-        assertEquals(100.00, board.getTotalPredictedExpenses(), 0.00);
+        assertEquals(BigDecimal.valueOf(100.00).setScale(2, RoundingMode.HALF_UP), board.getTotalPredictedExpenses());
     }
 
     @Test
@@ -89,15 +91,15 @@ public class BoardTest {
         Category category_1 = Category.newCategory("Transṕortation");
 
         Set<Category> categories = Set.of(category_1);
-        var income_1 = FinancialRecord.newFinancialRecord("Uber", "Uber", categories, 30.00, 25.00, LocalDate.of(2024, 3, 1), FinancialRecordStatus.OK, FinancialRecordType.INCOME);
-        var income_2 = FinancialRecord.newFinancialRecord("Uber", "Uber", categories, 25.00, 25.00, LocalDate.of(2024, 3, 2), FinancialRecordStatus.LATE, FinancialRecordType.INCOME);
-        var income_3 = FinancialRecord.newFinancialRecord("Uber", "Uber", categories, 45.00, 42.00, LocalDate.of(2024, 3, 3), FinancialRecordStatus.PENDING, FinancialRecordType.INCOME);
-        var expense_1 = FinancialRecord.newFinancialRecord("Uber", "Uber", categories, 30.00, 27.00, LocalDate.of(2024, 3, 1), FinancialRecordStatus.OK, FinancialRecordType.EXPENSE);
+        var income_1 = FinancialRecord.newFinancialRecord("Uber", "Uber", categories, BigDecimal.valueOf(30.00), BigDecimal.valueOf(25.00), LocalDate.of(2024, 3, 1), FinancialRecordStatus.OK, FinancialRecordType.INCOME);
+        var income_2 = FinancialRecord.newFinancialRecord("Uber", "Uber", categories, BigDecimal.valueOf(25.00), BigDecimal.valueOf(25.00), LocalDate.of(2024, 3, 2), FinancialRecordStatus.LATE, FinancialRecordType.INCOME);
+        var income_3 = FinancialRecord.newFinancialRecord("Uber", "Uber", categories, BigDecimal.valueOf(45.00), BigDecimal.valueOf(42.00), LocalDate.of(2024, 3, 3), FinancialRecordStatus.PENDING, FinancialRecordType.INCOME);
+        var expense_1 = FinancialRecord.newFinancialRecord("Uber", "Uber", categories, BigDecimal.valueOf(30.00), BigDecimal.valueOf(27.00), LocalDate.of(2024, 3, 1), FinancialRecordStatus.OK, FinancialRecordType.EXPENSE);
 
 
         Board board = Board.newBoard(Set.of(income_1, income_2, income_3, expense_1), user.getId());
 
-        assertEquals(92.00, board.getTotalActualIncomes(), 0.00);
+        assertEquals(BigDecimal.valueOf(92.00).setScale(2, RoundingMode.HALF_UP), board.getTotalActualIncomes());
     }
 
     @Test
@@ -105,13 +107,13 @@ public class BoardTest {
         Category category_1 = Category.newCategory("Transṕortation");
 
         Set<Category> categories = Set.of(category_1);
-        var expense_1 = FinancialRecord.newFinancialRecord("Uber", "Uber", categories, 30.00, 35.00, LocalDate.of(2024, 3, 1), FinancialRecordStatus.OK, FinancialRecordType.EXPENSE);
-        var expense_2 = FinancialRecord.newFinancialRecord("Uber", "Uber", categories, 25.00, 27.50, LocalDate.of(2024, 3, 2), FinancialRecordStatus.LATE, FinancialRecordType.EXPENSE);
-        var expense_3 = FinancialRecord.newFinancialRecord("Uber", "Uber", categories, 45.00, 42.50, LocalDate.of(2024, 3, 3), FinancialRecordStatus.PENDING, FinancialRecordType.EXPENSE);
+        var expense_1 = FinancialRecord.newFinancialRecord("Uber", "Uber", categories, BigDecimal.valueOf(30.00), BigDecimal.valueOf(35.00), LocalDate.of(2024, 3, 1), FinancialRecordStatus.OK, FinancialRecordType.EXPENSE);
+        var expense_2 = FinancialRecord.newFinancialRecord("Uber", "Uber", categories, BigDecimal.valueOf(25.00), BigDecimal.valueOf(27.50), LocalDate.of(2024, 3, 2), FinancialRecordStatus.LATE, FinancialRecordType.EXPENSE);
+        var expense_3 = FinancialRecord.newFinancialRecord("Uber", "Uber", categories, BigDecimal.valueOf(45.00), BigDecimal.valueOf(42.50), LocalDate.of(2024, 3, 3), FinancialRecordStatus.PENDING, FinancialRecordType.EXPENSE);
 
         Board board = Board.newBoard(Set.of(expense_1, expense_2, expense_3), user.getId());
 
-        assertEquals(105.00, board.getTotalActualExpenses(), 0.00);
+        assertEquals(BigDecimal.valueOf(105.00), board.getTotalActualExpenses());
     }
 
     @Test
@@ -126,7 +128,7 @@ public class BoardTest {
 
         var category = Category.newCategory("Clothing");
         var title = "Uber";
-        var predictedValue = 35.90;
+        var predictedValue = BigDecimal.valueOf(35.90);
         var dueDate = LocalDate.of(2024, 2, 1);
 
         var expense = FinancialRecord.newFinancialRecord(
@@ -141,14 +143,14 @@ public class BoardTest {
         );
         assertDoesNotThrow(() -> board.addFinancialRecord(expense));
 
-        assertEquals(35.90, board.getTotalPredictedExpenses(), 0.00);
+        assertEquals(BigDecimal.valueOf(35.90).setScale(2, RoundingMode.HALF_UP), board.getTotalPredictedExpenses());
     }
 
     @Test
     public void given_board_should_be_able_to_remove_financial_record_by_id() {
         var category = Category.newCategory("Clothing");
         var title = "Uber";
-        var predictedValue = 35.90;
+        var predictedValue = BigDecimal.valueOf(35.90);
         var dueDate = LocalDate.of(2024, 2, 1);
 
         var expense = FinancialRecord.newFinancialRecord(
@@ -169,19 +171,19 @@ public class BoardTest {
         assertEquals(1, board.getExpenses().size());
         assertEquals(0, board.getIncomes().size());
         assertDoesNotThrow(() -> board.validate(new ThrowsValidationHandler()));
-        assertEquals(35.90, board.getTotalPredictedExpenses(), 0.00);
+        assertEquals(BigDecimal.valueOf(35.90).setScale(2, RoundingMode.HALF_UP), board.getTotalPredictedExpenses());
 
         assertDoesNotThrow(() -> board.removeFinancialRecordByID(expense.getId()));
 
         assertEquals(0, board.getExpenses().size());
-        assertEquals(0.00, board.getTotalPredictedExpenses(), 0.00);
+        assertEquals(BigDecimal.valueOf(0.00).setScale(2, RoundingMode.HALF_UP), board.getTotalPredictedExpenses());
     }
 
     @Test
     public void given_wrong_id_should_not_remove_financial_record_from_board() {
         var category = Category.newCategory("Clothing");
         var title = "Uber";
-        var predictedValue = 35.90;
+        var predictedValue = BigDecimal.valueOf(35.90);
         var dueDate = LocalDate.of(2024, 2, 1);
 
         var expense = FinancialRecord.newFinancialRecord(
@@ -202,11 +204,11 @@ public class BoardTest {
         assertEquals(1, board.getExpenses().size());
         assertEquals(0, board.getIncomes().size());
         assertDoesNotThrow(() -> board.validate(new ThrowsValidationHandler()));
-        assertEquals(35.90, board.getTotalPredictedExpenses(), 0.00);
+        assertEquals(BigDecimal.valueOf(35.90).setScale(2, RoundingMode.HALF_UP), board.getTotalPredictedExpenses());
 
         assertDoesNotThrow(() -> board.removeFinancialRecordByID(FinancialRecordID.unique()));
 
         assertEquals(1, board.getExpenses().size());
-        assertEquals(35.90, board.getTotalPredictedExpenses(), 0.00);
+        assertEquals(BigDecimal.valueOf(35.90).setScale(2, RoundingMode.HALF_UP), board.getTotalPredictedExpenses());
     }
 }

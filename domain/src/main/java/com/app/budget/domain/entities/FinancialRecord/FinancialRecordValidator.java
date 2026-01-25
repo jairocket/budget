@@ -4,6 +4,7 @@ import com.app.budget.domain.validation.Error;
 import com.app.budget.domain.validation.ValidationHandler;
 import com.app.budget.domain.validation.Validator;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 public class FinancialRecordValidator extends Validator {
@@ -49,13 +50,13 @@ public class FinancialRecordValidator extends Validator {
         }
     }
 
-    private void validateValue(Double value) {
+    private void validateValue(BigDecimal value) {
         if (value == null) {
             this.validationHandler().append(new Error("Value cannot be null"));
         }
-        value = Optional.ofNullable(value).orElse(0.00);
+        value = Optional.ofNullable(value).orElse(BigDecimal.ZERO);
 
-        if (value < 0.00) {
+        if (value.doubleValue() < 0.00) {
             this.validationHandler().append(new Error("Value should not be lower than zero"));
         }
     }
