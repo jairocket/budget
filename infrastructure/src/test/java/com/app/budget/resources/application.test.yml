@@ -1,0 +1,17 @@
+app-test:
+  datasource:
+    jdbc-url: "jdbc:tc:postgresql://localhost:5431/budget_db"
+    username: postgres
+    password: postgres
+    maximum-pool-size: 10
+
+spring:
+  flyway:
+    enabled: false
+  datasource:
+    jdbcUrl: "jdbc:h2:mem:budget_db"
+    username: "budget"
+    password: "password"
+    driverClassName: "org.h2.Driver"
+
+

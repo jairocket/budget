@@ -1,38 +1,19 @@
 package com.app.budget;
 
-import junit.framework.Test;
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.test.context.ActiveProfiles;
 
 /**
  * Unit test for simple App.
  */
-public class AppTest 
-    extends TestCase
-{
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
-    }
+@TestConfiguration(proxyBeanMethods = false)
+@ActiveProfiles("test-containers")
+public class AppTest
+        extends TestCase {
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
-    }
-
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
+    public static void main(String[] args) {
+        SpringApplication.from(App::main).with(AppTest.class).run(args);
     }
 }
