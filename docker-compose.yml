@@ -1,7 +1,6 @@
-version: '3.8'
 services:
   database:
-    image: postgres:16-alpine
+    image: docker.io/library/postgres:16-alpine
     restart: always
     environment:
       - POSTGRES_USER=postgres
@@ -9,3 +8,7 @@ services:
       - POSTGRES_DB=budget_db
     ports:
       - '5431:5432'
+    networks:
+      - budget_network
+networks:
+  budget_network:

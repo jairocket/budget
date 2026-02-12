@@ -1,0 +1,7 @@
+app:
+  datasource:
+    jdbc-url: "jdbc:postgresql://localhost:5431/budget_db"
+    username: postgres
+    password: postgres
+    maximum-pool-size: 10
+    driver-class-name: org.postgresql.Driver

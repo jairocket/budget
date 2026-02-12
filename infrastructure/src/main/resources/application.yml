@@ -1,0 +1,40 @@
+server:
+  port: 8080
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,plain/text,text/css,text/javascript,application/javascript,application/json
+    min-response-size: 1024
+  undertow:
+    threads:
+      io: 4
+      worker: 32
+      accesslog:
+        enabled: true
+spring:
+  application:
+    name: budget
+  profiles:
+    active: dev
+  flyway:
+    user: postgres
+    password: postgres
+    url: "jdbc:postgresql://localhost:5431/budget_db"
+    baseline-on-migrate: true
+    clean-disabled: false
+    clean-on-validation-error: true
+
+app:
+  datasource:
+    jdbc-url: "jdbc:postgresql://localhost:5431/budget_db"
+    username: postgres
+    password: postgres
+    maximum-pool-size: 10
+    driver-class-name: org.postgresql.Driver
+
+api:
+  security:
+    token:
+      secret: mySecret
+
+jwt:
+  cookie-expiration: 10800
